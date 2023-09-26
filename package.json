@@ -64,7 +64,6 @@
     "testEnvironment": "node",
     "moduleNameMapper": {}
   },
-  "keywords": [],
   "files": [
     "lib",
     "LICENSE"
@@ -76,5 +75,6 @@
   },
   "eslintIgnore": [
     "lib"
-  ]
+  ],
+  "keywords": []
 }
