@@ -1,5 +1,5 @@
 import { asArray } from './as-array';
-import { ARec, ArrayMay, Nullable } from './index';
+import { ARec, ArrayMay, Nullable, URec } from './index';
 
 export type ErrorCode = `EC_${string}`;
 
@@ -23,9 +23,17 @@ export function raise(message: string | undefined, meta?: any): never {
     throw result;
 }
 
+export function readErrorContext(error: Nullable<Error>): URec | undefined {
+    if (error && 'context' in error) {
+        const result = error.context;
+        if (result && typeof result === 'object') return result as URec;
+    }
+    return undefined;
+}
+
 export function readErrorCode(error: Nullable<Error>): ErrorCode | undefined {
     if (error && 'code' in error) {
-        const result = error['code'];
+        const result = error.code;
         if (typeof result === 'string') return result as ErrorCode;
     }
     return undefined;
