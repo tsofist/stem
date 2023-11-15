@@ -133,10 +133,10 @@ export type DeepReadonlyObject<T> = {
 export type DeepReadonly<T> = T extends Primitive
     ? T
     : T extends Map<infer K, infer V>
-    ? ReadonlyMap<K, V>
-    : T extends Set<infer M>
-    ? ReadonlySet<M>
-    : DeepReadonlyObject<T>;
+      ? ReadonlyMap<K, V>
+      : T extends Set<infer M>
+        ? ReadonlySet<M>
+        : DeepReadonlyObject<T>;
 
 /**
  * Easy version of Record type
