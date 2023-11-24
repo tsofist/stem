@@ -1,4 +1,12 @@
-import { matchErrorMessage, raise, readErrorCode, testErrorMessage } from './error';
+import {
+    hasErrorContext,
+    matchErrorMessage,
+    raise,
+    raiseEx,
+    readErrorCode,
+    readErrorContext,
+    testErrorMessage,
+} from './error';
 
 describe('error', () => {
     it('raise', () => {
@@ -16,6 +24,98 @@ describe('error', () => {
             error = e;
         }
         expect(readErrorCode(error)).toStrictEqual(code);
+    });
+    it('readErrorCode with undefined message', () => {
+        const code = 'EC_SOME_CODE';
+        let error: any;
+        try {
+            raise(undefined, code);
+        } catch (e) {
+            error = e;
+        }
+        expect(readErrorCode(error)).toStrictEqual(code);
+        expect(error.message).toStrictEqual(code);
+    });
+    it('readErrorCode with empty string message', () => {
+        const code = 'EC_SOME_CODE';
+        let error: any;
+        try {
+            raise('', code);
+        } catch (e) {
+            error = e;
+        }
+        expect(readErrorCode(error)).toStrictEqual(code);
+        expect(error.message).toStrictEqual('');
+    });
+    it('raiseEx', () => {
+        const code = 'EC_SOME_CODE';
+        const message = 'ERROR';
+        const context = { f: 1 };
+        let error: any;
+        try {
+            raiseEx(code, context, message);
+        } catch (e) {
+            error = e;
+        }
+        expect(readErrorCode(error)).toStrictEqual(code);
+        expect(readErrorContext(error)).toStrictEqual(context);
+        expect(error.message).toStrictEqual(message);
+    });
+    it('readErrorContext field', () => {
+        const context = { f: 1 };
+        let error: any;
+        try {
+            raiseEx('EC_!', context);
+        } catch (e) {
+            error = e;
+        }
+        expect(readErrorContext(error)).toStrictEqual(context);
+        expect(readErrorContext(error, 'f')).toStrictEqual(context.f);
+        expect(readErrorContext(error, 'no')).toStrictEqual(undefined);
+    });
+    it('raiseEx with undefined message', () => {
+        const code = 'EC_SOME_CODE';
+        let error: any;
+        try {
+            raiseEx(code);
+        } catch (e) {
+            error = e;
+        }
+        expect(readErrorCode(error)).toStrictEqual(code);
+        expect(readErrorContext(error)).toStrictEqual(undefined);
+        expect(error.message).toStrictEqual(code);
+    });
+    it('raiseEx with empty string message', () => {
+        const code = 'EC_SOME_CODE';
+        let error: any;
+        try {
+            raiseEx(code, undefined, '');
+        } catch (e) {
+            error = e;
+        }
+        expect(readErrorCode(error)).toStrictEqual(code);
+        expect(readErrorContext(error)).toStrictEqual(undefined);
+        expect(error.message).toStrictEqual('');
+    });
+    it('hasErrorContext', () => {
+        const context = { f: 1, m: 'val', b: false };
+        let error: any;
+        try {
+            raiseEx('EC_!', context);
+        } catch (e) {
+            error = e;
+        }
+        expect(hasErrorContext(undefined)).toStrictEqual(false);
+        expect(hasErrorContext(error)).toStrictEqual(true);
+        expect(hasErrorContext(error, 'ff')).toStrictEqual(false);
+        expect(hasErrorContext(error, 'f')).toStrictEqual(true);
+        expect(hasErrorContext(error, 'f', '1')).toStrictEqual(false);
+        expect(hasErrorContext(error, 'f', false)).toStrictEqual(false);
+        expect(hasErrorContext(error, 'f', true)).toStrictEqual(false);
+        expect(hasErrorContext(error, 'f', 1)).toStrictEqual(true);
+        expect(hasErrorContext(error, 'm', 'val')).toStrictEqual(true);
+        expect(hasErrorContext(error, 'b', false)).toStrictEqual(true);
+        expect(hasErrorContext(error, 'b', true)).toStrictEqual(false);
     });
     it('testErrorMessage with text', () => {
         const error = new Error('This is Super-Error');
