@@ -110,6 +110,36 @@ export type WSimpleValueKeysOf<T, K extends keyof T = keyof T> = keyof PickByVal
 >;
 
 /**
+ * Extract all fields from T without methods
+ */
+export type OmitMethods<T extends object> = Pick<
+    T,
+    { [K in keyof T]: T[K] extends (...args: any[]) => any ? never : K }[keyof T]
+>;
+
+/**
+ * Extract all methods from T
+ */
+export type PickMethods<T extends object> = Pick<
+    T,
+    { [K in keyof T]: T[K] extends (...args: any[]) => any ? K : never }[keyof T]
+>;
+
+/**
+ * Extract all fields from T with names starts with Prefix
+ */
+export type PickFieldsWithPrefix<T extends object, Prefix extends string> = {
+    [K in keyof T as K extends `${Prefix}${infer R}` ? K : never]: T[K];
+};
+
+/**
+ * Extract all fields from T with names starts with Prefix and drop Prefix from names
+ */
+export type PickExplicitFieldsWithPrefix<T extends object, Prefix extends string> = {
+    [K in keyof T as K extends `${Prefix}${infer Rest}` ? Rest : never]: T[K];
+};
+
+/**
  * Drop readonly modifier from target object
  */
 export type DropReadonly<T extends object, K extends keyof T = keyof T> = {
