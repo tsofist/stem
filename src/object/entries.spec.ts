@@ -36,7 +36,6 @@ describe('entries', () => {
             ['b', 2],
             ['c', 3],
         ]);
-        console.log('MAP', entries(map));
         expect(entries(map)).toEqual([
             ['a', 1],
             ['b', 2],
@@ -46,7 +45,6 @@ describe('entries', () => {
 
     it('should return an array of key-value pairs for a Set object', () => {
         const set = new Set<string>(['a', 'b', 'c']);
-        console.log('SET', entries(set));
         expect(entries(set)).toEqual([
             ['a', 'a'],
             ['b', 'b'],
