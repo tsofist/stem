@@ -14,7 +14,11 @@ export function raise(message: string | undefined, meta?: ErrorCode | ARec): nev
     throw createError(code, context, message);
 }
 
-export function raiseEx(code: ErrorCode, context?: ARec, message?: string): never {
+export function raiseEx<Ctx extends URec = ARec>(
+    code: ErrorCode,
+    context?: Ctx,
+    message?: string,
+): never {
     throw createError(code, context, message);
 }
 
