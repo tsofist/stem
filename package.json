@@ -24,7 +24,7 @@
     "tslib": "^2.6.2"
   },
   "devDependencies": {
-    "@tsofist/web-buddy": "^1.5.0",
+    "@tsofist/web-buddy": "^1.5.1",
     "@types/jest": "^29.5.11",
     "@types/node": "^18.19.8",
     "@types/supertest": "^6.0.2",
