@@ -1,5 +1,5 @@
 import { asArray } from './as-array';
-import { ARec, ArrayMay, Nullable, Primitive, URec } from './index';
+import { ARec, ArrayMay, Primitive, URec } from './index';
 
 export type ErrorCode = `EC_${string}`;
 
@@ -22,21 +22,47 @@ export function raiseEx<Ctx extends ARec = URec>(
     throw createError(code, context, message);
 }
 
-export function readErrorContext<T extends object = URec>(error: Nullable<Error>): T | undefined;
-export function readErrorContext<T = unknown>(error: Nullable<Error>, field: string): T | undefined;
-export function readErrorContext<T>(error: Nullable<Error>, field?: string): T | undefined {
-    if (error && 'context' in error) {
+export function readErrorContext<T extends object = URec>(error: any): T | undefined;
+export function readErrorContext<T = unknown>(error: any, field: string): T | undefined;
+export function readErrorContext<T>(error: any, field?: string): T | undefined {
+    if (error && error instanceof Error && 'context' in error) {
         const result = error.context as ARec;
         if (result && typeof result === 'object') {
-            if (!field) return result as T;
+            if (field == null) return result as T;
             else return result[field] as T;
         }
     }
     return undefined;
 }
 
-export function hasErrorContext(error: Nullable<Error>, field?: string, value?: Primitive) {
-    if (error && 'context' in error && error.context != null && typeof error.context === 'object') {
+export function readErrorContextEx<T extends object = URec>(
+    error: any,
+    code: ErrorCode,
+): T | undefined;
+export function readErrorContextEx<T = unknown>(
+    error: any,
+    code: ErrorCode,
+    field: string,
+): T | undefined;
+export function readErrorContextEx<T>(error: any, code: ErrorCode, field?: string): T | undefined {
+    if (hasErrorCode(error, code)) {
+        return readErrorContext(
+            error,
+            // @ts-expect-error It's OK
+            field,
+        );
+    }
+    return undefined;
+}
+
+export function hasErrorContext(error: any, field?: string, value?: Primitive) {
+    if (
+        error &&
+        error instanceof Error &&
+        'context' in error &&
+        error.context != null &&
+        typeof error.context === 'object'
+    ) {
         if (!field) return true;
         if (value == null) return field in error.context;
         return (error.context as ARec)[field] === value;
@@ -44,20 +70,20 @@ export function hasErrorContext(error: Nullable<Error>, field?: string, value?: 
     return false;
 }
 
-export function readErrorCode(error: Nullable<Error>): ErrorCode | undefined {
-    if (error && 'code' in error) {
+export function readErrorCode(error: any): ErrorCode | undefined {
+    if (error && error instanceof Error && 'code' in error) {
         const result = error.code;
         if (typeof result === 'string') return result as ErrorCode;
     }
     return undefined;
 }
 
-export function hasErrorCode(error: Nullable<Error>, code: ErrorCode): boolean {
-    return readErrorCode(error) === code;
+export function hasErrorCode(error: any, code: ErrorCode): boolean {
+    return code != null && readErrorCode(error) === code;
 }
 
 export function matchErrorMessage(error: any, re: RegExp): RegExpMatchArray | string[] {
-    if (error) {
+    if (error && error instanceof Error) {
         const message = error + '';
         return message.match(re) || [];
     }
@@ -73,7 +99,7 @@ export function testErrorMessage(error: any, text: ArrayMay<string>): boolean;
  */
 export function testErrorMessage(error: any, re: ArrayMay<RegExp>): boolean;
 export function testErrorMessage(error: any, math: ArrayMay<RegExp | string>): boolean {
-    if (error && math) {
+    if (error && error instanceof Error && math) {
         const message = error + '';
         return asArray(math).some((m) => {
             if (m instanceof RegExp) return m.test(message);

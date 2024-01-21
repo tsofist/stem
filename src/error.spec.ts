@@ -3,8 +3,10 @@ import {
     matchErrorMessage,
     raise,
     raiseEx,
+    hasErrorCode,
     readErrorCode,
     readErrorContext,
+    readErrorContextEx,
     testErrorMessage,
 } from './error';
 
@@ -24,6 +26,7 @@ describe('error', () => {
             error = e;
         }
         expect(readErrorCode(error)).toStrictEqual(code);
+        expect(readErrorCode(new Error(''))).toStrictEqual(undefined);
     });
     it('readErrorCode with undefined message', () => {
         const code = 'EC_SOME_CODE';
@@ -70,6 +73,7 @@ describe('error', () => {
             error = e;
         }
         expect(readErrorContext(error)).toStrictEqual(context);
+        expect(readErrorContext(error, '')).toStrictEqual(undefined);
         expect(readErrorContext(error, 'f')).toStrictEqual(context.f);
         expect(readErrorContext(error, 'no')).toStrictEqual(undefined);
     });
@@ -141,5 +145,49 @@ describe('error', () => {
         expect(match.length).toStrictEqual(3);
         expect(match[1]).toStrictEqual('problem with');
         expect(match[2]).toStrictEqual('that');
+    });
+    it('hasErrorCode', () => {
+        const code = 'EC_!';
+        const error = (() => {
+            try {
+                raiseEx(code);
+            } catch (e) {
+                return e;
+            }
+        })();
+        expect(hasErrorCode(undefined, code)).toStrictEqual(false);
+        expect(hasErrorCode(error, code)).toStrictEqual(true);
+        expect(hasErrorCode(error, 'EC_?')).toStrictEqual(false);
+        expect(
+            hasErrorCode(
+                new Error(),
+                // @ts-expect-error It's OK
+                undefined,
+            ),
+        ).toStrictEqual(false);
+    });
+    it('readErrorContextEx edge cases', () => {
+        const error = new Error('Some problem with that');
+        const code = 'EC_!';
+        expect(readErrorContextEx(error, code)).toStrictEqual(undefined);
+        expect(readErrorContextEx(undefined, code)).toStrictEqual(undefined);
+        expect(readErrorContextEx(false, code)).toStrictEqual(undefined);
+    });
+    it('readErrorContextEx', () => {
+        const code = 'EC_!';
+        const context = { f: 1, m: 'val', b: false, u: undefined, n: null };
+        const error = (() => {
+            try {
+                raiseEx(code, context);
+            } catch (e) {
+                return e;
+            }
+        })();
+        expect(readErrorContextEx(error, code)).toStrictEqual(context);
+        expect(readErrorContextEx(error, code, '')).toStrictEqual(undefined);
+        expect(readErrorContextEx(error, code, 'b')).toStrictEqual(context.b);
+        expect(readErrorContextEx(error, code, 'u')).toStrictEqual(context.u);
+        expect(readErrorContextEx(error, code, 'n')).toStrictEqual(context.n);
+        expect(readErrorContextEx(error, 'EC_')).toStrictEqual(undefined);
     });
 });
