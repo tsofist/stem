@@ -13,7 +13,7 @@
     "pkg:publish": "semantic-release --no-ci",
     "pkg:publish-test": "semantic-release --dry-run",
     "pkg:purge": "rimraf lib .coverage .lint-cache .jest-cache node_modules",
-    "prepare": "husky install",
+    "prepare": "husky",
     "prepublishOnly": "npm run lint && npm run test && npm run build",
     "test": "jest",
     "test:cov": "jest --coverage",
@@ -24,11 +24,11 @@
     "tslib": "^2.6.2"
   },
   "devDependencies": {
-    "@tsofist/web-buddy": "^1.5.2",
+    "@tsofist/web-buddy": "^1.6.0",
     "@types/jest": "^29.5.11",
-    "@types/node": "^18.19.8",
+    "@types/node": "^18.19.10",
     "@types/supertest": "^6.0.2",
-    "husky": "^8.0.3",
+    "husky": "^9.0.7",
     "jest": "^29.7.0",
     "rimraf": "^5.0.5",
     "supertest": "^6.3.4",
