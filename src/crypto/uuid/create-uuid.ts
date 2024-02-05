@@ -1,5 +1,5 @@
 import { randomBytes } from 'crypto';
-import { UUID } from './index';
+import { UUID } from './types';
 
 /**
  * Generate a real, cryptographically strong UUID

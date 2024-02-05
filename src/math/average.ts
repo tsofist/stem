@@ -1,4 +1,4 @@
-import { divide } from './index';
+import { divide } from './arith';
 
 export function average(values: number[]): number;
 export function average<T>(values: T[], selector?: (value: T) => number): number;

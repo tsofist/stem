@@ -1,5 +1,5 @@
 import { createUUID } from './create-uuid';
-import { RE_UUID } from './index';
+import { RE_UUID } from './guards';
 
 describe('createUUID', () => {
     it('should return a valid UUID', () => {

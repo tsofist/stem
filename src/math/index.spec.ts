@@ -1,4 +1,4 @@
-import { add, divide, multiply, subtract } from '.';
+import { add, divide, multiply, subtract } from './arith';
 
 describe('math', () => {
     it('add', () => {
