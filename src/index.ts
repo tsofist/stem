@@ -67,6 +67,13 @@ export type PromiseValue<T> = T extends Promise<infer U> ? U : T;
 export type StringKeyOf<T> = T extends object ? Extract<keyof T, string> : never;
 
 /**
+ * Make K-keys of T required
+ */
+export type RequiredFields<T, K extends keyof T> = T & {
+    [P in K]-?: T[P];
+};
+
+/**
  * Pick all properties with values has a U-types
  */
 export type PickByValueType<T, U> = {
