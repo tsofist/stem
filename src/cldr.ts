@@ -2,9 +2,10 @@ import { PRec, Rec } from './index';
 
 /**
  * ISO day of the week
+ *
  * @see https://en.wikipedia.org/wiki/ISO_week_date Wikipedia
  */
-export enum Weekday {
+export enum ISOWeekday {
     Monday = 1,
     Tuesday = 2,
     Wednesday = 3,
@@ -14,42 +15,40 @@ export enum Weekday {
     Sunday = 7,
 }
 
-export type WeekdaySet<T> = Rec<T, Weekday>;
-export type WeekdayPSet<T> = PRec<T, Weekday>;
+export type ISOWeekdayRec<T> = Rec<T, ISOWeekday>;
+export type ISOWeekdayPRec<T> = PRec<T, ISOWeekday>;
 
 /**
- * A string date (without time) in the native format for browsers: YYYY-MM-DD
- * @pattern (?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))
- * @see https://developer.mozilla.org/docs/Web/HTML/Element/input/date MDN HTMLInput
- * @see https://ru.wikipedia.org/wiki/ISO_8601 ISO8601
- * @see https://www.html5pattern.com/Dates html5pattern
+ * ISO date (without time)
+ *
+ * @pattern ^(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))$
+ * @see https://en.wikipedia.org/wiki/ISO_8601 ISO8601
  */
-export type StringDate = `${number}-${number}-${number}`;
+export type ISODateString = `${number}-${number}-${number}`;
 
 /**
- * A string time in the native format for browsers: HH:mm:ss
- * @pattern (0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){2}
- * @see https://www.html5pattern.com/Dates html5pattern
+ * ISO time (without date) with optional time-zone
+ * @format iso-time
  */
-export type StringTime = `${number}:${number}:${number}`;
+export type ISOTimeString = string;
 
 /**
- * @format date
- * @see https://ajv.js.org/packages/ajv-formats.html formats
+ * ISO time (without date) in UTC time-zone
+ * @pattern ^(0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){2}Z$
  */
-export type SchematicDateString = string;
+export type ISOTimeZString = `${number}-${number}-${number}Z`;
 
 /**
- * @format time
- * @see https://ajv.js.org/packages/ajv-formats.html formats
+ * ISO date with time with optional time-zone
+ * @format iso-date-time
  */
-export type SchematicTimeString = string;
+export type ISODateTimeString = string;
 
 /**
- * @format date-time
- * @see https://ajv.js.org/packages/ajv-formats.html formats
+ * ISO date with time with optional time-zone
+ * @pattern ^(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))T([0-5][0-9])\:([0-5][0-9])\:([0-5][0-9])Z$
  */
-export type SchematicDateTimeString = string;
+export type ISODateTimeZString = `${string}Z`;
 
 /**
  * @minimum 0
@@ -61,6 +60,6 @@ export type N24HourClock = number;
 /**
  * @minimum 1
  * @maximum 12
- * @see https://en.wikipedia.org/wiki/24-hour_clock 24-hour clock
+ * @see https://en.wikipedia.org/wiki/12-hour_clock 12-hour clock
  */
 export type N12HourClock = number;
