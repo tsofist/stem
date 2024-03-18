@@ -98,25 +98,19 @@ export type SimpleValuesOf<T, K extends keyof T = keyof T> = Exclude<
  * @see SimpleValuesOf
  */
 export type WSimpleValuesOf<T, K extends keyof T = keyof T> = Exclude<
-    Extract<T[K], ObjectKey | undefined>,
+    Extract<T[K], ObjectKey | undefined | unknown>,
     null
 >;
 
 /**
  * Get all keys of T with values assignable to object keys
  */
-export type SimpleValueKeysOf<T, K extends keyof T = keyof T> = keyof PickByValueType<
-    T,
-    SimpleValuesOf<T>
->;
+export type SimpleValueKeysOf<T> = keyof PickByValueType<T, SimpleValuesOf<T>>;
 
 /**
  * Get all keys of T with values assignable to object keys
  */
-export type WSimpleValueKeysOf<T, K extends keyof T = keyof T> = keyof PickByValueType<
-    T,
-    WSimpleValuesOf<T>
->;
+export type WSimpleValueKeysOf<T> = keyof PickByValueType<T, WSimpleValuesOf<T>>;
 
 /**
  * Extract all fields from T without methods
