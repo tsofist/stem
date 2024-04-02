@@ -213,6 +213,11 @@ export type PRec<V, K extends ObjectKey = string> = {
 };
 
 /**
+ * Object without any fields
+ */
+export type EmptyRec = Rec<never, never>;
+
+/**
  * Universal comparator result type
  */
 export type CompareResult = -1 | 0 | 1;
