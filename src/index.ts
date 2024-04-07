@@ -69,8 +69,15 @@ export type StringKeyOf<T> = T extends object ? Extract<keyof T, string> : never
 /**
  * Make K-keys of T required
  */
-export type RequiredFields<T, K extends keyof T> = T & {
+export type RequiredSome<T, K extends keyof T> = T & {
     [P in K]-?: T[P];
+};
+
+/**
+ * Make K-keys of T optional
+ */
+export type PartialSome<T, K extends keyof T> = Omit<T, K> & {
+    [P in K]?: T[P];
 };
 
 /**
