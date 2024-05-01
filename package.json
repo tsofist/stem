@@ -4,6 +4,7 @@
   "description": "Core basics for TypeScript applications",
   "author": "Andrew Berdnikov <tsofistgudmen@gmail.com>",
   "license": "MIT",
+  "homepage": "https://github.com/tsofist/stem/",
   "main": "lib/index",
   "types": "lib/index",
   "type": "commonjs",
