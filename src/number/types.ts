@@ -4,6 +4,18 @@
 export type Float = number;
 
 /**
+ * @asType number
+ * @minimum 0
+ */
+export type NonNegativeFloat = number;
+
+/**
+ * @asType number
+ * @exclusiveMaximum 0
+ */
+export type NegativeFloat = number;
+
+/**
  * @asType integer
  */
 export type Int = number;
