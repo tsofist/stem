@@ -31,6 +31,16 @@ export type Base64String = string;
 export type EmailString = string;
 
 /**
+ * @pattern ^https:\/\/t.me\/
+ */
+export type TelegramLink = string;
+
+/**
+ * @pattern ^https:\/\/wa.me\/
+ */
+export type WhatsAppLink = string;
+
+/**
  * Hexadecimal string
  * @pattern ^([a-fA-F0-9]{2})+$
  */
