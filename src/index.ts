@@ -8,6 +8,9 @@ export type NonPrimitive = Exclude<object, Primitive>;
 export type Nully = null | undefined;
 export type Nullable<T> = T | null | undefined;
 
+/** Returns IfNever if T is never, otherwise returns T or AltT */
+export type IsNever<T, IfNever, AltT = T> = [T] extends [never] ? IfNever : AltT;
+
 /**
  * Valid types of object keys
  */
@@ -232,9 +235,34 @@ export type PRec<V, K extends ObjectKey = string> = {
 /**
  * Object without any fields
  */
-export type EmptyRec = Rec<never, never>;
+export type EmptyRec = Rec<never, any>;
 
 /**
  * Universal comparator result type
  */
 export type CompareResult = -1 | 0 | 1;
+
+/**
+ * Type containing only elements present in both set T and set U.
+ * This makes type U a subset of T or, in other words, narrows down set U to match set T.
+ *
+ * @see https://www.sandromaglione.com/articles/covariant-contravariant-and-invariant-in-typescript Covariant, Contravariant, and Invariant in Typescript
+ * @see https://github.com/microsoft/TypeScript/pull/48240 Optional variance annotations
+ * @see https://devblogs.microsoft.com/typescript/announcing-typescript-4-7/ TypeScript 4.7
+ */
+export type ShallowExact<T, U extends T = T> = {
+    [Key in keyof U]: Key extends keyof T ? U[Key] : never;
+};
+
+/**
+ * Deep version of ShallowExact
+ *
+ * @see ShallowExact
+ */
+export type DeepExact<T, U extends T = T> = {
+    [Key in keyof U]: Key extends keyof T
+        ? U[Key] extends object
+            ? DeepExact<T[Key], U[Key]>
+            : U[Key]
+        : never;
+};
