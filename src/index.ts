@@ -12,6 +12,11 @@ export type Nullable<T> = T | null | undefined;
 export type IsNever<T, IfNever, AltT = T> = [T] extends [never] ? IfNever : AltT;
 
 /**
+ * Check if T is an empty object
+ */
+export type IsEmptyObject<T> = keyof T extends never ? true : false;
+
+/**
  * Valid types of object keys
  */
 export type ObjectKey = string | number | symbol;
