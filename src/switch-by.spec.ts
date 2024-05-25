@@ -1,4 +1,4 @@
-import { switchBy } from './switch-by';
+import { switchBy } from './switch-by.js';
 
 describe('switchBy', () => {
     enum V {

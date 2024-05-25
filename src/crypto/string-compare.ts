@@ -1,5 +1,5 @@
-import { Buffer } from 'buffer';
-import { timingSafeEqual } from 'crypto';
+import { Buffer } from 'node:buffer';
+import { timingSafeEqual } from 'node:crypto';
 
 /**
  * Crypto-safe string comparison

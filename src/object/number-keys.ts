@@ -1,4 +1,4 @@
-import { Nullable, PRec } from '../index';
+import { Nullable, PRec } from '../index.js';
 
 /**
  * Get object keys and convert them to numeric format

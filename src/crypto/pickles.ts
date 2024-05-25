@@ -1,5 +1,5 @@
-import { Buffer } from 'buffer';
-import { BinaryLike, createHmac, randomBytes, timingSafeEqual } from 'crypto';
+import { Buffer } from 'node:buffer';
+import { BinaryLike, createHmac, randomBytes, timingSafeEqual } from 'node:crypto';
 
 export enum PicklesHashingAlgorithm {
     /** HMAC+SHA256 */

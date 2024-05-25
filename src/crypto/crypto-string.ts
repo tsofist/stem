@@ -1,7 +1,7 @@
-import { Buffer } from 'buffer';
-import { BinaryLike, createCipheriv, createDecipheriv, randomBytes } from 'crypto';
-import { raise } from '../error';
-import { NonEmptyString } from '../index';
+import { Buffer } from 'node:buffer';
+import { BinaryLike, createCipheriv, createDecipheriv, randomBytes } from 'node:crypto';
+import { raise } from '../error.js';
+import { NonEmptyString } from '../index.js';
 
 const CIPHER_ALGORITHM = 'aes-256-cbc';
 

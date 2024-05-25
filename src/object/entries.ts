@@ -1,4 +1,4 @@
-import { CompareResult, Nullable } from '../index';
+import { CompareResult, Nullable } from '../index.js';
 
 /**
  * Type-safe version of Object.entries

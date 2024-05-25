@@ -1,4 +1,4 @@
-import { divide, multiply } from './arith';
+import { divide, multiply } from './arith.js';
 
 export function quartile(values: number[], percentile: number): number;
 export function quartile<T>(

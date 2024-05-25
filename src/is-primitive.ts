@@ -1,4 +1,4 @@
-import { Primitive } from './index';
+import { Primitive } from './index.js';
 
 export function isPrimitive(it: any): it is Primitive {
     if (it == null) return true;

@@ -1,4 +1,4 @@
-import { Nullable, ObjectKey, PRec } from '../index';
+import { Nullable, ObjectKey, PRec } from '../index.js';
 
 export type GroupByKeyExtractor<TItem, R> = (item: TItem) => Nullable<R>;
 export type GroupByTarget<T = unknown> = Set<T> | Map<any, T> | T[];

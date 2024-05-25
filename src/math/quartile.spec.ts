@@ -1,4 +1,4 @@
-import { quartile } from './quartile';
+import { quartile } from './quartile.js';
 
 describe('quartile', () => {
     it('should return the first quartile of a single-value array', () => {

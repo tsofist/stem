@@ -1,4 +1,4 @@
-import { CompareResult } from '../index';
+import { CompareResult } from '../index.js';
 
 export function compareStringsAsc(a: string, b: string): CompareResult {
     return a === b ? 0 : a > b ? 1 : -1;

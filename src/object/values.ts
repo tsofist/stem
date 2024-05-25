@@ -1,4 +1,4 @@
-import { Nullable } from '../index';
+import { Nullable } from '../index.js';
 
 /**
  * Returns only non-Nullable values from collection (Set/Map/Array)

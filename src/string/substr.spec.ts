@@ -1,4 +1,4 @@
-import { substr } from './substr';
+import { substr } from './substr.js';
 
 describe('string/substr', () => {
     it('Edge cases', () => {

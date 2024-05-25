@@ -1,6 +1,6 @@
 import { parseExpression, ParserOptions } from 'cron-parser';
-import { NonEmptyString } from '../index';
-import { deepSleeper, Sleeper } from './sleeper';
+import { NonEmptyString } from '../index.js';
+import { deepSleeper, Sleeper } from './sleeper.js';
 
 type CronExpression = ReturnType<typeof parseExpression>;
 

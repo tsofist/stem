@@ -1,4 +1,4 @@
-import { chunk } from './chunk';
+import { chunk } from './chunk.js';
 
 describe('chunk function', () => {
     const inputString = 'Hello, world!';

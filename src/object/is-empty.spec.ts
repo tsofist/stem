@@ -1,4 +1,4 @@
-import { isEmptyObject } from './is-empty';
+import { isEmptyObject } from './is-empty.js';
 
 describe('isEmptyObject', () => {
     it('simple', () => {

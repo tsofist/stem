@@ -1,4 +1,4 @@
-import { asNum } from './as-num';
+import { asNum } from './as-num.js';
 
 describe('asNum', () => {
     it('for number', () => {

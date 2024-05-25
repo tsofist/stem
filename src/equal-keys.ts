@@ -1,4 +1,4 @@
-import { ARec, hasOwnProperty, Nullable } from './index';
+import { ARec, hasOwnProperty, Nullable } from './index.js';
 
 /**
  * Checks if the keys of two objects are identical

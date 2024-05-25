@@ -1,4 +1,4 @@
-import { valueIn } from './value-in';
+import { valueIn } from './value-in.js';
 
 describe('valueIn', () => {
     it('Array', () => {

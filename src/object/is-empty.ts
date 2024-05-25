@@ -1,4 +1,4 @@
-import { hasOwnProperty } from '../index';
+import { hasOwnProperty } from '../index.js';
 
 /**
  * Object has no own properties

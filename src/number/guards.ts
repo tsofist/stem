@@ -1,4 +1,4 @@
-import { Float, Int, PositiveInt } from './types';
+import { Float, Int, PositiveInt } from './types.js';
 
 /**
  * Value is Integer number

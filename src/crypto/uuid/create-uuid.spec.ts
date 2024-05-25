@@ -1,5 +1,5 @@
-import { createUUID } from './create-uuid';
-import { RE_UUID } from './guards';
+import { createUUID } from './create-uuid.js';
+import { RE_UUID } from './guards.js';
 
 describe('createUUID', () => {
     it('should return a valid UUID', () => {

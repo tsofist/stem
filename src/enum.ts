@@ -1,4 +1,4 @@
-import { Nullable } from './index';
+import { Nullable } from './index.js';
 
 export type EnumType = object;
 export type EnumValue = string | number;

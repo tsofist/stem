@@ -8,7 +8,7 @@ import {
     readErrorContext,
     readErrorContextEx,
     testErrorMessage,
-} from './error';
+} from './error.js';
 
 describe('error', () => {
     it('raise', () => {

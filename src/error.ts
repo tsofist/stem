@@ -1,5 +1,5 @@
-import { asArray } from './as-array';
-import { ARec, ArrayMay, Primitive, URec } from './index';
+import { asArray } from './as-array.js';
+import { ARec, ArrayMay, Primitive, URec } from './index.js';
 
 export type ErrorCode = `EC_${string}`;
 

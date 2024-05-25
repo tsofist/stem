@@ -1,4 +1,4 @@
-import { ObjectKey } from '../index';
+import { ObjectKey } from '../index.js';
 
 /**
  * Remove specified properties from the target object

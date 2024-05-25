@@ -1,4 +1,4 @@
-import { PRec, Rec } from './index';
+import { PRec, Rec } from './index.js';
 
 /**
  * ISO day of the week

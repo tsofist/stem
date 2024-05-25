@@ -7,7 +7,7 @@
   "homepage": "https://github.com/tsofist/stem/",
   "main": "lib/index",
   "types": "lib/index",
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
     "build": "rimraf lib/** && tsc",
     "format": "npm run lint -- --fix",
@@ -26,15 +26,15 @@
     "tslib": "^2.6.2"
   },
   "devDependencies": {
-    "@tsofist/web-buddy": "^1.7.0",
+    "@swc/jest": "^0.2.36",
+    "@tsofist/web-buddy": "^1.8.0",
     "@types/jest": "^29.5.12",
-    "@types/node": "^18.19.31",
+    "@types/node": "^18.19.33",
     "@types/supertest": "^6.0.2",
     "husky": "^9.0.11",
     "jest": "^29.7.0",
-    "rimraf": "^5.0.5",
-    "supertest": "^6.3.4",
-    "ts-jest": "^29.1.2",
+    "rimraf": "^5.0.7",
+    "supertest": "^7.0.0",
     "typescript": "~5.4.5"
   },
   "publishConfig": {
@@ -47,25 +47,29 @@
     ]
   },
   "jest": {
+    "cacheDirectory": ".jest-cache",
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": ".coverage",
+    "extensionsToTreatAsEsm": [
+      ".ts",
+      ".tsx"
+    ],
     "moduleFileExtensions": [
       "js",
       "json",
       "ts"
     ],
-    "roots": [
-      "src"
-    ],
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
+    "roots": ["src"],
+    "testEnvironment": "node",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
-    ],
-    "cacheDirectory": ".jest-cache",
-    "coverageDirectory": ".coverage",
-    "testEnvironment": "node",
-    "moduleNameMapper": {}
+      "^.+\\.(t|j)sx?$": "@swc/jest"
+    }
   },
   "files": [
     "lib",

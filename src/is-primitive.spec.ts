@@ -1,4 +1,4 @@
-import { isPrimitive } from './is-primitive';
+import { isPrimitive } from './is-primitive.js';
 
 describe('isPrimitive', () => {
     it('simple', () => {

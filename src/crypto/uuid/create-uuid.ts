@@ -1,5 +1,5 @@
-import { randomBytes } from 'crypto';
-import { UUID } from './types';
+import { randomBytes } from 'node:crypto';
+import { UUID } from './types.js';
 
 /**
  * Generate a real, cryptographically strong UUID

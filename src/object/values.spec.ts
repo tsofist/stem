@@ -1,4 +1,4 @@
-import { nonNullableValues } from './values';
+import { nonNullableValues } from './values.js';
 
 describe('groupBy', () => {
     it('basic', () => {

@@ -1,4 +1,4 @@
-import { DropReadonly, Nullable, ObjectKey, PRec } from './index';
+import { DropReadonly, Nullable, ObjectKey, PRec } from './index.js';
 
 export interface SetOf<T extends ObjectKey> extends Iterable<T> {
     readonly values: Readonly<PRec<number, T>>;
@@ -24,7 +24,7 @@ export function setOf<T extends ObjectKey>(
             if (index === undefined) {
                 index = Object.create(null);
                 let seq = 0;
-                for (const item of target!) {
+                for (const item of target) {
                     if (item in index) continue;
                     index[item] = seq++;
                 }

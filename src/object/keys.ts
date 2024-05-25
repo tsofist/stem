@@ -1,4 +1,4 @@
-import { Nullable } from '../index';
+import { Nullable } from '../index.js';
 
 /**
  * Get array of Map/Set keys

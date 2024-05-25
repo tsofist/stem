@@ -1,4 +1,4 @@
-import { average } from './average';
+import { average } from './average.js';
 
 describe('average', () => {
     it('should return 0 for an empty array', () => {

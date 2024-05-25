@@ -1,5 +1,5 @@
-import { PositiveInt } from './number/types';
-import { Nullable, PromiseMay } from './index';
+import { PositiveInt } from './number/types.js';
+import { Nullable, PromiseMay } from './index.js';
 
 type OnChunk<T> = (chunk: T) => PromiseMay<void | boolean>;
 

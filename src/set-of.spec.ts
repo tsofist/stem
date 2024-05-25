@@ -1,4 +1,4 @@
-import { setOf } from './set-of';
+import { setOf } from './set-of.js';
 
 describe('setOf', () => {
     it('Edge cases', () => {

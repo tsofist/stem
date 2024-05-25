@@ -1,4 +1,4 @@
-import { ArrayMay } from '../index';
+import { ArrayMay } from '../index.js';
 
 export type TextBuilderItem = string | undefined | null | false;
 

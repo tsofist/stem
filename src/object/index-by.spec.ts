@@ -1,4 +1,4 @@
-import { indexBy } from './index-by';
+import { indexBy } from './index-by.js';
 
 describe('indexBy', () => {
     const list: {

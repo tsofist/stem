@@ -1,4 +1,4 @@
-import { chunkString } from './chunk';
+import { chunkString } from './chunk.js';
 
 describe('string/substr', () => {
     it('Edge cases', () => {

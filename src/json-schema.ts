@@ -1,4 +1,4 @@
-import { ARec } from './index';
+import { ARec } from './index.js';
 
 export interface JSONSchemaLike {
     $ref: string;

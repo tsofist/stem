@@ -1,4 +1,4 @@
-import { Nullable, ObjectKey, PRec, SimpleValuesOf, WSimpleValueKeysOf } from '../index';
+import { Nullable, ObjectKey, PRec, SimpleValuesOf, WSimpleValueKeysOf } from '../index.js';
 
 export type KeyValueExtractor<T, R extends ObjectKey> = (target: T) => R;
 

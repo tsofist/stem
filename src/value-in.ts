@@ -1,4 +1,4 @@
-import { ARec, ArrayMay, Nullable, ObjectKey } from './index';
+import { ARec, ArrayMay, Nullable, ObjectKey } from './index.js';
 
 /**
  * Value in Enumeration checker

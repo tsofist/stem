@@ -1,5 +1,5 @@
-import { EnumValue } from './enum';
-import { Rec } from './index';
+import { EnumValue } from './enum.js';
+import { Rec } from './index.js';
 
 type SwitchByExpr<T> = T | (() => T);
 type SwitchByFExpr<T> = T | ((val: unknown) => T);

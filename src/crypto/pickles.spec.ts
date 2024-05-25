@@ -1,4 +1,4 @@
-import { createSaltedStringHash, PicklesHashingAlgorithm, verifySaltedHash } from './pickles';
+import { createSaltedStringHash, PicklesHashingAlgorithm, verifySaltedHash } from './pickles.js';
 
 describe('pickles', () => {
     const values = ['Hello!', '안녕!🇰🇷', 'Привет!🚩'];
