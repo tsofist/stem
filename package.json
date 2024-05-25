@@ -7,6 +7,7 @@
   "homepage": "https://github.com/tsofist/stem/",
   "main": "lib/cjs/index",
   "module": "lib/esm/index",
+  "type": "module",
   "scripts": {
     "build": "rimraf lib/** && tsc && tsc -p tsconfig.cjs.json",
     "format": "npm run lint -- --fix",
