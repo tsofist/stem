@@ -5,7 +5,9 @@
     "module": "NodeNext",
     "moduleResolution": "Node16",
     "skipLibCheck": true,
-    "outDir": "lib/esm"
+    "outDir": "lib",
+    "incremental": false,
+    "noEmit": true
   },
   "include": ["src"],
   "exclude": ["node_modules"]
