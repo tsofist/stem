@@ -6,8 +6,8 @@ export class TextBuilder {
     readonly #data: string[] = [];
 
     levelChar = ' ';
-
     levelSize = 2;
+    baseLevel = 0;
 
     constructor(data?: ArrayMay<TextBuilderItem> | TextBuilder, level = 0) {
         if (data != null) this.push(data, level);
@@ -17,7 +17,13 @@ export class TextBuilder {
         return ((arguments.length > 1 ? condition && value : value) && value) || undefined;
     }
 
+    get size() {
+        return this.#data.length;
+    }
+
     push(data: ArrayMay<TextBuilderItem | TextBuilder> | TextBuilder, level = 0) {
+        level = this.baseLevel + level;
+
         if (!Array.isArray(data)) {
             if (data instanceof TextBuilder) data = [...data.#data];
             else data = [data];

@@ -24,7 +24,7 @@ export function setOf<T extends ObjectKey>(
             if (index === undefined) {
                 index = Object.create(null);
                 let seq = 0;
-                for (const item of target!) {
+                for (const item of target) {
                     if (item in index) continue;
                     index[item] = seq++;
                 }
