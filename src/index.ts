@@ -146,6 +146,13 @@ export type OmitMethods<T extends object> = Pick<
 >;
 
 /**
+ * Extract all existing fields from T with names from K
+ */
+export type PickExists<T, K extends ObjectKey> = {
+    [P in K]: P extends keyof T ? T[P] : never;
+};
+
+/**
  * Extract all methods from T
  */
 export type PickMethods<T extends object> = Pick<
