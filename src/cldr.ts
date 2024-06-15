@@ -63,3 +63,27 @@ export type N24HourClock = number;
  * @see https://en.wikipedia.org/wiki/12-hour_clock 12-hour clock
  */
 export type N12HourClock = number;
+
+/**
+ * One minute in milliseconds
+ * @const 60000
+ */
+export const ONE_MINUTE = 60 * 1000;
+
+/**
+ * One hour in milliseconds
+ * @const 3600000
+ */
+export const ONE_HOUR = 60 * ONE_MINUTE;
+
+/**
+ * One day in milliseconds
+ * @const 86400000
+ */
+export const ONE_DAY = 24 * ONE_HOUR;
+
+/**
+ * One week in milliseconds
+ * @const 604800000
+ */
+export const ONE_WEEK = 7 * ONE_DAY;
