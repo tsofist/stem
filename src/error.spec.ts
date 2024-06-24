@@ -8,6 +8,8 @@ import {
     readErrorContext,
     readErrorContextEx,
     testErrorMessage,
+    matchError,
+    MatchErrorCondition,
 } from './error';
 
 describe('error', () => {
@@ -189,5 +191,52 @@ describe('error', () => {
         expect(readErrorContextEx(error, code, 'u')).toStrictEqual(context.u);
         expect(readErrorContextEx(error, code, 'n')).toStrictEqual(context.n);
         expect(readErrorContextEx(error, 'EC_')).toStrictEqual(undefined);
+    });
+
+    it('matchError', () => {
+        const error = (() => {
+            try {
+                raiseEx('EC_SOME_CODE', { field: 'value' }, 'This is an error');
+            } catch (e) {
+                return e;
+            }
+        })();
+
+        {
+            const condition: MatchErrorCondition = {
+                code: 'EC_SOME_CODE',
+                context: ['field', 'value'],
+                message: ['This is an error'],
+            };
+            expect(matchError(error, condition)).toStrictEqual(true);
+        }
+        {
+            const condition: MatchErrorCondition = {
+                code: 'EC_DIFFERENT_CODE',
+                context: ['field', 'value'],
+                message: ['This is an error'],
+            };
+            expect(matchError(error, condition)).toStrictEqual(false);
+        }
+        {
+            const condition: MatchErrorCondition = {
+                code: 'EC_SOME_CODE',
+                context: ['field', 'different value'],
+                message: ['This is an error'],
+            };
+            expect(matchError(error, condition)).toStrictEqual(false);
+        }
+        {
+            const condition: MatchErrorCondition = {
+                code: 'EC_SOME_CODE',
+                context: ['field', 'value'],
+                message: ['This is a different error'],
+            };
+            expect(matchError(error, condition)).toStrictEqual(false);
+        }
+        {
+            const condition: MatchErrorCondition = {};
+            expect(matchError(error, condition)).toStrictEqual(false);
+        }
     });
 });

@@ -91,13 +91,8 @@ export function matchErrorMessage(error: any, re: RegExp): RegExpMatchArray | st
 }
 
 /**
- * Error message contains text (with case-insensitive)
+ * Error message match to RegExp or text (case-insensitive)
  */
-export function testErrorMessage(error: any, text: ArrayMay<string>): boolean;
-/**
- * Error message match to RegExp
- */
-export function testErrorMessage(error: any, re: ArrayMay<RegExp>): boolean;
 export function testErrorMessage(error: any, math: ArrayMay<RegExp | string>): boolean {
     if (error && error instanceof Error && math) {
         const message = error + '';
@@ -105,6 +100,23 @@ export function testErrorMessage(error: any, math: ArrayMay<RegExp | string>): b
             if (m instanceof RegExp) return m.test(message);
             return message.toLowerCase().includes(m.toLowerCase());
         });
+    }
+    return false;
+}
+
+export interface MatchErrorCondition {
+    code?: ErrorCode;
+    context?: [field: string, value: Primitive];
+    message?: ArrayMay<string | RegExp>;
+}
+
+export function matchError(error: any, condition: MatchErrorCondition): boolean {
+    const { code, context, message } = condition;
+    if (code || context || message) {
+        if (condition.code && !hasErrorCode(error, condition.code)) return false;
+        if (condition.context && !hasErrorContext(error, ...condition.context)) return false;
+        if (condition.message && !testErrorMessage(error, condition.message)) return false;
+        return true;
     }
     return false;
 }
