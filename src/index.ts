@@ -27,6 +27,31 @@ export type ObjectKey = string | number | symbol;
 export type NonEmptyString = string;
 
 /**
+ * @format uri
+ */
+export type URIString = string;
+
+/**
+ * @pattern ^\\/(?:[a-zA-Z0-9-._]+\\/)*[a-zA-Z0-9-._]*$
+ */
+export type URLAbsPathname = string;
+
+/**
+ * @pattern ^(?!\\/)(?:[a-zA-Z0-9-._]+\\/)*[a-zA-Z0-9-._]*$
+ */
+export type URLRelPathname = string;
+
+/**
+ * @pattern ^(\/?[a-zA-Z0-9_/-]*)(\?.*)?$
+ */
+export type URLPath = string;
+
+/**
+ * HTML href
+ */
+export type HRefString = URIString | URLPath;
+
+/**
  * @pattern ^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})$
  * @see https://en.wikipedia.org/wiki/Base64 Wikipedia
  */
@@ -39,12 +64,12 @@ export type Base64String = string;
 export type EmailString = string;
 
 /**
- * @pattern ^https:\/\/t.me\/
+ * @pattern ^https:\/\/t\.me\/
  */
 export type TelegramLink = string;
 
 /**
- * @pattern ^https:\/\/wa.me\/
+ * @pattern ^https:\/\/wa\.me\/
  */
 export type WhatsAppLink = string;
 
