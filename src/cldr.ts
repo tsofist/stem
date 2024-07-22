@@ -21,7 +21,7 @@ export type ISOWeekdayPRec<T> = PRec<T, ISOWeekday>;
 /**
  * ISO date (without time)
  *
- * @pattern ^(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))$
+ * @pattern ^(?:19|20)\d{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])|(?:0[13-9]|1[0-2])-(?:30)|(?:0[13578]|1[02])-31)$
  * @see https://en.wikipedia.org/wiki/ISO_8601 ISO8601
  */
 export type ISODateString = `${number}-${number}-${number}`;
@@ -45,12 +45,14 @@ export type ISOTimeZString = `${number}:${number}:${number}Z`;
 export type ISODateTimeString = string;
 
 /**
- * ISO date with time with optional time-zone
- * @pattern ^(?:19|20)[0-9]{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|1[0-9]|2[0-9])|(?:(?!02)(?:0[1-9]|1[0-2])-(?:30))|(?:(?:0[13578]|1[02])-31))T(0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){2}(\.\d{1,3})?Z$
+ * ISO date with time UTC+0 (Zulu)
+ * @pattern ^(?:19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])(\.\d{1,3})?Z$
+ * @faker date.anytime
  */
 export type ISODateTimeZString = `${string}Z`;
 
 /**
+ * @asType integer
  * @minimum 0
  * @maximum 23
  * @see https://en.wikipedia.org/wiki/24-hour_clock 24-hour clock
@@ -58,6 +60,7 @@ export type ISODateTimeZString = `${string}Z`;
 export type N24HourClock = number;
 
 /**
+ * @asType integer
  * @minimum 1
  * @maximum 12
  * @see https://en.wikipedia.org/wiki/12-hour_clock 12-hour clock
