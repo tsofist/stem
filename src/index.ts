@@ -11,6 +11,14 @@ export type Nullable<T> = T | null | undefined;
 /** Returns IfNever if T is never, otherwise returns T or AltT */
 export type IsNever<T, IfNever, AltT = T> = [T] extends [never] ? IfNever : AltT;
 
+/** Returns never if T is never, otherwise returns T */
+export type ExcludeNever<T> = T extends never ? never : T;
+
+/** Merge all values from T without never-value members */
+export type MergeNonNeverValues<T extends object> = {
+    [K in keyof T]: ExcludeNever<T[K]>;
+}[keyof T];
+
 /**
  * Check if T is an empty object
  */
@@ -205,14 +213,14 @@ export type PickExplicitFieldsWithPrefix<T extends object, Prefix extends string
 };
 
 /**
- * Drop readonly modifier from target object
+ * Drop readonly modifier from a target object
  */
 export type DropReadonly<T extends object, K extends keyof T = keyof T> = {
     -readonly [P in K]: T[P];
 };
 
 /**
- * Deep-version of Partial type
+ * Deep-version of a Partial type
  * @see Partial
  */
 export type DeepPartial<T> = T extends object ? { [P in keyof T]?: DeepPartial<T[P]> } : T;
