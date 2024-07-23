@@ -15,9 +15,9 @@ export type IsNever<T, IfNever, AltT = T> = [T] extends [never] ? IfNever : AltT
 export type ExcludeNever<T> = T extends never ? never : T;
 
 /** Merge all values from T without never-value members */
-export type MergeNonNeverValues<T extends object> = {
-    [K in keyof T]: ExcludeNever<T[K]>;
-}[keyof T];
+export type MergeNonNeverValues<T, R = ValuesOf<OmitByValueType<T, never>>> = {
+    [K in keyof R]: R[K];
+};
 
 /**
  * Check if T is an empty object
@@ -136,6 +136,13 @@ export type PartialSome<T, K extends keyof T> = Omit<T, K> & {
  */
 export type PickByValueType<T, U> = {
     [K in keyof T as T[K] extends U ? K : never]: T[K];
+};
+
+/**
+ * Omit all properties with values has a U-types
+ */
+export type OmitByValueType<T, U> = {
+    [K in keyof T as T[K] extends U ? never : K]: T[K];
 };
 
 /**
