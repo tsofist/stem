@@ -106,6 +106,11 @@ export type ArrayValue<T> = T extends Array<infer U> ? U : T;
 export type NonEmptyArray<T> = T[];
 /** @uniqueItems true */
 export type UniqueItemsArray<T> = T[];
+/**
+ * @minItems 1
+ * @uniqueItems true
+ */
+export type NonEmptyUniqueItemsArray<T> = T[];
 
 export type PromiseMay<T = unknown> = T | Promise<T>;
 export type PromiseValue<T> = T extends Promise<infer U> ? U : T;
