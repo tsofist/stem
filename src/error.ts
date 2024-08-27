@@ -144,3 +144,10 @@ function createError(code?: ErrorCode, context?: ARec, message?: string): Error 
 
     return result;
 }
+
+export function errorFrom(source: any): Error {
+    if (source instanceof Error) return source;
+
+    const { code, context, message } = source || {};
+    return createError(code, context, message);
+}
