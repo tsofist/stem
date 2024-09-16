@@ -60,6 +60,8 @@ export type ISODateZString = `${number}-${number}-${number}`;
  * @description Local-time string in ISO-8601 format without date and with optional time-zone
  *
  * @format iso-time
+ *
+ * @public
  */
 export type ISOTimeString = string;
 
