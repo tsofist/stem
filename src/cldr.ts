@@ -19,35 +19,93 @@ export type ISOWeekdayRec<T> = Rec<T, ISOWeekday>;
 export type ISOWeekdayPRec<T> = PRec<T, ISOWeekday>;
 
 /**
- * ISO date (without time)
+ * ISO date string
+ *
+ * TZ: Local
+ * Date: YES
+ * Time: NO
+ *
+ * @description Local-date string in ISO-8601 format without time
  *
  * @pattern ^(?:19|20)\d{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])|(?:0[13-9]|1[0-2])-(?:30)|(?:0[13578]|1[02])-31)$
- * @see https://en.wikipedia.org/wiki/ISO_8601 ISO8601
+ * @see https://en.wikipedia.org/wiki/ISO_8601 ISO-8601
+ *
+ * @public
  */
 export type ISODateString = `${number}-${number}-${number}`;
 
 /**
- * ISO time (without date) with optional time-zone
+ * ISO date string
+ *
+ * TZ: Zulu
+ * Date: YES
+ * Time: NO
+ *
+ * @description Zulu-date string in ISO-8601 format without time
+ *
+ * @pattern ^(?:19|20)\d{2}-(?:(?:0[1-9]|1[0-2])-(?:0[1-9]|[12][0-9]|3[01])|(?:0[13-9]|1[0-2])-(?:30)|(?:0[13578]|1[02])-31)$
+ * @see https://en.wikipedia.org/wiki/ISO_8601 ISO-8601
+ *
+ * @public
+ */
+export type ISODateZString = `${number}-${number}-${number}`;
+
+/**
+ * ISO time string
+ *
+ * TZ: Local, Optional
+ * Date: NO
+ * Time: YES
+ *
+ * @description Local-time string in ISO-8601 format without date and with optional time-zone
+ *
  * @format iso-time
  */
 export type ISOTimeString = string;
 
 /**
- * ISO time (without date) in UTC time-zone
+ * ISO time string
+ *
+ * TZ: Zulu
+ * Date: NO
+ * Time: YES
+ *
+ * @description Zulu-time string in ISO-8601 format without date
+ *
  * @pattern ^(0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){2}(\.\d{1,3})?Z$
+ *
+ * @public
  */
 export type ISOTimeZString = `${number}:${number}:${number}Z`;
 
 /**
- * ISO date with time with optional time-zone
+ * ISO date with time string
+ *
+ * TZ: Local, Optional
+ * Date: YES
+ * Time: YES
+ *
+ * @description Local datetime string in ISO-8601 format with time-zone
+ *
  * @format iso-date-time
+ *
+ * @public
  */
 export type ISODateTimeString = string;
 
 /**
- * ISO date with time UTC+0 (Zulu)
+ * ISO date with time string
+ *
+ * TZ: Zulu
+ * Date: YES
+ * Time: YES
+ *
+ * @description Zulu datetime string in ISO-8601 format
+ *
  * @pattern ^(?:19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])T([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])(\.\d{1,3})?Z$
  * @faker date.anytime
+ *
+ * @public
  */
 export type ISODateTimeZString = `${string}Z`;
 
