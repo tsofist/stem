@@ -82,6 +82,11 @@ export type TelegramLink = string;
 export type WhatsAppLink = string;
 
 /**
+ * @pattern ^https?:\/\/(www\.)?(youtube\.com\/|youtu\.be\/)
+ */
+export type YouTubeLink = string;
+
+/**
  * Hexadecimal string
  * @pattern ^([a-fA-F0-9]{2})+$
  */
