@@ -1,3 +1,4 @@
+import { startsWithNonDigit } from './string/leading-digit';
 import { Nullable } from './index';
 
 export type EnumType = object;
@@ -5,6 +6,7 @@ export type EnumValue = string | number;
 
 /**
  * Get keys of Enum type
+ *
  * @example
  * enum Alpha { A, B, C}
  *
@@ -13,6 +15,28 @@ export type EnumValue = string | number;
  * const alphaKey2: AlphaKey = 'D'; // ERROR
  */
 export type EnumKeys<TypeOfEnum extends EnumType> = keyof TypeOfEnum;
+
+/**
+ * Get values of Enum type
+ *
+ * @example
+ * enum Alpha { A, B, C}
+ *
+ * type AlphaValues = EnumValues<typeof Alpha>; // 0 | 1 | 2
+ * const alphaValue1: AlphaValues = 0; // OK
+ * const alphaValue11: AlphaValues = Alpha.C; // OK
+ * const alphaValue2: AlphaValues = 3; // ERROR
+ *
+ * enum Alpha2 { A = 'A', B = 'B', C = 'C'}
+ *
+ * type Alpha2Values = EnumValues<typeof Alpha2>; // "A" | "B" | "C"
+ * const alpha2Value1: Alpha2Values = 'A'; // OK
+ * const alpha2Value11: Alpha2Values = Alpha2.B // OK
+ * const alpha2Value2: Alpha2Values = 'D'; // ERROR
+ */
+export type EnumValues<T extends EnumType, K extends keyof T = keyof T> = T[K] extends string
+    ? `${T[K]}`
+    : T[K];
 
 /**
  * Extract keys of Enums
@@ -37,11 +61,7 @@ export function extractEnumKeys<Enum extends EnumType>(value: Enum): (keyof Enum
     if (nCount === 0) {
         result = keys;
     } else if (nCount !== strings.length) {
-        result = keys.filter((item) => {
-            const v = (value as any)[item];
-            const num = typeof v === 'number';
-            return num || !(v in value);
-        });
+        result = keys.filter(startsWithNonDigit);
     } else {
         result = strings;
     }
