@@ -1,5 +1,6 @@
 import { Buffer } from 'buffer';
 import { BinaryLike, createHmac, randomBytes, timingSafeEqual } from 'crypto';
+import { Base64String } from '../index';
 
 export enum PicklesHashingAlgorithm {
     /** HMAC+SHA256 */
@@ -10,8 +11,8 @@ export enum PicklesHashingAlgorithm {
 
 export interface SaltedStringHash {
     alg: PicklesHashingAlgorithm;
-    salt: string;
-    hash: string;
+    salt: Base64String;
+    hash: Base64String;
 }
 
 export function createSaltedStringHash(
@@ -61,6 +62,7 @@ export function verifySaltedHash(hash: SaltedStringHash, value: BinaryLike): boo
                 return timingSafeEqual(computedHash, storedHash);
             }
             default:
+                // noinspection ExceptionCaughtLocallyJS
                 throw new Error(`Unknown algorithm: ${hash.alg}`);
         }
     } catch (err) {
