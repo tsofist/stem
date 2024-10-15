@@ -142,6 +142,17 @@ export type PartialSome<T, K extends keyof T> = Omit<T, K> & {
 };
 
 /**
+ * Pick some items from T
+ *
+ * (for omitting items you can use just Exclude<A, B>)
+ *
+ * @example
+ *   type L1 = 'a' | 'b' | 'c';
+ *   type L1WithoutA = PickSome<L1, 'b' | 'c'>; // 'b' | 'c'
+ */
+export type PickStringLiteral<A extends string, B extends A> = B;
+
+/**
  * Pick all properties with values has a U-types
  */
 export type PickByValueType<T, U> = {
