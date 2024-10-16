@@ -153,6 +153,15 @@ export type PartialSome<T, K extends keyof T> = Omit<T, K> & {
 export type PickStringLiteral<A extends string, B extends A> = B;
 
 /**
+ * Converts a string literal type into a template literal type.
+ *
+ * Ensures that the resulting type is treated as a `TemplateLiteralType`
+ *   by the TypeScript Compiler, useful for working with template literals
+ *   in advanced type scenarios.
+ */
+export type TemplateStringOf<T extends string> = `${T}`;
+
+/**
  * Pick all properties with values has a U-types
  */
 export type PickByValueType<T, U> = {
