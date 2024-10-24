@@ -176,6 +176,33 @@ export type OmitByValueType<T, U> = {
 };
 
 /**
+ * Reintroduces properties from type R into type T,
+ *    replacing any properties in T that share the same name with those in R.
+ * R can include additional properties that are not present in T.
+ *
+ * @example
+ *   type A = { x: number; y: string };
+ *   type B = { y: number; z: boolean };
+ *   type C = Reintroduce<A, B>; // Result: { x: number; y: number; z: boolean }
+ */
+export type Reintroduce<T extends object, R extends object> = Omit<T, keyof R> & R;
+
+/**
+ * Reintroduces properties from type R into type T exactly,
+ *    replacing any properties in T that share the same name with those in R.
+ * R may only contain properties that exist in T, ensuring that no extra properties are included.
+ *
+ * @example
+ *   type G = { x: number; y: string };
+ *   type H = { y: number };
+ *   type I = ReintroduceExact<G, H>; // Result: { x: number; y: number }
+ */
+export type ReintroduceExact<
+    T extends object,
+    R extends ShallowExact<PRec<any, keyof T>, R>,
+> = Omit<T, keyof R> & R;
+
+/**
  * Get all types from values of T
  */
 export type ValuesOf<T, K extends keyof T = keyof T> = T[K];
