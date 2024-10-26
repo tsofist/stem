@@ -16,7 +16,6 @@
     "pkg:publish-test": "semantic-release --dry-run",
     "pkg:purge": "rimraf lib .coverage .lint-cache .jest-cache node_modules",
     "prepare": "husky",
-    "prepublishOnly": "npm run lint && npm run test && npm run build",
     "test": "jest",
     "test:cov": "jest --coverage",
     "test:watch": "jest --watch"
