@@ -2,7 +2,7 @@ import { randomBytes } from 'crypto';
 import { UUID } from './types';
 
 /**
- * Generate a real, cryptographically strong UUID
+ * Generate a real, cryptographically strong UUID v4
  * @see https://ru.wikipedia.org/wiki/UUID
  */
 export function createUUID(): UUID {
