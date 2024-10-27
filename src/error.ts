@@ -1,5 +1,5 @@
 import { asArray } from './as-array';
-import { ARec, ArrayMay, Primitive, URec } from './index';
+import { ARec, ArrayMay, IsNever, Primitive, URec } from './index';
 
 type ErrorCodeSeparator = '_' | '.';
 
@@ -17,11 +17,11 @@ export type ErrorCodesMap<
     Sep extends ErrorCodeSeparator = '_',
     TValue = string,
 > = {
-    readonly [Code in ErrorCodeFamily<TCode, Sep>]: TValue;
+    readonly [Code in ErrorCodeFamily<TCode, Sep>]: IsNever<TValue, Code>;
 };
 
 export type ErrorCodesFamilyMap<TFamily extends ErrorCodeFamily<any>, TValue = string> = {
-    readonly [Code in TFamily]: TValue;
+    readonly [Code in TFamily]: IsNever<TValue, Code>;
 };
 
 export function raise(message: string): never;
@@ -179,4 +179,17 @@ export function isErrorCode(source: any): source is ErrorCode {
         source.startsWith(ErrorCodePrefix) &&
         source.length > ErrorCodePrefix.length
     );
+}
+
+export function normalizeErrorCodesMap<
+    M extends ErrorCodesFamilyMap<ErrorCodeFamily<any>>,
+    K extends keyof M = keyof M,
+    R = { [P in K]: P },
+>(source: M): R {
+    const result: R = {} as R;
+    for (const key of Object.keys(source) as K[]) {
+        // @ts-expect-error It's OK
+        result[key] = key;
+    }
+    return result;
 }
