@@ -1,7 +1,28 @@
 import { asArray } from './as-array';
 import { ARec, ArrayMay, Primitive, URec } from './index';
 
-export type ErrorCode = `EC_${string}`;
+type ErrorCodeSeparator = '_' | '.';
+
+export const ErrorCodePrefix = 'EC_';
+export type ErrorCode = `${typeof ErrorCodePrefix}${string}`;
+
+export type ErrorCodeFamily<
+    TCode extends ErrorCode,
+    Sep extends ErrorCodeSeparator = '_',
+    _ extends string = `${TCode}${Sep}${string}`,
+> = Sep extends '_' ? Uppercase<_> : _;
+
+export type ErrorCodesMap<
+    TCode extends ErrorCode,
+    Sep extends ErrorCodeSeparator = '_',
+    TValue = string,
+> = {
+    readonly [Code in ErrorCodeFamily<TCode, Sep>]: TValue;
+};
+
+export type ErrorCodesFamilyMap<TFamily extends ErrorCodeFamily<any>, TValue = string> = {
+    readonly [Code in TFamily]: TValue;
+};
 
 export function raise(message: string): never;
 export function raise(message: string, code: ErrorCode): never;
@@ -73,7 +94,7 @@ export function hasErrorContext(error: any, field?: string, value?: Primitive) {
 export function readErrorCode(error: any): ErrorCode | undefined {
     if (error && error instanceof Error && 'code' in error) {
         const result = error.code;
-        if (typeof result === 'string') return result as ErrorCode;
+        if (isErrorCode(result)) return result;
     }
     return undefined;
 }
@@ -150,4 +171,12 @@ export function errorFrom(source: any): Error {
 
     const { code, context, message } = source || {};
     return createError(code, context, message);
+}
+
+export function isErrorCode(source: any): source is ErrorCode {
+    return (
+        typeof source === 'string' &&
+        source.startsWith(ErrorCodePrefix) &&
+        source.length > ErrorCodePrefix.length
+    );
 }
