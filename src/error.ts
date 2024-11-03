@@ -2,6 +2,8 @@ import { asArray } from './as-array';
 import { ARec, ArrayMay, Primitive, URec } from './index';
 
 export const ErrorCodePrefix = 'EC_';
+export const ErrorCodeField = 'code';
+export const ErrorContextField = 'context';
 
 /**
  * @pattern ^EC_[A-Z][a-zA-Z0-9\._\-|]{0,200}$
@@ -37,7 +39,7 @@ export function raiseEx<Ctx extends ARec = URec>(
 export function readErrorContext<T extends object = URec>(error: any): T | undefined;
 export function readErrorContext<T = unknown>(error: any, field: string): T | undefined;
 export function readErrorContext<T>(error: any, field?: string): T | undefined {
-    if (error && error instanceof Error && 'context' in error) {
+    if (error && error instanceof Error && ErrorContextField in error) {
         const result = error.context as ARec;
         if (result && typeof result === 'object') {
             if (field == null) return result as T;
@@ -71,7 +73,7 @@ export function hasErrorContext(error: any, field?: string, value?: Primitive) {
     if (
         error &&
         error instanceof Error &&
-        'context' in error &&
+        ErrorContextField in error &&
         error.context != null &&
         typeof error.context === 'object'
     ) {
@@ -83,7 +85,7 @@ export function hasErrorContext(error: any, field?: string, value?: Primitive) {
 }
 
 export function readErrorCode(error: any): ErrorCode | undefined {
-    if (error && error instanceof Error && 'code' in error) {
+    if (error && error instanceof Error && ErrorCodeField in error) {
         const result = error.code;
         if (isErrorCode(result)) return result;
     }
@@ -137,7 +139,7 @@ function createError(code?: ErrorCode, context?: ARec, message?: string): Error 
     const result = new Error(message ?? code);
 
     if (code) {
-        Object.defineProperty(result, 'code', {
+        Object.defineProperty(result, ErrorCodeField, {
             value: code,
             enumerable: true,
             writable: false,
@@ -146,7 +148,7 @@ function createError(code?: ErrorCode, context?: ARec, message?: string): Error 
     }
 
     if (context) {
-        Object.defineProperty(result, 'context', {
+        Object.defineProperty(result, ErrorContextField, {
             value: context,
             enumerable: true,
             writable: false,
