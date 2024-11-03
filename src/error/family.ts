@@ -3,7 +3,7 @@ import {
     ErrorCodeFamily,
     ErrorCodeSeparator,
     raiseEx,
-    readErrorContext,
+    readErrorContextEx,
 } from '../error';
 import { ARec, OmitByValueType, ShallowExact, URec } from '../index';
 
@@ -77,6 +77,21 @@ export class ErrorFamily<
     }
 
     readContext<T extends keyof Members>(code: T, source: unknown | Error): Members[T][1] {
-        return readErrorContext(source, code as ErrorCode);
+        return readErrorContextEx(source, code as ErrorCode);
+    }
+
+    readContextWithDefaults<T extends keyof Members>(
+        code: T,
+        source: unknown | Error,
+    ): Members[T][1] {
+        return this.getMergedContext(code, this.readContext(code, source));
+    }
+
+    protected getMergedContext(
+        code: keyof Members,
+        context: object | undefined,
+    ): object | undefined {
+        const defaults = this.members[code][1] as undefined | object;
+        return context || defaults ? { ...defaults, ...context } : undefined;
     }
 }
