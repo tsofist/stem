@@ -9,7 +9,7 @@
   "types": "lib/index",
   "type": "commonjs",
   "scripts": {
-    "build": "rimraf lib/** && tsc",
+    "build": "rimraf lib/** && tsc -p tsconfig.build.json",
     "format": "npm run lint -- --fix",
     "lint": "eslint . --cache --cache-location .lint-cache/",
     "pkg:publish": "semantic-release --no-ci",
