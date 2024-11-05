@@ -5,12 +5,15 @@ import {
     raiseEx,
     readErrorContextEx,
 } from '../error';
-import { ARec, OmitByValueType, ShallowExact, URec } from '../index';
+import { ARec, OmitByValueType, PickFieldsWithPrefix, ShallowExact, URec } from '../index';
 
 export type ErrorFamilyMember<Context extends URec> = readonly [
     publicMessage: string,
     contextDefaults?: Context,
 ];
+
+export type ErrorFamilyCode<EF extends ErrorFamily<ErrorCode, any, any, any>> =
+    keyof PickFieldsWithPrefix<EF, EF['prefix']>;
 
 export class ErrorFamily<
     ErrorCodePrefix extends ErrorCode,
