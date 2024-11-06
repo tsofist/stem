@@ -1,14 +1,23 @@
-import { hasOwnProperty } from '../index';
+import { hasOwn } from './has-own';
 
 /**
- * Object has no own properties
+ * Object has no own properties.
  *
- * **Effective more than** *!Object.keys(t).length*
+ * More efficient alternative to `Object.keys(target).length === 0`.
+ *
+ * Note: Symbol properties are ignored in the check for object emptiness,
+ *   even if they are enumerable, because they are not included in
+ *   JSON serialization and may not be handled in the same way as string-based
+ *   properties in all contexts.
  */
-export function isEmptyObject(target: any): boolean {
+export function isEmptyObject(target: unknown, onlyOwnProperties = true): boolean {
     if (target == null) return false;
     for (const key in target) {
-        if (hasOwnProperty.call(target, key)) return false;
+        if (onlyOwnProperties) {
+            if (hasOwn(target, key)) return false;
+        } else {
+            return false;
+        }
     }
     return true;
 }
