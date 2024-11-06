@@ -1,7 +1,11 @@
 import { PositiveInt } from './number/types';
 import { Nullable, PromiseMay } from './index';
 
-type OnChunk<T> = (chunk: T) => PromiseMay<void | boolean>;
+/**
+ * Callback for each chunk.
+ * Return `false` to break early.
+ */
+type OnChunk<T> = (this: void, chunk: T) => PromiseMay<boolean> | PromiseMay;
 
 /**
  * Iterate target chunks

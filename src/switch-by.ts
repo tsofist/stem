@@ -5,7 +5,7 @@ type SwitchByExpr<T> = T | (() => T);
 type SwitchByFExpr<T> = T | ((val: unknown) => T);
 
 function switchByFallback(val: unknown): never {
-    throw new Error(`No value for ${val}`);
+    throw new Error(`No value for ${String(val)}`);
 }
 
 /**

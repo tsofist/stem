@@ -15,7 +15,7 @@ export function indexBy<T, R extends ObjectKey>(
     keyField: KeyValueExtractor<T, R> | keyof T,
 ): PRec<T> {
     const isMap = target instanceof Map;
-    const result: PRec<T> = Object.create(null);
+    const result = Object.create(null) as PRec<T>;
     const fn = typeof keyField === 'function';
 
     if (target) {

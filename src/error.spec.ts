@@ -21,33 +21,33 @@ describe('error', () => {
     });
     it('readErrorCode', () => {
         const code = 'EC_SOME_CODE';
-        let error: any;
+        let error;
         try {
             raise('ERROR', code);
         } catch (e) {
-            error = e;
+            error = e as Error;
         }
         expect(readErrorCode(error)).toStrictEqual(code);
         expect(readErrorCode(new Error(''))).toStrictEqual(undefined);
     });
     it('readErrorCode with undefined message', () => {
         const code = 'EC_SOME_CODE';
-        let error: any;
+        let error;
         try {
             raise(undefined, code);
         } catch (e) {
-            error = e;
+            error = e as Error;
         }
         expect(readErrorCode(error)).toStrictEqual(code);
         expect(error.message).toStrictEqual(code);
     });
     it('readErrorCode with empty string message', () => {
         const code = 'EC_SOME_CODE';
-        let error: any;
+        let error;
         try {
             raise('', code);
         } catch (e) {
-            error = e;
+            error = e as Error;
         }
         expect(readErrorCode(error)).toStrictEqual(code);
         expect(error.message).toStrictEqual('');
@@ -56,11 +56,11 @@ describe('error', () => {
         const code = 'EC_SOME_CODE';
         const message = 'ERROR';
         const context = { f: 1 };
-        let error: any;
+        let error;
         try {
             raiseEx(code, context, message);
         } catch (e) {
-            error = e;
+            error = e as Error;
         }
         expect(readErrorCode(error)).toStrictEqual(code);
         expect(readErrorContext(error)).toStrictEqual(context);
@@ -81,11 +81,11 @@ describe('error', () => {
     });
     it('raiseEx with undefined message', () => {
         const code = 'EC_SOME_CODE';
-        let error: any;
+        let error;
         try {
             raiseEx(code);
         } catch (e) {
-            error = e;
+            error = e as Error;
         }
         expect(readErrorCode(error)).toStrictEqual(code);
         expect(readErrorContext(error)).toStrictEqual(undefined);
@@ -93,11 +93,11 @@ describe('error', () => {
     });
     it('raiseEx with empty string message', () => {
         const code = 'EC_SOME_CODE';
-        let error: any;
+        let error;
         try {
             raiseEx(code, undefined, '');
         } catch (e) {
-            error = e;
+            error = e as Error;
         }
         expect(readErrorCode(error)).toStrictEqual(code);
         expect(readErrorContext(error)).toStrictEqual(undefined);

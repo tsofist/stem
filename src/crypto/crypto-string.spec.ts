@@ -11,7 +11,7 @@ describe('CryptoString', () => {
             /* Default */ undefined,
         ]) {
             const algorithmName = algorithm
-                ? enumKeyByValue(CipherAlgorithm, algorithm)
+                ? enumKeyByValue(CipherAlgorithm, algorithm)!
                 : '[ Default algorithm ]';
 
             it(`should encrypt and decrypt a value correctly with ${algorithmName}`, () => {

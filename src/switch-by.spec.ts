@@ -1,5 +1,7 @@
 import { switchBy } from './switch-by';
 
+/* eslint-disable @typescript-eslint/no-mixed-enums */
+
 describe('switchBy', () => {
     enum V {
         A,
@@ -13,7 +15,13 @@ describe('switchBy', () => {
             [V.B]: 'a B',
             c: 'a C',
         };
-        expect(switchBy<V, string>(map, undefined as any)).toStrictEqual(undefined);
+        expect(
+            switchBy<V, string>(
+                map,
+                // @ts-expect-error It's a test
+                undefined,
+            ),
+        ).toStrictEqual(undefined);
         expect(switchBy<V, string>(map, V.C)).toStrictEqual('a C');
         expect(switchBy<V, string>(map, 'C' as V)).toStrictEqual(undefined);
         expect(switchBy<V, string>(map, 'c' as V)).toStrictEqual('a C');

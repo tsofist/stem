@@ -1,7 +1,7 @@
 import { PromiseMay } from '../index';
 import { NonNegativeInt } from '../number/types';
 
-export interface SerialIntervalOptions {
+export type SerialIntervalOptions = {
     /**
      * Calls immediately
      * @default false
@@ -11,14 +11,14 @@ export interface SerialIntervalOptions {
      * Errors handler
      * @default console.error
      */
-    onError?(error: Error): void;
-}
+    onError?: (error: Error) => void;
+};
 
 export type SerialIntervalHandle = {
     /** Break the cycle */
-    clear(): void;
+    clear: () => void;
     /** Resume the cycle */
-    resume(immediate: boolean): void;
+    resume: (immediate: boolean) => void;
 };
 
 /**

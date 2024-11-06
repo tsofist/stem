@@ -14,7 +14,7 @@ describe('setOf', () => {
     });
 
     it('Set of values from array', () => {
-        const set = setOf<any>([1, 2, 3, 'd', 'd']);
+        const set = setOf<string | number>([1, 2, 3, 'd', 'd']);
         expect(Object.keys(set.values).length).toStrictEqual(4);
         expect(Object.values(set.values).reduce((a, b) => a! + b!, 0)).toStrictEqual(6);
         expect(!set.isEmpty);
@@ -23,7 +23,10 @@ describe('setOf', () => {
         expect(set.has('d')).toStrictEqual(true);
 
         let r = '';
-        for (const v of set) r += v;
+        for (const v of set) {
+            // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+            r += v;
+        }
         expect(r).toStrictEqual('123d');
     });
     it('Check coverage for empty set', () => {

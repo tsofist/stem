@@ -1,4 +1,5 @@
-export const hasOwnProperty = Object.prototype.hasOwnProperty;
+import '@total-typescript/ts-reset';
+
 /**
  * JS-primitive types
  * @see https://developer.mozilla.org/docs/Glossary/Primitive
@@ -26,6 +27,7 @@ export type IsEmptyObject<T> = keyof T extends never ? true : false;
 
 /**
  * Valid types of object keys
+ * @deprecated use PropertyKey from standard library
  */
 export type ObjectKey = string | number | symbol;
 

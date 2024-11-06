@@ -9,7 +9,7 @@ export function entries<T, K extends keyof T>(
     sort?: (a: [K, T[K]], b: [K, T[K]]) => CompareResult,
 ): [K, T[K]][] {
     if (!target) return [];
-    const result: [any, any][] =
+    const result: [K, T[K]][] =
         target instanceof Set || target instanceof Map
             ? Array.from(target.entries())
             : Object.entries(target);

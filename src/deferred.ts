@@ -1,7 +1,7 @@
 export interface Deferred<T> {
     readonly promise: Promise<T>;
-    resolver(val: T): void;
-    rejector(error: Error): void;
+    resolver: (val: T) => void;
+    rejector: (error: Error) => void;
 }
 
 export function deferred<T = void>(): Deferred<T> {

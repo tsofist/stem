@@ -3,7 +3,7 @@ import { DropReadonly, Nullable, ObjectKey, PRec } from './index';
 export interface SetOf<T extends ObjectKey> extends Iterable<T> {
     readonly values: Readonly<PRec<number, T>>;
     readonly isEmpty: boolean;
-    has(value: T): boolean;
+    has: (value: T) => boolean;
 }
 
 /**
@@ -22,7 +22,7 @@ export function setOf<T extends ObjectKey>(
     return {
         get values() {
             if (index === undefined) {
-                index = Object.create(null);
+                index = Object.create(null) as typeof index;
                 let seq = 0;
                 for (const item of target) {
                     if (item in index) continue;

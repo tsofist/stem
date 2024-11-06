@@ -1,4 +1,4 @@
-import { ARec, ArrayMay, Nullable, ObjectKey } from './index';
+import { ARec, ArrayMay, Nullable, PRec, Primitive } from './index';
 
 /**
  * Value in Enumeration checker
@@ -12,7 +12,7 @@ import { ARec, ArrayMay, Nullable, ObjectKey } from './index';
  *      valueIn('two', { 0: 'zero', 1: 'one', 2: 'two' }); // false
  *      valueIn(1, [{ value: 1, other: 1 }, { value: 2, other: 1 }], 'value'); // true
  */
-export function valueIn(value: any, enumeration: Nullable<any[]>, field?: ObjectKey): boolean;
+export function valueIn(value: any, enumeration: Nullable<any[]>, field?: PropertyKey): boolean;
 /**
  * Value in Enumeration checker
  * @param value
@@ -29,23 +29,27 @@ export function valueIn(value: any, enumeration: Nullable<any[]>, field?: Object
  */
 export function valueIn(value: any, enumeration: Nullable<ARec>, byValue?: true): boolean;
 export function valueIn(
-    value: any,
-    enumeration: Nullable<ArrayMay<any>>,
-    fieldOrByValue?: ObjectKey | boolean,
+    value: Primitive | PropertyKey,
+    enumeration: Nullable<ArrayMay<PRec<any, PropertyKey>> | (typeof value)[]>,
+    fieldOrByValue?: PropertyKey | true,
 ): boolean {
     if (enumeration) {
         if (Array.isArray(enumeration)) {
-            if (fieldOrByValue === undefined || fieldOrByValue === true)
+            // find by whole value
+            if (fieldOrByValue === undefined || fieldOrByValue === true) {
                 return enumeration.includes(value);
+            }
+            // find by field value
             for (const item of enumeration) {
-                if (value === item[fieldOrByValue as ObjectKey]) return true;
+                // @ts-expect-error It's OK
+                if (value === item[fieldOrByValue]) return true;
             }
         } else if (fieldOrByValue) {
             for (const v of Object.values(enumeration)) {
                 if (value === v) return true;
             }
         } else {
-            return value in enumeration;
+            return (value as PropertyKey) in enumeration;
         }
     }
     return false;

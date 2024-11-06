@@ -41,7 +41,7 @@ export function createSaltedStringHash(
             };
         }
         default:
-            throw new Error(`Unknown algorithm: ${alg}`);
+            throw new Error(`Unknown algorithm: ${String(alg)}`);
     }
 }
 

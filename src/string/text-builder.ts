@@ -13,8 +13,8 @@ export class TextBuilder {
         if (data != null) this.push(data, level);
     }
 
-    static ne(value: TextBuilderItem, condition?: any): string | undefined {
-        return ((arguments.length > 1 ? condition && value : value) && value) || undefined;
+    static ne(value: TextBuilderItem, condition?: unknown): string | undefined {
+        return ((arguments.length > 1 ? !!condition && value : value) && value) || undefined;
     }
 
     get size() {

@@ -17,8 +17,8 @@ export function groupBy<T, K extends keyof T, KV>(
     target: Nullable<GroupByTarget<T>>,
     by: K | GroupByKeyExtractor<T, KV>,
     skipNullableKeys = true,
-): PRec<T[], ObjectKey> {
-    const result: PRec<T[], ObjectKey> = Object.create(null);
+): PRec<T[], PropertyKey> {
+    const result = Object.create(null) as PRec<T[], PropertyKey>;
 
     if (target) {
         const isMap = target instanceof Map;
@@ -30,7 +30,7 @@ export function groupBy<T, K extends keyof T, KV>(
 
             if (skipNullableKeys && key == null) continue;
 
-            (result[key + ''] ??= [] as T[]).push(item);
+            (result[String(key)] ??= [] as T[]).push(item);
         }
     }
 

@@ -80,7 +80,7 @@ export class ErrorFamily<
     }
 
     readContext<T extends keyof Members>(code: T, source: unknown | Error): Members[T][1] {
-        return readErrorContextEx(source, code as ErrorCode);
+        return readErrorContextEx(source, code as ErrorCode) as unknown;
     }
 
     readContextWithDefaults<T extends keyof Members>(

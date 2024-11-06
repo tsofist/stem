@@ -15,8 +15,8 @@ export function nonNullableValues<T, K extends keyof T>(
 ): NonNullable<T[K]>[];
 export function nonNullableValues<T, K extends keyof T>(
     target: Nullable<T | Map<any, T> | Set<T>>,
-): NonNullable<T[K]>[] {
-    const result: NonNullable<any>[] = [];
+): NonNullable<unknown>[] {
+    const result: NonNullable<unknown>[] = [];
     if (target != null) {
         const isMap = target instanceof Map;
         const isSet = target instanceof Set;

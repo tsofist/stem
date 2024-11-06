@@ -1,8 +1,8 @@
 export type Sleeper = {
     /** Подождать завершение периода ожидания */
-    waitFor(): Promise<void>;
+    waitFor: () => Promise<void>;
     /** Прервать период ожидания досрочно */
-    abort(): boolean;
+    abort: () => boolean;
     /** Ожидание было прервано */
     readonly aborted: boolean;
 };

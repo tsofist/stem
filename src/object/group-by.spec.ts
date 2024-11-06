@@ -73,9 +73,11 @@ describe('groupBy', () => {
     });
 
     it('edge cases', function () {
-        expect(groupBy(null, '' as any)).toEqual({});
-        expect(groupBy(undefined, '' as any)).toEqual({});
-        expect(groupBy([], '' as any)).toEqual({});
+        // @ts-expect-error testing edge cases
+        expect(groupBy(null, '')).toEqual({});
+        // @ts-expect-error testing edge cases
+        expect(groupBy(undefined, '')).toEqual({});
+        expect(groupBy([], '')).toEqual({});
         expect(groupBy([], () => null)).toEqual({});
     });
 });

@@ -50,11 +50,11 @@ export function readErrorContext<T>(error: any, field?: string): T | undefined {
 }
 
 export function readErrorContextEx<T extends object = URec>(
-    error: any,
+    error: unknown,
     code: ErrorCode,
 ): T | undefined;
 export function readErrorContextEx<T = unknown>(
-    error: any,
+    error: unknown,
     code: ErrorCode,
     field: string,
 ): T | undefined;
@@ -98,7 +98,7 @@ export function hasErrorCode(error: any, code: ErrorCode): boolean {
 
 export function matchErrorMessage(error: any, re: RegExp): RegExpMatchArray | string[] {
     if (error && error instanceof Error) {
-        const message = error + '';
+        const message = error.message ?? String(error);
         return message.match(re) || [];
     }
     return [];
@@ -109,7 +109,7 @@ export function matchErrorMessage(error: any, re: RegExp): RegExpMatchArray | st
  */
 export function testErrorMessage(error: any, math: ArrayMay<RegExp | string>): boolean {
     if (error && error instanceof Error && math) {
-        const message = error + '';
+        const message = error.message ?? String(error);
         return asArray(math).some((m) => {
             if (m instanceof RegExp) return m.test(message);
             return message.toLowerCase().includes(m.toLowerCase());
@@ -135,7 +135,7 @@ export function matchError(error: any, condition: MatchErrorCondition): boolean 
     return false;
 }
 
-function createError(code?: ErrorCode, context?: ARec, message?: string): Error {
+function createError(code?: string, context?: ARec, message?: string): Error {
     const result = new Error(message ?? code);
 
     if (code) {
@@ -147,7 +147,7 @@ function createError(code?: ErrorCode, context?: ARec, message?: string): Error 
         });
     }
 
-    if (context) {
+    if (context != null && typeof context === 'object') {
         Object.defineProperty(result, ErrorContextField, {
             value: context,
             enumerable: true,
@@ -159,10 +159,12 @@ function createError(code?: ErrorCode, context?: ARec, message?: string): Error 
     return result;
 }
 
-export function errorFrom(source: any): Error {
+export function errorFrom(source: unknown): Error {
     if (source instanceof Error) return source;
 
+    // @ts-expect-error It's OK
     const { code, context, message } = source || {};
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     return createError(code, context, message);
 }
 

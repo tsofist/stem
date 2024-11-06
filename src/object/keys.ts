@@ -11,8 +11,10 @@ export function keysOf<K>(target: Nullable<Map<K, any> | Set<K>>): K[];
  * @see https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Object/keys
  */
 export function keysOf<T>(target: Nullable<T>): (keyof T)[];
-export function keysOf(target: Nullable<object>): string[] {
+export function keysOf(target: Nullable<object>): unknown[] {
     if (target == null) return [];
-    if (target instanceof Map || target instanceof Set) return Array.from(target.keys());
+    if (target instanceof Map || target instanceof Set) {
+        return Array.from(target.keys()) as unknown[];
+    }
     return Object.keys(target);
 }

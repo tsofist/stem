@@ -12,7 +12,7 @@ export function asNum(it: any, defaultValue = 0, nanValue = 0): number {
         case 'number':
             return isNaN(it) ? nanValue : it;
         default: {
-            const v = parseFloat(it + '');
+            const v = parseFloat(String(it));
             return isNaN(v) ? nanValue : v;
         }
     }

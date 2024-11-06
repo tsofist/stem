@@ -1,5 +1,5 @@
 import { startsWithNonDigit } from './string/leading-digit';
-import { Nullable } from './index';
+import { Nullable, URec } from './index';
 
 export type EnumType = object;
 export type EnumValue = string | number;
@@ -53,7 +53,8 @@ export function extractEnumKeys<Enum extends EnumType>(value: Enum): (keyof Enum
     const strings: string[] = [];
     const keys = Object.keys(value);
     for (const item of keys) {
-        const v = (value as any)[item];
+        // @ts-expect-error It's OK
+        const v = value[item] as string | number;
         if (typeof v === 'number') nCount++;
         else strings.push(v);
     }
@@ -65,7 +66,8 @@ export function extractEnumKeys<Enum extends EnumType>(value: Enum): (keyof Enum
     } else {
         result = strings;
     }
-    return result.sort() as any;
+    // @ts-expect-error It's OK
+    return result.sort();
 }
 
 /**
@@ -76,7 +78,7 @@ export function extractEnumKeys<Enum extends EnumType>(value: Enum): (keyof Enum
  * @see https://www.typescriptlang.org/docs/handbook/compiler-options.html TSConfig
  */
 export function extractEnumValues<Enum extends EnumType>(value: Enum): Enum[keyof Enum][] {
-    return extractEnumKeys(value).map((item) => value[item]) as any;
+    return extractEnumKeys(value).map((item) => value[item]);
 }
 
 /**
@@ -105,5 +107,5 @@ export function enumValueByKey<T extends EnumType, K extends EnumKeys<T>>(
 ): T[K] | undefined {
     if (key == null) return fallbackValue;
     // @ts-expect-error It's OK
-    return container[key] ?? fallbackValue;
+    return (container as URec)[key] ?? fallbackValue;
 }

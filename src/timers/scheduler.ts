@@ -22,7 +22,7 @@ export type SchedulerOptions = {
      * Error handler for operations
      * Errors will be sent to console if no handler is provided
      */
-    onError?(error: Error): void;
+    onError?: (error: Error) => void;
     /**
      * Accuracy of event triggering
      * @see deepSleeper
@@ -36,7 +36,7 @@ export type SchedulerOptions = {
 };
 
 type SchedulerJob = {
-    abort(): void;
+    abort: () => void;
 };
 
 class SchedulerImpl<TParams> {
@@ -113,9 +113,9 @@ class SchedulerImpl<TParams> {
                     if (aborted) break;
 
                     if (this.#options.serial) await promise;
-                    else promise.catch((error) => this.#onError(error));
+                    else promise.catch((error) => this.#onError(error as Error));
                 } catch (e: any) {
-                    this.#onError(e);
+                    this.#onError(e as Error);
                 }
             }
         })();
