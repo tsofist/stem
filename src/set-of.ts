@@ -1,9 +1,9 @@
-import { DropReadonly, Nullable, ObjectKey, PRec } from './index';
+import { DropReadonly, Nullable, PRec } from './index';
 
-export interface SetOf<T extends ObjectKey> extends Iterable<T> {
+export interface SetOf<T extends PropertyKey> extends Iterable<T> {
     readonly values: Readonly<PRec<number, T>>;
     readonly isEmpty: boolean;
-    has: (value: T) => boolean;
+    has: <U extends T>(value: U) => boolean;
 }
 
 /**
@@ -11,7 +11,7 @@ export interface SetOf<T extends ObjectKey> extends Iterable<T> {
  * @param target
  * @param coverEmptyTarget consider existing values for empty target
  */
-export function setOf<T extends ObjectKey>(
+export function setOf<T extends PropertyKey>(
     target: Nullable<ReadonlyArray<T> | T[]>,
     coverEmptyTarget = false,
 ): SetOf<T> {
