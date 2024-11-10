@@ -1,5 +1,8 @@
-import { ErrorCodeFamily, hasErrorCode, hasErrorContext, readErrorContextEx } from '../error';
-import { ErrorFamily, ErrorFamilyCode } from './family';
+import { hasErrorCode, hasErrorContext, readErrorCode, readErrorContextEx } from '../error';
+import { ErrorFamily } from './family';
+import { ErrorCodeFamily, ErrorFamilyCode, ErrorInstanceFactory } from './types';
+
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
 describe('ErrorFamily', () => {
     it('example', () => {
@@ -12,6 +15,7 @@ describe('ErrorFamily', () => {
             EC_AEF_CONTINUE_WITH_AUTH_PROVIDER: ErrorFamily.member<{ throttleTimeout: number }>(
                 'Continue sequence with auth provider',
             ),
+            EC_AEF_MORE: ErrorFamily.member<{ param1: number }>('More'),
         });
 
         type AuthErrorCode = ErrorFamilyCode<typeof AuthErrors>;
@@ -30,6 +34,7 @@ describe('ErrorFamily', () => {
             'EC_AEF_CODE_REDEEM_FAILED',
             'EC_AEF_CODE_THROTTLED',
             'EC_AEF_CONTINUE_WITH_AUTH_PROVIDER',
+            'EC_AEF_MORE',
         ];
         expect(Codes).toBeDefined();
 
@@ -64,6 +69,69 @@ describe('ErrorFamily', () => {
             expect(readErrorContextEx(e, 'EC_AEF_CONTINUE_WITH_AUTH_PROVIDER')).toStrictEqual({
                 throttleTimeout: 1000,
             });
+        }
+
+        {
+            const TypeErrorFactory: ErrorInstanceFactory = function (code, context, message) {
+                const result = new TypeError(message) as unknown as TypeError & {
+                    code: typeof code;
+                    context: typeof context;
+                };
+                result.code = code;
+                result.context = context;
+                return result;
+            };
+
+            const errors = AuthErrors.withErrorFactory(TypeErrorFactory);
+            expect(errors.forks).toStrictEqual(1);
+
+            expect(AuthErrors.withErrorFactory(TypeErrorFactory)).toStrictEqual(errors);
+            expect(errors.forks).toStrictEqual(1);
+
+            try {
+                errors.raise(errors.EC_AEF_CODE_THROTTLED);
+            } catch (e) {
+                expect(e).toBeDefined();
+                expect(e).toBeInstanceOf(TypeError);
+                expect(readErrorCode(e)).toBe('EC_AEF_CODE_THROTTLED');
+            }
+        }
+
+        {
+            type TEContext = { n: number; s: string };
+
+            const ctx: TEContext = { n: 1, s: 's' };
+
+            const TypeErrorFactoryWithContext: ErrorInstanceFactory<TypeError, TEContext> =
+                function (code, context, message) {
+                    const result = new TypeError(message) as unknown as TypeError & {
+                        code: typeof code;
+                        context: typeof context;
+                        extra: TEContext;
+                    };
+                    result.code = code;
+                    result.context = context;
+                    result.extra = this;
+                    return result;
+                };
+
+            const bounded = TypeErrorFactoryWithContext.bind(ctx);
+
+            const errors = AuthErrors.withErrorFactory(bounded);
+            expect(errors.forks).toStrictEqual(2);
+
+            expect(AuthErrors.withErrorFactory(bounded)).toStrictEqual(errors);
+            expect(errors.forks).toStrictEqual(2);
+
+            try {
+                errors.raise(errors.EC_AEF_CODE_THROTTLED);
+            } catch (e) {
+                expect(e).toBeDefined();
+                expect(e).toBeInstanceOf(TypeError);
+                expect(readErrorCode(e)).toBe('EC_AEF_CODE_THROTTLED');
+                expect((e as any).extra).toBeDefined();
+                expect((e as any).extra).toStrictEqual(ctx);
+            }
         }
     });
 });

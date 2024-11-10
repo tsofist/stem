@@ -1,23 +1,25 @@
+import { ErrorCode, errorFrom, readErrorContextEx } from '../error';
+import { ARec, OmitByValueType, ShallowExact, URec } from '../index';
 import {
-    ErrorCode,
     ErrorCodeFamily,
-    ErrorCodeSeparator,
-    raiseEx,
-    readErrorContextEx,
-} from '../error';
-import { ARec, OmitByValueType, PickFieldsWithPrefix, ShallowExact, URec } from '../index';
+    ErrorCodeFamilySep,
+    ErrorFamilyMember,
+    ErrorInstanceFactory,
+} from './types';
 
-export type ErrorFamilyMember<Context extends URec> = readonly [
-    publicMessage: string,
-    contextDefaults?: Context,
-];
+const ErrorFactoryFieldID = Symbol('ErrorFactoryFieldID');
 
-export type ErrorFamilyCode<EF extends ErrorFamily<ErrorCode, any, any, any>> =
-    keyof PickFieldsWithPrefix<EF, EF['prefix']>;
+const defaultErrorFactory: ErrorInstanceFactory = (code, context, message) => {
+    return errorFrom.call(null, {
+        code,
+        context,
+        message,
+    });
+};
 
 export class ErrorFamily<
     ErrorCodePrefix extends ErrorCode,
-    Sep extends ErrorCodeSeparator,
+    Sep extends ErrorCodeFamilySep,
     Family extends ErrorCodeFamily<ErrorCodePrefix, Sep>,
     Members extends {
         readonly [Code in Family]: ErrorFamilyMember<any>;
@@ -32,7 +34,7 @@ export class ErrorFamily<
 
     static declare<
         ErrorCodePrefix extends ErrorCode,
-        Sep extends ErrorCodeSeparator,
+        Sep extends ErrorCodeFamilySep,
         Family extends ErrorCodeFamily<ErrorCodePrefix, Sep>,
         Members extends {
             readonly [Code in Family]: ErrorFamilyMember<any>;
@@ -41,11 +43,15 @@ export class ErrorFamily<
         prefix: Family,
         members: ShallowExact<{ [Code in Family]: ErrorFamilyMember<any> }, Members>,
     ) {
-        const result = new ErrorFamily(prefix, members);
+        const result = new this(prefix, members);
         return result as typeof result & {
             readonly [key in keyof Members]: key;
         };
     }
+
+    protected alternativeErrorFactories = new WeakMap<ErrorInstanceFactory, this>();
+    protected forkedTimes: number = 0;
+    protected [ErrorFactoryFieldID]: ErrorInstanceFactory = defaultErrorFactory;
 
     protected constructor(
         readonly prefix: Family,
@@ -54,6 +60,10 @@ export class ErrorFamily<
         for (const code of Object.keys(members)) {
             (this as ARec)[code] = code;
         }
+    }
+
+    get forks() {
+        return this.forkedTimes;
     }
 
     isMember(code: ErrorCode) {
@@ -71,10 +81,9 @@ export class ErrorFamily<
     raise<T extends keyof OmitByValueType<Members, [any, undefined]>>(code: T): never;
     raise<T extends keyof Members>(code: T, context: Members[T][1]): never;
     raise(code: keyof Members, context?: object) {
-        const defaults = this.members[code][1] as undefined | object;
-        return raiseEx(
+        throw this[ErrorFactoryFieldID](
             code as ErrorCode,
-            context || defaults ? { ...defaults, ...context } : undefined,
+            this.getMergedContext(code, context),
             this.msg(code),
         );
     }
@@ -88,6 +97,28 @@ export class ErrorFamily<
         source: unknown | Error,
     ): Members[T][1] {
         return this.getMergedContext(code, this.readContext(code, source));
+    }
+
+    /**
+     * Use custom error factory for this family
+     */
+    withErrorFactory(factory: ErrorInstanceFactory): typeof this {
+        let proxy = this.alternativeErrorFactories.get(factory);
+
+        if (!proxy) {
+            proxy = new Proxy(this, {
+                get(target, prop, receiver) {
+                    if (prop === ErrorFactoryFieldID) {
+                        return factory;
+                    }
+                    return Reflect.get(target, prop, receiver);
+                },
+            });
+            this.forkedTimes++;
+            this.alternativeErrorFactories.set(factory, proxy);
+        }
+
+        return proxy;
     }
 
     protected getMergedContext(

@@ -9,13 +9,6 @@ export const ErrorContextField = 'context';
  * @pattern ^EC_[A-Z][a-zA-Z0-9\._\-|]{0,200}$
  */
 export type ErrorCode = `${typeof ErrorCodePrefix}${string}`;
-export type ErrorCodeSeparator = '_' | '.';
-
-export type ErrorCodeFamily<
-    TCode extends ErrorCode,
-    Sep extends ErrorCodeSeparator = '_',
-    _ extends string = `${TCode}${Sep}${string}`,
-> = Sep extends '_' ? Uppercase<_> : _;
 
 export function raise(message: string): never;
 export function raise(message: string, code: ErrorCode): never;
