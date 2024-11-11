@@ -1,5 +1,5 @@
 import type { ErrorCode } from '../error';
-import type { PickFieldsWithPrefix, URec, ValuesOf } from '../index';
+import type { IsNever, PickFieldsWithPrefix, URec, ValuesOf } from '../index';
 import type { ErrorFamily } from './family';
 
 /**
@@ -36,10 +36,10 @@ export type ErrorCodeFamily<
 
 export type ErrorCodeFamilySep = '_' | '.';
 
-export type ErrorFamilyMember<Context extends URec> = readonly [
-    publicMessage: string,
-    contextDefaults?: Context,
-];
+export type ErrorFamilyMember<Context extends URec | undefined = undefined> =
+    Context extends undefined
+        ? [publicMessage: string]
+        : [publicMessage: string, contextDefaults?: Context];
 
 /**
  * Extract all error codes from the family
@@ -61,9 +61,21 @@ export type ErrorFamilyMembers<Family extends AnyErrorFamily> =
 export type ErrorFamilyRaiseParams<
     F extends AnyErrorFamily,
     M extends ErrorFamilyMembers<F> = ErrorFamilyMembers<F>,
-> = ValuesOf<{
-    [Code in keyof M]: M[Code][1] extends undefined ? [Code] : [Code, M[Code][1]];
-}>;
+> = ValuesOf<ErrorFamilyRaiseParamsByCode<F, M>>;
+
+export type ErrorFamilyRaiseParamsByCode<
+    F extends AnyErrorFamily,
+    M extends ErrorFamilyMembers<F> = ErrorFamilyMembers<F>,
+> = {
+    [Code in keyof M]: M[Code][1] extends undefined
+        ? [Code]
+        : [Code, Exclude<M[Code][1], undefined>];
+};
+
+export type ErrorFamilyContext<F extends AnyErrorFamily, C extends ErrorFamilyCode<F>> =
+    F extends ErrorFamily<any, any, any, infer Members>
+        ? IsNever<Exclude<Members[C][1], undefined>, undefined>
+        : undefined;
 
 /**
  * Factory function for creating error instances

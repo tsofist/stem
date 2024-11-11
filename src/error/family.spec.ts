@@ -1,11 +1,18 @@
 import { hasErrorCode, hasErrorContext, readErrorCode, readErrorContextEx } from '../error';
 import { ErrorFamily } from './family';
-import { ErrorCodeFamily, ErrorFamilyCode, ErrorInstanceFactory } from './types';
+import {
+    AnyErrorFamily,
+    ErrorCodeFamily,
+    ErrorFamilyCode,
+    ErrorFamilyContext,
+    ErrorFamilyRaiseParams,
+    ErrorInstanceFactory,
+} from './types';
 
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 
-describe('ErrorFamily', () => {
-    it('example', () => {
+describe('ErrorFamily: examples', () => {
+    it('example-1', () => {
         type AuthErrorCodeFamily = ErrorCodeFamily<'EC_AEF'>;
         const AuthErrorPrefix: AuthErrorCodeFamily = 'EC_AEF_';
 
@@ -132,6 +139,196 @@ describe('ErrorFamily', () => {
                 expect((e as any).extra).toBeDefined();
                 expect((e as any).extra).toStrictEqual(ctx);
             }
+        }
+    });
+});
+
+describe('ErrorFamily: types', () => {
+    type F1 = ErrorCodeFamily<'EC_F1'>;
+    const F1Prefix: F1 = 'EC_F1_';
+    type F1ErrorCode = ErrorFamilyCode<typeof F1Errors>;
+
+    const F1Errors = ErrorFamily.declare(F1Prefix, {
+        EC_F1_S1: ErrorFamily.member('Message for S1'),
+        EC_F1_WITH_CTX1: ErrorFamily.member<{ n: number }>('Message for W_CTX1'),
+        EC_F1_WITH_CTX2: ErrorFamily.member('Message for W_CTX2', { f1: 1 }),
+        EC_F1_WITH_CTX3_1: ErrorFamily.member<{ f3_1: boolean }>('Message for W_CTX3_1'),
+        EC_F1_WITH_CTX3_2: ErrorFamily.member<{ f3_1: boolean }>('Message for W_CTX3_2', {}),
+        EC_F1_WITH_CTX3_3: ErrorFamily.member<{ f3_1: boolean }>('Message for W_CTX3_3', {
+            f3_1: false,
+        }),
+        EC_F1_WITH_CTX4: ErrorFamily.member<{ f4: boolean; add: string }>('Message for W_CTX4', {
+            add: 'add',
+        }),
+    });
+
+    it('should correctly infer error codes', () => {
+        expect([
+            'EC_F1_S1',
+            'EC_F1_WITH_CTX1',
+            'EC_F1_WITH_CTX2',
+            'EC_F1_WITH_CTX3_1',
+            'EC_F1_WITH_CTX3_2',
+            'EC_F1_WITH_CTX3_3',
+            'EC_F1_WITH_CTX4',
+        ] satisfies F1ErrorCode[]).toBeDefined();
+
+        expect([
+            // @ts-expect-error It's OK
+            'EC',
+            // @ts-expect-error It's OK
+            'EC_F1',
+            // @ts-expect-error It's OK
+            'EC_F1_',
+        ] satisfies F1ErrorCode[]).toBeDefined();
+    });
+
+    it('should correctly infer members context', () => {
+        expect([
+            //
+            undefined satisfies ErrorFamilyContext<typeof F1Errors, 'EC_F1_S1'>,
+            // @ts-expect-error Expected
+            {} satisfies ErrorFamilyContext<typeof F1Errors, 'EC_F1_S1'>,
+            { n: 100 } satisfies ErrorFamilyContext<typeof F1Errors, 'EC_F1_WITH_CTX1'>,
+            // @ts-expect-error Expected
+            { n: 0, b: false } satisfies ErrorFamilyContext<typeof F1Errors, 'EC_F1_WITH_CTX1'>,
+            // @ts-expect-error Expected
+            undefined satisfies ErrorFamilyContext<typeof F1Errors, 'EC_F1_WITH_CTX1'>,
+            // @ts-expect-error Expected
+            undefined satisfies ErrorFamilyContext<typeof F1Errors, 'EC_F1_WITH_CTX2'>,
+            // @ts-expect-error Expected
+            {} satisfies ErrorFamilyContext<typeof F1Errors, 'EC_F1_WITH_CTX2'>,
+            // @ts-expect-error Expected
+            { t: 11 } satisfies ErrorFamilyContext<typeof F1Errors, 'EC_F1_WITH_CTX2'>,
+            { f1: 100 } satisfies ErrorFamilyContext<typeof F1Errors, 'EC_F1_WITH_CTX2'>,
+            // @ts-expect-error Expected
+            { f1: 100, f2: true } satisfies ErrorFamilyContext<typeof F1Errors, 'EC_F1_WITH_CTX2'>,
+            // @ts-expect-error Expected
+            { f1: 100, f2: true } satisfies ErrorFamilyContext<
+                typeof F1Errors,
+                'EC_F1_WITH_CTX3_1'
+            >,
+            // @ts-expect-error Expected
+            {} satisfies ErrorFamilyContext<typeof F1Errors, 'EC_F1_WITH_CTX3_1'>,
+            { f3_1: false } satisfies ErrorFamilyContext<typeof F1Errors, 'EC_F1_WITH_CTX3_1'>,
+            { f3_1: true } satisfies ErrorFamilyContext<typeof F1Errors, 'EC_F1_WITH_CTX3_1'>,
+        ]).toBeDefined();
+    });
+
+    it('should correctly infer raise params', () => {
+        expect([
+            //
+            ['EC_F1_S1'],
+            ['EC_F1_WITH_CTX1', { n: -1 }],
+            ['EC_F1_WITH_CTX2', { f1: 1000 }],
+            ['EC_F1_WITH_CTX3_1', { f3_1: false }],
+            ['EC_F1_WITH_CTX3_3', { f3_1: true }],
+            ['EC_F1_WITH_CTX4', { f4: true, add: 'add' }],
+        ] satisfies ErrorFamilyRaiseParams<typeof F1Errors>[]).toBeDefined();
+
+        expect([
+            // @ts-expect-error Expected
+            ['EC_F1_WITH_CTX2'],
+            // @ts-expect-error Expected
+            ['EC_F1_WITH_CTX2', {}],
+            // @ts-expect-error Expected
+            ['EC_F1_WITH_CTX3_2'],
+            // @ts-expect-error Expected
+            ['EC_F1_WITH_CTX2', undefined],
+            // @ts-expect-error Expected
+            ['EC_F1_WITH_CTX3_1', undefined],
+            // @ts-expect-error Expected
+            ['EC_F1_WITH_CTX3_1', {}],
+            // @ts-expect-error Expected
+            ['EC_F1_WITH_CTX3_1', { f3_1: undefined }],
+        ] satisfies ErrorFamilyRaiseParams<typeof F1Errors>[]).toBeDefined();
+
+        try {
+            F1Errors.raise('EC_F1_S1');
+            F1Errors.raise('EC_F1_WITH_CTX3_1', { f3_1: true });
+            F1Errors.raise('EC_F1_WITH_CTX3_1', { f3_1: false });
+        } catch (e) {
+            expect(e).toBeDefined();
+        }
+
+        try {
+            F1Errors.raise(
+                'EC_F1_S1',
+                // @ts-expect-error Expected
+                {},
+            );
+            F1Errors.raise(
+                'EC_F1_S1',
+                // @ts-expect-error Expected
+                undefined,
+            );
+            F1Errors.raise('EC_F1_WITH_CTX3_1', {
+                // @ts-expect-error Expected
+                f3_1: 12,
+            });
+            F1Errors.raise(
+                'EC_F1_WITH_CTX3_1',
+                // @ts-expect-error Expected
+                {},
+            );
+            F1Errors.raise('EC_F1_WITH_CTX3_1', {
+                // @ts-expect-error Expected
+                f3_1: undefined,
+            });
+            // @ts-expect-error Expected
+            F1Errors.raise('EC_F1_WITH_CTX3_1');
+            F1Errors.raise(
+                'EC_F1_WITH_CTX3_1',
+                // @ts-expect-error Expected
+                undefined,
+            );
+        } catch (e) {
+            expect(e).toBeDefined();
+        }
+    });
+
+    it('should correctly infer raise params as rest parameters', () => {
+        function raiseInternalServerError<Family extends AnyErrorFamily>(
+            errorFamily: Family,
+            ...params: ErrorFamilyRaiseParams<typeof errorFamily>
+        ) {
+            return errorFamily
+                .withErrorFactory((code) => {
+                    throw new Error(code);
+                })
+                .raise(
+                    // @ts-expect-error It's OK
+                    ...params,
+                );
+        }
+
+        try {
+            raiseInternalServerError(F1Errors, 'EC_F1_S1');
+            raiseInternalServerError(F1Errors, 'EC_F1_WITH_CTX1', { n: 22 });
+            raiseInternalServerError(F1Errors, 'EC_F1_WITH_CTX3_1', { f3_1: true });
+        } catch (e) {
+            expect(e).toBeDefined();
+        }
+
+        try {
+            raiseInternalServerError(
+                F1Errors,
+                // @ts-expect-error Expected
+                'EC_F1_S1',
+                undefined,
+            );
+            raiseInternalServerError(
+                F1Errors,
+                // @ts-expect-error Expected
+                'EC_F1_WITH_CTX1',
+                {},
+            );
+            raiseInternalServerError(F1Errors, 'EC_F1_WITH_CTX3_1', {
+                // @ts-expect-error Expected
+                no: true,
+            });
+        } catch (e) {
+            expect(e).toBeDefined();
         }
     });
 });

@@ -1,5 +1,5 @@
 import { ErrorCode, errorFrom, readErrorContextEx } from '../error';
-import { ARec, OmitByValueType, ShallowExact, URec } from '../index';
+import { ARec, PickByValueType, ShallowExact, URec } from '../index';
 import {
     ErrorCodeFamily,
     ErrorCodeFamilySep,
@@ -22,13 +22,18 @@ export class ErrorFamily<
     Sep extends ErrorCodeFamilySep,
     Family extends ErrorCodeFamily<ErrorCodePrefix, Sep>,
     Members extends {
-        readonly [Code in Family]: ErrorFamilyMember<any>;
+        readonly [Code in Family]: ErrorFamilyMember<URec | undefined>;
     },
 > {
-    static member<Context extends URec = never>(
+    static member(message: string): ErrorFamilyMember;
+    static member<Context extends URec>(
+        message: string,
+        contextDefaults?: Partial<Context>,
+    ): ErrorFamilyMember<Context>;
+    static member<Context extends URec>(
         message: string,
         contextDefaults?: Context,
-    ): ErrorFamilyMember<Context> {
+    ): ErrorFamilyMember<any> {
         return [message, contextDefaults];
     }
 
@@ -78,8 +83,8 @@ export class ErrorFamily<
         return this.members[code]?.[0];
     }
 
-    raise<T extends keyof OmitByValueType<Members, [any, undefined]>>(code: T): never;
-    raise<T extends keyof Members>(code: T, context: Members[T][1]): never;
+    raise<T extends keyof PickByValueType<Members, [any]>>(code: T): never;
+    raise<T extends keyof Members>(code: T, context: Exclude<Members[T][1], undefined>): never;
     raise(code: keyof Members, context?: object) {
         throw this[ErrorFactoryFieldID](
             code as ErrorCode,
@@ -89,14 +94,14 @@ export class ErrorFamily<
     }
 
     readContext<T extends keyof Members>(code: T, source: unknown | Error): Members[T][1] {
-        return readErrorContextEx(source, code as ErrorCode) as unknown;
+        return readErrorContextEx(source, code as ErrorCode) as Members[T][1];
     }
 
     readContextWithDefaults<T extends keyof Members>(
         code: T,
         source: unknown | Error,
     ): Members[T][1] {
-        return this.getMergedContext(code, this.readContext(code, source));
+        return this.getMergedContext(code, this.readContext(code, source)) as Members[T][1];
     }
 
     /**
