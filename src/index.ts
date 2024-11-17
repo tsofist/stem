@@ -38,6 +38,8 @@ export type NonEmptyString = string;
 
 /**
  * @format uri
+ *
+ * @faker internet.url
  */
 export type URIString = string;
 
@@ -53,6 +55,8 @@ export type URLRelPathname = string;
 
 /**
  * @pattern ^(\/?[a-zA-Z0-9_/-]*)(\?.*)?$
+ *
+ * @faker system.filePath
  */
 export type URLPath = string;
 
