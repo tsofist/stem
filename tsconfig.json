@@ -1,9 +1,9 @@
 {
   "extends": "@tsofist/web-buddy/tsconfig/base.json",
   "compilerOptions": {
-    "module": "CommonJS",
     "outDir": "lib",
     "target": "ES6",
+    "module": "CommonJS",
     "skipLibCheck": true
   },
   "include": ["src"],

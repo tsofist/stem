@@ -272,7 +272,7 @@ export type PickMethods<T extends object> = Pick<
  * Extract all fields from T with names starts with Prefix
  */
 export type PickFieldsWithPrefix<T extends object, Prefix extends string> = {
-    [K in keyof T as K extends `${Prefix}${infer R}` ? K : never]: T[K];
+    [K in keyof T as K extends `${Prefix}${string}` ? K : never]: T[K];
 };
 
 /**

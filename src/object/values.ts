@@ -13,7 +13,7 @@ export function nonNullableValues<T>(
 export function nonNullableValues<T, K extends keyof T>(
     target: Nullable<T | Map<any, T> | Set<T>>,
 ): NonNullable<T[K]>[];
-export function nonNullableValues<T, K extends keyof T>(
+export function nonNullableValues<T>(
     target: Nullable<T | Map<any, T> | Set<T>>,
 ): NonNullable<unknown>[] {
     const result: NonNullable<unknown>[] = [];
