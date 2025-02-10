@@ -168,6 +168,11 @@ export type PickStringLiteral<A extends string, B extends A> = B;
 export type TemplateStringOf<T extends string> = `${T}`;
 
 /**
+ * Numeric string type
+ */
+export type NumericString<T extends number = number> = `${T}`;
+
+/**
  * Pick all properties with values has a U-types
  */
 export type PickByValueType<T, U> = {
