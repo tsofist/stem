@@ -34,3 +34,7 @@ As a rule, this library is enough to abandon the use of such libraries as `lodas
 
 ### Specific dependencies when used in the browser
 Tools from the crypto directory actively use NodeJS modules, so when using in the browser, you will need to connect polyfills for `crypto` and `buffer`.
+
+
+#### License
+This project is licensed under the **LGPL-3.0** License – see the [LICENSE](LICENSE) file for details.
