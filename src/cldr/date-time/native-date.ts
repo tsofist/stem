@@ -1,6 +1,8 @@
 import { raise } from '../../error';
 import { Nullable } from '../../index';
 import { substr } from '../../string/substr';
+import { DateConstructorSource } from '../types';
+import { isValidTypedDateTimeString } from './guards';
 import {
     ISODateTimeType,
     LocalISODateString,
@@ -11,7 +13,7 @@ import {
     ZuluISODateTimeString,
     ZuluISOTimeString,
 } from './types';
-import { minutesToUTCOffset, applyUTCOffset } from './utc-offset';
+import { applyUTCOffset, minutesToUTCOffset } from './utc-offset';
 
 /**
  * Converts a string to a date object.
@@ -24,6 +26,7 @@ export function typedStringToDate(
     omitUTCOffset = false,
 ): Date | undefined {
     if (value == null) return undefined;
+    if (typeof value !== 'string') raise(`Invalid input: ${String(value)}`);
 
     switch (type) {
         // 2024-07-23
@@ -111,8 +114,16 @@ export function dateToTypedString(
     omitUTCOffset?: boolean,
     omitSeconds?: boolean,
 ): ZuluISODateTimeString | undefined;
+export function dateToTypedString(
+    value: Nullable<Date>,
+    type: ISODateTimeType,
+    omitUTCOffset?: boolean,
+    omitSeconds?: boolean,
+): TypedDateTimeString | undefined;
 /**
  * Converts a date object to a TypedDateTimeString based on the specified type.
+ *
+ * @see TypedDateTimeString
  */
 export function dateToTypedString(
     value: Nullable<Date>,
@@ -121,6 +132,7 @@ export function dateToTypedString(
     omitSeconds = true,
 ): string | undefined {
     if (value == null) return undefined;
+    if (!(value instanceof Date)) raise(`Invalid input: ${String(value)}`);
 
     switch (type) {
         case ISODateTimeType.LocalDate:
@@ -177,4 +189,53 @@ export function dateToTypedString(
         default:
             raise(`Unknown date type: ${type}`);
     }
+}
+
+export function createTypedDateTimeString(
+    type: ISODateTimeType.LocalDate,
+    source: DateConstructorSource,
+): LocalISODateString;
+export function createTypedDateTimeString(
+    type: ISODateTimeType.LocalTime,
+    source: DateConstructorSource,
+): LocalISOTimeString;
+export function createTypedDateTimeString(
+    type: ISODateTimeType.LocalDateTime,
+    source: DateConstructorSource,
+): LocalISODateTimeString;
+export function createTypedDateTimeString(
+    type: ISODateTimeType.ZuluDate,
+    source: DateConstructorSource,
+): ZuluISODateString;
+export function createTypedDateTimeString(
+    type: ISODateTimeType.ZuluTime,
+    source: DateConstructorSource,
+): ZuluISOTimeString;
+export function createTypedDateTimeString(
+    type: ISODateTimeType.ZuluDateTime,
+    source: DateConstructorSource,
+): ZuluISODateTimeString;
+export function createTypedDateTimeString(
+    type: ISODateTimeType,
+    source: DateConstructorSource,
+): TypedDateTimeString;
+/**
+ * Creates a TypedDateTimeString based on the specified type.
+ *
+ * @see TypedDateTimeString
+ */
+export function createTypedDateTimeString(
+    type: ISODateTimeType,
+    source: DateConstructorSource = new Date(),
+): TypedDateTimeString {
+    if (!(source instanceof Date)) {
+        if (Number.isInteger(source)) source = new Date(source);
+        else if (isValidTypedDateTimeString(source)) source = new Date(source);
+        else raise(`Invalid source: ${source}`);
+    }
+
+    const result = dateToTypedString(source, type);
+    if (result == null) raise(`Failed to create ${type}: ${String(source)}`);
+
+    return result;
 }

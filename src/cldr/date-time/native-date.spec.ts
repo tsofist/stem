@@ -1,5 +1,5 @@
 import { dateToTypedString, typedStringToDate } from './native-date';
-import { ISODateTimeType } from './types';
+import { TypedDateTimeString, ISODateTimeType } from './types';
 import { minutesToUTCOffset } from './utc-offset';
 
 describe('typedStringToDate', () => {
@@ -50,6 +50,29 @@ describe('dateToTypedString', () => {
         expect(dateToTypedString(undefined, ISODateTimeType.LocalDate)).toBeUndefined();
     });
 
+    it('', () => {
+        const randomType: ISODateTimeType =
+            Math.random() > 0.5 ? ISODateTimeType.LocalDate : ISODateTimeType.LocalTime;
+
+        const typesTest = [
+            dateToTypedString(new Date(), randomType)!,
+            dateToTypedString(new Date(), ISODateTimeType.LocalDateTime)!,
+            dateToTypedString(new Date(), ISODateTimeType.ZuluDateTime)!,
+        ] satisfies TypedDateTimeString[];
+        expect(typesTest).toBeTruthy();
+    });
+
+    it('throws error for invalid input', () => {
+        expect(() =>
+            // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
+            dateToTypedString(
+                // @ts-expect-error Testing invalid input
+                'AAA',
+                ISODateTimeType.LocalDate,
+            ),
+        ).toThrow('Invalid input: AAA');
+    });
+
     it('converts Date object to LocalTime string', () => {
         const date = new Date();
         date.setHours(22, 15, 0, 0);
@@ -63,7 +86,7 @@ describe('dateToTypedString', () => {
         expect(result).toBe('2024-07-23T23:00:00Z');
     });
 
-    it('throws error for unknown date type', () => {
+    it('throws error for unknown type', () => {
         const date = new Date('2024-07-23T00:00:00');
         expect(() =>
             dateToTypedString(

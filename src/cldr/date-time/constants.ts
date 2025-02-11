@@ -135,19 +135,19 @@ export const CLDRRegExpGroups = (() => {
 export const CLDR_UTC_OFFSET = new RegExp(`^${CLDRRegExpGroups.UTCOffset}$`);
 
 /**
- * @see LocalISOTimeString
- */
-export const CLDR_ISO_LOCAL_TIME = new RegExp(`^${CLDRRegExpGroups.LocalTime}$`);
-
-/**
  * @see LocalISODateString
  */
 export const CLDR_ISO_LOCAL_DATE = new RegExp(`^${CLDRRegExpGroups.Date}$`);
 
 /**
- * @see ZuluISOTimeString
+ * @see LocalISOTimeString
  */
-export const CLDR_ISO_ZULU_TIME = new RegExp(`^${CLDRRegExpGroups.ZuluTime}$`);
+export const CLDR_ISO_LOCAL_TIME = new RegExp(`^${CLDRRegExpGroups.LocalTime}$`);
+
+/**
+ * @see LocalISODateTimeString
+ */
+export const CLDR_ISO_LOCAL_DATE_TIME = new RegExp(`^${CLDRRegExpGroups.DateWithLocalTime}$`);
 
 /**
  * @see ZuluISODateString
@@ -155,9 +155,9 @@ export const CLDR_ISO_ZULU_TIME = new RegExp(`^${CLDRRegExpGroups.ZuluTime}$`);
 export const CLDR_ISO_ZULU_DATE = new RegExp(`^${CLDRRegExpGroups.DateWithZuluTime}$`);
 
 /**
- * @see LocalISODateTimeString
+ * @see ZuluISOTimeString
  */
-export const CLDR_ISO_LOCAL_DATE_TIME = new RegExp(`^${CLDRRegExpGroups.DateWithLocalTime}$`);
+export const CLDR_ISO_ZULU_TIME = new RegExp(`^${CLDRRegExpGroups.ZuluTime}$`);
 
 /**
  * @see ZuluISODateTimeString

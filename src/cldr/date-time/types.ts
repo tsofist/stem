@@ -47,6 +47,7 @@ export type N12HourClock =
  * @see https://en.wikipedia.org/wiki/UTC_offset UTC offset
  * @see https://wikipedia.org/wiki/UTC+00:00 UTC+00:00
  * @see https://en.wikipedia.org/wiki/List_of_UTC_offsets List of UTC offsets
+ * @see https://en.wikipedia.org/wiki/ISO_8601 ISO-8601
  *
  * @pattern ^(([+-])(0\d|1\d|2[0-3]):(0\d|[1-5]\d))$
  *
@@ -55,13 +56,39 @@ export type N12HourClock =
 export type UTCOffsetString = `${'+' | '-'}${NumericString}:${NumericString}`;
 
 /**
+ * ISO local date string.
+ *
+ * Rules:
+ *  * Date: YES
+ *  * Time: NO
+ *  * UTC offset: NO
+ *  * Milliseconds: NO
+ *
+ * @example
+ *   2021-01-01
+ *   2021-12-31
+ *   2021-02-28
+ *
+ * @see https://en.wikipedia.org/wiki/UTC_offset
+ * @see https://en.wikipedia.org/wiki/List_of_UTC_offsets
+ * @see https://wikipedia.org/wiki/UTC+00:00 UTC+00:00
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString Date.prototype.toISOString()
+ * @see https://en.wikipedia.org/wiki/ISO_8601 ISO-8601
+ *
+ * @pattern ^(197\d|19[89]\d|20[0-2]\d|203[0-8])-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$
+ *
+ * @public
+ */
+export type LocalISODateString = `${NumericString}-${NumericString}-${NumericString}`;
+
+/**
  * ISO local time string.
  *
  * Rules:
  *   * Date: NO
  *   * Time: YES
  *   * UTC offset: Optional
- *   * Microseconds: Optional
+ *   * Milliseconds: Optional
  *
  * @example
  *   00:00:00
@@ -74,36 +101,45 @@ export type UTCOffsetString = `${'+' | '-'}${NumericString}:${NumericString}`;
  *
  * @see https://en.wikipedia.org/wiki/UTC_offset
  * @see https://en.wikipedia.org/wiki/List_of_UTC_offsets
+ * @see https://wikipedia.org/wiki/UTC+00:00 UTC+00:00
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString Date.prototype.toISOString()
+ * @see https://en.wikipedia.org/wiki/ISO_8601 ISO-8601
  *
  * @pattern ^(0\d|1\d|2[0-3]):(0\d|[1-5]\d):(0\d|[1-5]\d)(\.(00\d|0[1-9]\d|[1-9]\d{2}))?(([+-])(0\d|1\d|2[0-3]):(0\d|[1-5]\d))?$
  *
  * @public
  */
 export type LocalISOTimeString =
-    `${NumericString}:${NumericString}:${NumericString}${'' | InternalTimeDotMicroseconds | UTCOffsetString}`;
+    `${NumericString}:${NumericString}:${NumericString}${'' | InternalTimeDotMilliseconds | UTCOffsetString}`;
 
 /**
- * ISO local date string.
+ * ISO local date-time string.
  *
  * Rules:
- *  * Date: YES
- *  * Time: NO
- *  * UTC offset: NO
- *  * Microseconds: NO
+ * * Date: YES
+ * * Time: YES
+ * * UTC offset: Optional
+ * * Milliseconds: Optional
  *
  * @example
- *   2021-01-01
- *   2021-12-31
- *   2021-02-28
+ *   2021-01-01T00:00:00
+ *   2021-12-31T23:59:59
+ *   2021-02-28T12:34:56
+ *   2021-02-28T12:34:56.123
+ *   2021-02-28T12:34:56.123+01:00
+ *   2021-02-28T12:34:56.123-01:00
  *
- * @pattern ^(197\d|19[89]\d|20[0-2]\d|203[0-8])-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$
- *
+ * @see https://en.wikipedia.org/wiki/UTC_offset
+ * @see https://en.wikipedia.org/wiki/List_of_UTC_offsets
+ * @see https://wikipedia.org/wiki/UTC+00:00 UTC+00:00
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString Date.prototype.toISOString()
  * @see https://en.wikipedia.org/wiki/ISO_8601 ISO-8601
+ *
+ * @pattern ^(197\d|19[89]\d|20[0-2]\d|203[0-8])-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])T(0\d|1\d|2[0-3]):(0\d|[1-5]\d):(0\d|[1-5]\d)(\.(00\d|0[1-9]\d|[1-9]\d{2}))?(([+-])(0\d|1\d|2[0-3]):(0\d|[1-5]\d))?$
  *
  * @public
  */
-export type LocalISODateString = `${NumericString}-${NumericString}-${NumericString}`;
+export type LocalISODateTimeString = `${LocalISODateString}T${LocalISOTimeString}`;
 
 /**
  * ISO zulu time string (GMT time zone).
@@ -112,12 +148,16 @@ export type LocalISODateString = `${NumericString}-${NumericString}-${NumericStr
  *  * Date: NO
  *  * Time: YES
  *  * UTC offset: NO
- *  * Microseconds: Optional
+ *  * Milliseconds: Optional
  *
  * @example
  *  00:00:00Z
  *  12:34:56Z
  *  12:34:56.789Z
+ *
+ * @see https://wikipedia.org/wiki/UTC+00:00 UTC+00:00
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString Date.prototype.toISOString()
+ * @see https://en.wikipedia.org/wiki/ISO_8601 ISO-8601
  *
  * @pattern ^(0\d|1\d|2[0-3]):(0\d|[1-5]\d):(0\d|[1-5]\d)(\.(00\d|0[1-9]\d|[1-9]\d{2}))?Z$
  *
@@ -132,7 +172,7 @@ export type ZuluISOTimeString = `${NumericString}:${NumericString}:${NumericStri
  * * Date: YES
  * * Time: YES
  * * UTC offset: NO
- * * Microseconds: Optional
+ * * Milliseconds: Optional
  *
  * @example
  *   2021-01-01T00:00:00Z
@@ -140,36 +180,17 @@ export type ZuluISOTimeString = `${NumericString}:${NumericString}:${NumericStri
  *   2021-02-28T12:34:56Z
  *   2021-02-28T12:34:56.123Z
  *
+ * @see https://wikipedia.org/wiki/UTC+00:00 UTC+00:00
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString Date.prototype.toISOString()
+ * @see https://en.wikipedia.org/wiki/ISO_8601 ISO-8601
+ *
  * @pattern ^(197\d|19[89]\d|20[0-2]\d|203[0-8])-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])T(0\d|1\d|2[0-3]):(0\d|[1-5]\d):(0\d|[1-5]\d)(\.(00\d|0[1-9]\d|[1-9]\d{2}))?Z$
  *
- * @see https://en.wikipedia.org/wiki/ISO_8601 ISO-8601
+ * @faker date.anytime
  *
  * @public
  */
 export type ZuluISODateString = `${LocalISODateString}T${ZuluISOTimeString}`;
-
-/**
- * ISO local date-time string.
- *
- * Rules:
- * * Date: YES
- * * Time: YES
- * * UTC offset: Optional
- * * Microseconds: Optional
- *
- * @example
- *   2021-01-01T00:00:00
- *   2021-12-31T23:59:59
- *   2021-02-28T12:34:56
- *   2021-02-28T12:34:56.123
- *   2021-02-28T12:34:56.123+01:00
- *   2021-02-28T12:34:56.123-01:00
- *
- * @pattern ^(197\d|19[89]\d|20[0-2]\d|203[0-8])-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])T(0\d|1\d|2[0-3]):(0\d|[1-5]\d):(0\d|[1-5]\d)(\.(00\d|0[1-9]\d|[1-9]\d{2}))?(([+-])(0\d|1\d|2[0-3]):(0\d|[1-5]\d))?$
- *
- * @public
- */
-export type LocalISODateTimeString = `${LocalISODateString}T${LocalISOTimeString}`;
 
 /**
  * ISO zulu date-time string (GMT time zone).
@@ -178,7 +199,7 @@ export type LocalISODateTimeString = `${LocalISODateString}T${LocalISOTimeString
  * * Date: YES
  * * Time: YES
  * * UTC offset: NO
- * * Microseconds: Optional
+ * * Milliseconds: Optional
  *
  * @example
  *   2021-01-01T00:00:00Z
@@ -186,7 +207,12 @@ export type LocalISODateTimeString = `${LocalISODateString}T${LocalISOTimeString
  *   2021-02-28T12:34:56Z
  *   2021-02-28T12:34:56.123Z
  *
+ * @see https://wikipedia.org/wiki/UTC+00:00 UTC+00:00
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString Date.prototype.toISOString()
+ * @see https://en.wikipedia.org/wiki/ISO_8601 ISO-8601
+ *
  * @pattern ^(197\d|19[89]\d|20[0-2]\d|203[0-8])-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])T(0\d|1\d|2[0-3]):(0\d|[1-5]\d):(0\d|[1-5]\d)(\.(00\d|0[1-9]\d|[1-9]\d{2}))?Z$
+ *
  * @faker date.anytime
  *
  * @public
@@ -194,24 +220,90 @@ export type LocalISODateTimeString = `${LocalISODateString}T${LocalISOTimeString
 export type ZuluISODateTimeString = `${LocalISODateString}T${ZuluISOTimeString}`;
 
 /**
- * ISO date-time type.
+ * Type of ISO date/-time string.
  *
  * @public
  */
 export enum ISODateTimeType {
-    LocalTime = 'LocalTimeString',
-    ZuluTime = 'ZuluTimeString',
+    /**
+     * Local date without time.
+     *
+     * This means that the date is in the local time zone.
+     */
     LocalDate = 'LocalDateString',
-    ZuluDate = 'ZuluDateString',
+    /**
+     * Local time without date.
+     *
+     * This means that the time is in the local time zone.
+     * Value can be with or without UTC offset.
+     * Value can be with or without milliseconds.
+     */
+    LocalTime = 'LocalTimeString',
+    /**
+     * Local date with time.
+     *
+     * This means that the date and time are in the local time zone.
+     * Value can be with or without UTC offset.
+     * Value can be with or without milliseconds.
+     */
     LocalDateTime = 'LocalDateTimeString',
+    /**
+     * Zulu date.
+     *
+     * This means that the date is in the GMT time zone.
+     *
+     * In fact, a value with this type always contains not only the date, but also the time in Zulu.
+     * This is necessary to clearly determine which days the date refers to.
+     * Format of the value with this type corresponds to the ZuluDateTime format.
+     *
+     * For example: if an event occurs on 2030-01-01,
+     *   then depending on the time, it can occur on different days.
+     *
+     * This type differs from LocalDate in that the latter does not contain information about the time zone.
+     * This type differs from ZuluDateTime in that they need to be entered and displayed differently.
+     */
+    ZuluDate = 'ZuluDateString',
+    /**
+     * Zulu time without date.
+     *
+     * This means that the time is in the GMT time zone.
+     * Value can be with or without milliseconds.
+     */
+    ZuluTime = 'ZuluTimeString',
+    /**
+     * Zulu date with time.
+     *
+     * This means that the date and time are in the GMT time zone.
+     * Value can be with or without milliseconds.
+     */
     ZuluDateTime = 'ZuluDateTimeString',
 }
 
-export type TypedDateTimeString = EnumValues<typeof ISODateTimeType>;
+/**
+ * Common type for all types of ISO date/-time strings.
+ */
+export type TypedDateTimeString =
+    | LocalISODateString
+    | LocalISOTimeString
+    | LocalISODateTimeString
+    | ZuluISODateString
+    | ZuluISOTimeString
+    | ZuluISODateTimeString;
 
-export const ISODateTimeTypes: ReadonlyArray<TypedDateTimeString> =
+/**
+ * Name of ISO date/-time type.
+ */
+export type ISODateTimeTypeName = EnumValues<typeof ISODateTimeType>;
+
+/**
+ * List of all ISO date/-time type names.
+ */
+export const ISODateTimeTypesNames: ReadonlyArray<ISODateTimeTypeName> =
     extractEnumValues(ISODateTimeType);
 
+/**
+ * Description of typed date-time string.
+ */
 export type TypedDateTimeDescription = DeepReadonly<{
     date?: {
         year: number;
@@ -228,4 +320,4 @@ export type TypedDateTimeDescription = DeepReadonly<{
     zulu?: boolean;
 }>;
 
-type InternalTimeDotMicroseconds = `.${NumericString}`;
+type InternalTimeDotMilliseconds = `.${NumericString}`;

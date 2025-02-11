@@ -1,4 +1,5 @@
 import { PRec, Rec, UniqueItemsArray } from '../index';
+import { Int } from '../number/types';
 
 /**
  * ISO day of the week
@@ -21,3 +22,5 @@ export type ISOWeekdayRec<T> = Rec<T, ISOWeekday>;
 export type ISOWeekdayPRec<T> = PRec<T, ISOWeekday>;
 
 export type ISOWeekdaySet = UniqueItemsArray<ISOWeekday>;
+
+export type DateConstructorSource = string | Int | Date;
