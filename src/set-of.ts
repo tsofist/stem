@@ -1,9 +1,9 @@
 import { Nullable } from './index';
 
 export interface SetOf<T> extends Iterable<T> {
-    readonly rebuild: (values: Nullable<readonly T[]>) => this;
+    readonly rebuild: <U extends T>(values: Nullable<readonly U[]>) => this;
     readonly has: <U extends T>(value: U) => boolean;
-    readonly findIndex: (value: T) => number | undefined;
+    readonly findIndex: <U extends T>(value: U) => number | undefined;
     readonly isEmpty: boolean;
     readonly size: number;
     readonly join: (separator?: string) => string;
