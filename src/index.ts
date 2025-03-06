@@ -44,7 +44,7 @@ export type NonEmptyString = string;
 export type URIString = string;
 
 /**
- * @format url
+ * @pattern (https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|www\.[a-zA-Z0-9][a-zA-Z0-9-]+[a-zA-Z0-9]\.[^\s]{2,}|https?:\/\/(?:www\.|(?!www))[a-zA-Z0-9]+\.[^\s]{2,}|www\.[a-zA-Z0-9]+\.[^\s]{2,})
  *
  * @faker internet.url
  */
@@ -70,7 +70,7 @@ export type URLPath = string;
 /**
  * HTML href
  */
-export type HRefString = URIString | URLPath;
+export type HRefString = URLString | URLPath;
 
 /**
  * @pattern ^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})$
