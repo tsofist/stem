@@ -44,6 +44,13 @@ export type NonEmptyString = string;
 export type URIString = string;
 
 /**
+ * @format url
+ *
+ * @faker internet.url
+ */
+export type URLString = string;
+
+/**
  * @pattern ^\\/(?:[a-zA-Z0-9-._]+\\/)*[a-zA-Z0-9-._]*$
  */
 export type URLAbsPathname = string;
@@ -74,6 +81,8 @@ export type Base64String = string;
 /**
  * @format email
  * @see https://ajv.js.org/packages/ajv-formats.html formats
+ *
+ * @faker internet.email
  */
 export type EmailString = string;
 
