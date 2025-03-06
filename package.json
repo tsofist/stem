@@ -1,6 +1,6 @@
 {
   "name": "@tsofist/stem",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Core basics for TypeScript applications",
   "author": "Andrew Berdnikov <tsofistgudmen@gmail.com>",
   "license": "LGPL-3.0",
