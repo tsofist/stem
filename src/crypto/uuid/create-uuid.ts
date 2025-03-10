@@ -1,4 +1,4 @@
-import { randomBytes } from 'crypto';
+import { randomBytes, randomUUID } from 'crypto';
 import { UUID } from './types';
 
 /**
@@ -6,6 +6,8 @@ import { UUID } from './types';
  * @see https://ru.wikipedia.org/wiki/UUID
  */
 export function createUUID(): UUID {
+    if (randomUUID) return randomUUID();
+
     const arr = randomBytes(16);
 
     arr[6] = (arr[6] & 0x0f) | 0x40;
