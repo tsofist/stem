@@ -1,8 +1,6 @@
-import { parseExpression, ParserOptions } from 'cron-parser';
+import { CronExpressionParser, CronExpressionOptions, CronExpression } from 'cron-parser';
 import { NonEmptyString } from '../index';
 import { deepSleeper, Sleeper } from './sleeper';
-
-type CronExpression = ReturnType<typeof parseExpression>;
 
 export type SchedulerRunner<TParams> = (
     this: Scheduler<TParams>,
@@ -32,7 +30,7 @@ export type SchedulerOptions = {
      * Default options for cron-parser
      * @see https://github.com/harrisiirak/cron-parser#options cron-parser on GitHub
      */
-    defaultCronParserOptions?: ParserOptions;
+    defaultCronParserOptions?: CronExpressionOptions;
 };
 
 type SchedulerJob = {
@@ -68,12 +66,16 @@ class SchedulerImpl<TParams> {
      * @see https://wikipedia.org/wiki/Cron wiki
      * @see https://github.com/harrisiirak/cron-parser#supported-format format
      */
-    schedule(crontabExpression: string, params?: TParams, options?: ParserOptions): boolean {
+    schedule(
+        crontabExpression: string,
+        params?: TParams,
+        options?: CronExpressionOptions,
+    ): boolean {
         crontabExpression = crontabExpression.trim();
         if (crontabExpression !== this.#currentIntervalExpression) {
             this.stop();
 
-            const interval = parseExpression(
+            const interval = CronExpressionParser.parse(
                 crontabExpression,
                 options || this.#options.defaultCronParserOptions,
             );
