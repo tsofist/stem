@@ -23,8 +23,8 @@ describe('typedStringToDate', () => {
     });
 
     it('converts ZuluDate string to Date object', () => {
-        const result = typedStringToDate('2024-07-23T23:00:00Z', ISODateTimeType.ZuluDate);
-        expect(result).toEqual(new Date('2024-07-23T23:00:00Z'));
+        const result = typedStringToDate('2024-07-23T23:00:50Z', ISODateTimeType.ZuluDate);
+        expect(result).toEqual(new Date('2024-07-23T00:00:00Z'));
     });
 
     it('throws error for unknown ISODateTimeType', () => {
@@ -81,9 +81,9 @@ describe('dateToTypedString', () => {
     });
 
     it('converts Date object to ZuluDate string', () => {
-        const date = new Date('2024-07-23T23:00:00Z');
+        const date = new Date('2024-07-23T23:45:59Z');
         const result = dateToTypedString(date, ISODateTimeType.ZuluDate);
-        expect(result).toBe('2024-07-23T23:00:00Z');
+        expect(result).toBe('2024-07-23T00:00:00Z');
     });
 
     it('throws error for unknown type', () => {

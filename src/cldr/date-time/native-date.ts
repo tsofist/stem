@@ -53,11 +53,12 @@ export function typedStringToDate(
             return new Date(value);
         }
 
-        // 2024-07-23T23:00:00Z
-        // 2020-12-31T00:00:00Z
-        // 2020-01-01T23:00:00Z
+        // 2024-07-23T23:00:00Z -> 2024-07-23T00:00:00Z
+        // 2020-12-31T00:00:00Z -> 2020-12-31T00:00:00Z
+        // 2020-01-01T23:00:00Z -> 2020-01-01T00:00:00Z
         case ISODateTimeType.ZuluDate: {
-            return new Date(applyUTCOffset(value, 'Z'));
+            const v = new Date(value);
+            return new Date(applyZuluTime(v.toISOString()));
         }
 
         // 22:15:00Z
@@ -140,8 +141,7 @@ export function dateToTypedString(
 
         case ISODateTimeType.ZuluDate: {
             const v = new Date(value);
-            v.setSeconds(0);
-            return v.toISOString().replace(/\.\d+Z$/, 'Z');
+            return applyZuluTime(v.toISOString());
         }
 
         case ISODateTimeType.LocalTime: {
@@ -238,4 +238,13 @@ export function createTypedDateTimeString(
     if (result == null) raise(`Failed to create ${type}: ${String(source)}`);
 
     return result;
+}
+
+export function applyZuluTime<T extends TypedDateTimeString>(value: TypedDateTimeString): T;
+export function applyZuluTime(value: string): string;
+export function applyZuluTime(value: string): string {
+    if (value) {
+        return value.replace(/T\d\d:\d\d:\d\d(.\d\d\d)?Z$/, 'T00:00:00Z');
+    }
+    return value;
 }

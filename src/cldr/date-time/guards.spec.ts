@@ -101,9 +101,7 @@ describe('cldr/isLocalISODateString', () => {
 describe('cldr/isZuluISODateString', () => {
     it('should return true', () => {
         expect(isZuluISODateString('2021-01-01T00:00:00Z')).toBe(true);
-        expect(isZuluISODateString('2021-12-31T23:59:59Z')).toBe(true);
-        expect(isZuluISODateString('2021-02-28T12:34:56Z')).toBe(true);
-        expect(isZuluISODateString('2021-02-28T12:34:56.123Z')).toBe(true);
+        expect(isZuluISODateString('2021-01-01T00:00:00.000Z')).toBe(true);
     });
 
     it('should return false', () => {
@@ -116,6 +114,10 @@ describe('cldr/isZuluISODateString', () => {
         expect(isZuluISODateString('2021-01-01T12:34:56.123+01:00')).toBe(false);
         expect(isZuluISODateString('2021-01-01T12:34:56.123-01:00')).toBe(false);
         expect(isZuluISODateString('2021-01-01T12:34:56.123+00:00')).toBe(false);
+        expect(isZuluISODateString('2021-01-01T00:00:00.001Z')).toBe(false);
+        expect(isZuluISODateString('2021-12-31T23:59:59Z')).toBe(false);
+        expect(isZuluISODateString('2021-02-28T12:34:56Z')).toBe(false);
+        expect(isZuluISODateString('2021-02-28T12:34:56.123Z')).toBe(false);
     });
 });
 

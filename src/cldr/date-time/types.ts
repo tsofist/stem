@@ -176,21 +176,19 @@ export type ZuluISOTimeString = `${NumericString}:${NumericString}:${NumericStri
  *
  * @example
  *   2021-01-01T00:00:00Z
- *   2021-12-31T23:59:59Z
- *   2021-02-28T12:34:56Z
- *   2021-02-28T12:34:56.123Z
+ *   2021-02-28T00:00:00.000Z
  *
  * @see https://wikipedia.org/wiki/UTC+00:00 UTC+00:00
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString Date.prototype.toISOString()
  * @see https://en.wikipedia.org/wiki/ISO_8601 ISO-8601
  *
- * @pattern ^(197\d|19[89]\d|20[0-2]\d|203[0-8])-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])T(0\d|1\d|2[0-3]):(0\d|[1-5]\d):(0\d|[1-5]\d)(\.(00\d|0[1-9]\d|[1-9]\d{2}))?Z$
+ * @pattern ^((197\d|19[89]\d|20[0-2]\d|203[0-8])-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))T(00):(00):(00)(\.(000))?Z$
  *
  * @faker date.anytime
  *
  * @public
  */
-export type ZuluISODateString = `${LocalISODateString}T${ZuluISOTimeString}`;
+export type ZuluISODateString = `${LocalISODateString}T00:00:00Z`;
 
 /**
  * ISO zulu date-time string (GMT time zone).

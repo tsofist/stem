@@ -111,11 +111,15 @@ export const CLDRRegExpGroups = (() => {
     const Time = `(${Hour}:${Minute}:${Second}${Millisecond}?)`;
     const LocalTime = `(${Hour}:${Minute}:${Second}${Millisecond}?${UTCOffset}?)`;
     const ZuluTime = `${Hour}:${Minute}:${Second}${Millisecond}?Z`;
+    const ZeroZuluTime = `(00):(00):(00)(\\.(000))?Z`;
     const AnyTime = `(${Hour}:${Minute}:${Second}${Millisecond}?((Z)|(${UTCOffset}))?)`;
     const Date = `(${Year}-${Month}-${Day})`;
     const DateWithAnyTime = `(${Date}T${AnyTime})`;
     const DateWithLocalTime = `(${Date}T${LocalTime})`;
     const DateWithZuluTime = `(${Date}T${ZuluTime})`;
+    const ZuluDate = `(${Date}T${ZeroZuluTime})`;
+
+    console.log('ZD:', ZuluDate);
 
     return {
         /* eslint-disable prettier/prettier */
@@ -123,8 +127,8 @@ export const CLDRRegExpGroups = (() => {
         Sign, UTCOffset,
         Year, Month, Day,
         Time, LocalTime, ZuluTime, AnyTime,
-        Date,
-        DateWithAnyTime, DateWithLocalTime, DateWithZuluTime
+        Date, ZuluDate,
+        DateWithAnyTime, DateWithLocalTime, DateWithZuluTime,
         /* eslint-enable prettier/prettier */
     } as const;
 })();
@@ -152,7 +156,7 @@ export const CLDR_ISO_LOCAL_DATE_TIME = new RegExp(`^${CLDRRegExpGroups.DateWith
 /**
  * @see ZuluISODateString
  */
-export const CLDR_ISO_ZULU_DATE = new RegExp(`^${CLDRRegExpGroups.DateWithZuluTime}$`);
+export const CLDR_ISO_ZULU_DATE = new RegExp(`^${CLDRRegExpGroups.ZuluDate}$`);
 
 /**
  * @see ZuluISOTimeString
