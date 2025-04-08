@@ -119,8 +119,6 @@ export const CLDRRegExpGroups = (() => {
     const DateWithZuluTime = `(${Date}T${ZuluTime})`;
     const ZuluDate = `(${Date}T${ZeroZuluTime})`;
 
-    console.log('ZD:', ZuluDate);
-
     return {
         /* eslint-disable prettier/prettier */
         Hour, Minute, Second, Millisecond,
