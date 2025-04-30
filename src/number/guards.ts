@@ -1,4 +1,4 @@
-import { Float, Int, PositiveInt } from './types';
+import { Float8, Int, PositiveInt } from './types';
 
 /**
  * Value is Integer number
@@ -15,8 +15,8 @@ export function isPositiveInt(it: any): it is PositiveInt {
 }
 
 /**
- * Value is Float number
+ * Value is Float8 number
  */
-export function isFloat(it: any): it is Float {
-    return typeof it === 'number' && it % 1 !== 0 && !Number.isNaN(it) && isFinite(it);
+export function isFloat(it: any): it is Float8 {
+    return typeof it === 'number' && it % 1 !== 0 && !Number.isNaN(it) && Number.isFinite(it);
 }
