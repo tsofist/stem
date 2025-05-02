@@ -1,5 +1,5 @@
-import { PromiseMay } from '../index';
-import { NonNegativeInt } from '../number/types';
+import type { PromiseMay } from '../index';
+import type { NonNegativeInt } from '../number/integer/types';
 
 export type SerialIntervalOptions = {
     /**

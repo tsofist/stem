@@ -1,7 +1,7 @@
-import { Nullable, NumericString } from '../../index';
-import { Int } from '../../number/types';
+import type { Nullable, NumericString } from '../../index';
+import type { Int } from '../../number/integer/types';
 import { CLDRRegExpGroups } from './constants';
-import { UTCOffsetString } from './types';
+import type { UTCOffsetString } from './types';
 
 export function minutesToUTCOffset(minutes: Int): UTCOffsetString {
     const sign = minutes >= 0 ? '+' : '-';

@@ -1,5 +1,5 @@
-import { PositiveInt } from './number/types';
-import { Nullable, PromiseMay } from './index';
+import type { PositiveInt } from './number/integer/types';
+import type { Nullable, PromiseMay } from './index';
 
 /**
  * Callback for each chunk.

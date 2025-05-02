@@ -104,6 +104,7 @@ export type YouTubeLink = string;
 /**
  * Hexadecimal string
  * @pattern ^([a-fA-F0-9]{2})+$
+ * @faker { 'number.hex': [{ min: 0, max: 65535 }] }
  */
 export type HexString = string;
 

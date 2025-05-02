@@ -1,5 +1,5 @@
-import { PRec, Rec, UniqueItemsArray } from '../index';
-import { Int } from '../number/types';
+import type { PRec, Rec, UniqueItemsArray } from '../index';
+import type { Int } from '../number/integer/types';
 import type { IANATimeZoneList } from './time-zone';
 
 export type DateConstructorSource = string | Int | Date;

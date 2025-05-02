@@ -1,4 +1,4 @@
-import { PositiveInt } from '../number/types';
+import type { PositiveInt } from '../number/integer/types';
 
 export function breakStringByLength(
     source: string,
