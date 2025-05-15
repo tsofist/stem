@@ -184,7 +184,13 @@ export type ZuluISOTimeString = `${NumericString}:${NumericString}:${NumericStri
  *
  * @pattern ^((197\d|19[89]\d|20[0-2]\d|203[0-8])-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))T(00):(00):(00)(\.(000))?Z$
  *
- * @faker date.anytime
+ * @faker {
+ *     'helpers.arrayElement': [[
+ *          '2022-02-21T00:00:00Z',
+ *          '2024-04-10T00:00:00Z'
+ *          '2020-01-01T00:00:00Z'
+ *     ]]
+ * }
  *
  * @public
  */
