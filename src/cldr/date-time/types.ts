@@ -187,7 +187,7 @@ export type ZuluISOTimeString = `${NumericString}:${NumericString}:${NumericStri
  * @faker {
  *     'helpers.arrayElement': [[
  *          '2022-02-21T00:00:00Z',
- *          '2024-04-10T00:00:00Z'
+ *          '2024-04-10T00:00:00Z',
  *          '2020-01-01T00:00:00Z'
  *     ]]
  * }
