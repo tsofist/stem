@@ -12,6 +12,9 @@ export type Nullable<T> = T | null | undefined;
 /** Returns IfNever if T is never, otherwise returns T or AltT */
 export type IsNever<T, IfNever, AltT = T> = [T] extends [never] ? IfNever : AltT;
 
+/** Returns IfUndefined if T is undefined, otherwise returns T or AltT */
+export type IsUndefined<T, IfUndefined, AltT = T> = [T] extends [undefined] ? IfUndefined : AltT;
+
 /** Returns never if T is never, otherwise returns T */
 export type ExcludeNever<T> = T extends never ? never : T;
 
@@ -20,10 +23,49 @@ export type MergeNonNeverValues<T, R = ValuesOf<OmitByValueType<T, never>>> = {
     [K in keyof R]: R[K];
 };
 
-/**
- * Check if T is an empty object
- */
+/** Check if T is an empty object */
 export type IsEmptyObject<T> = keyof T extends never ? true : false;
+
+/**
+ * Construct an object whose fields are based on a common vocabulary (field library).
+ *
+ * @template FieldLibrary vocabulary of fields (usually an interface with many well-described required fields)
+ * @template RequiredFields required fields from FieldLibrary
+ * @template OptionalFields optional fields from FieldLibrary
+ * @template ExtraFields additional fields that are not represented in FieldLibrary
+ *
+ * @example
+ *   interface ApplicationDomainFields {
+ *      // Entity ID
+ *      id: Int;
+ *      // Name
+ *      name: string;
+ *      // Description
+ *      description: string;
+ *   }
+ *
+ *   type User = FromVocabulary<
+ *      ApplicationDomainFields,
+ *      'id' | 'name',
+ *      'description'
+ *   >;
+ *   type AuthenticatedUser = FromVocabulary<
+ *      ApplicationDomainFields,
+ *      'id' | 'name',
+ *      'description',
+ *      { isAuthenticated: boolean }
+ *   >;
+ *
+ */
+export type FromVocabulary<
+    FieldLibrary extends object,
+    RequiredFields extends keyof FieldLibrary,
+    OptionalFields extends keyof FieldLibrary = never,
+    ExtraFields extends object = never,
+    R = IsNever<Pick<FieldLibrary, RequiredFields>, object> &
+        IsNever<Partial<Pick<FieldLibrary, OptionalFields>>, object> &
+        IsNever<ExtraFields, object>,
+> = IsEmptyObject<R> extends true ? EmptyRec : R;
 
 /**
  * Valid types of object keys

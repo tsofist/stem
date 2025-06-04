@@ -1,36 +1,50 @@
-import { CronExpressionParser, CronExpressionOptions, CronExpression } from 'cron-parser';
-import { NonEmptyString } from '../index';
-import { deepSleeper, Sleeper } from './sleeper';
+import { CronExpression, CronExpressionOptions, CronExpressionParser } from 'cron-parser';
+import type { IsNever, NonEmptyString } from '../index';
+import { createDeepSleeper, Sleeper } from './sleeper';
 
-export type SchedulerRunner<TParams> = (
+/**
+ * @see https://github.com/harrisiirak/cron-parser#options cron-parser on GitHub
+ */
+export type CronOptions = Omit<CronExpressionOptions, 'expression'>;
+
+/**
+ * Job runner function
+ */
+export type SchedulerJobRunner<TParams> = (
     this: Scheduler<TParams>,
-    params: TParams | undefined,
+    params: TParams,
 ) => Promise<void>;
 
+export type Scheduler<TParams = never> = SchedulerImpl<TParams>;
+
+/**
+ * Job Scheduler options
+ */
 export type SchedulerOptions = {
-    /** Arbitrary task name */
+    /** Job name */
     name?: NonEmptyString;
     /**
-     * Option allows to build a sequence of tasks executed by scheduler
-     * That means next task will not be started until previous one is finished
+     * Option allows to build a sequence of jobs executed by scheduler.
+     * That means next job will not be started until previous one is finished.
+     *
      * @default false
      */
     serial?: boolean;
     /**
-     * Error handler for operations
-     * Errors will be sent to console if no handler is provided
+     * Default error handler for operations.
+     * Note: errors will be sent to console if no handler is provided.
      */
     onError?: (error: Error) => void;
     /**
      * Accuracy of event triggering
-     * @see deepSleeper
+     * @see createDeepSleeper
      */
     accuracyMS?: number;
     /**
      * Default options for cron-parser
      * @see https://github.com/harrisiirak/cron-parser#options cron-parser on GitHub
      */
-    defaultCronParserOptions?: CronExpressionOptions;
+    defaultCronParserOptions?: CronOptions;
 };
 
 type SchedulerJob = {
@@ -39,38 +53,48 @@ type SchedulerJob = {
 
 class SchedulerImpl<TParams> {
     #currentIntervalExpression: string | undefined = undefined;
-
     #currentJob: SchedulerJob | undefined = undefined;
-
     #currentParams: TParams | undefined = undefined;
 
     readonly #options: SchedulerOptions;
 
     constructor(
         readonly name: string,
-        private readonly runner: SchedulerRunner<TParams>,
+        private readonly runner: SchedulerJobRunner<TParams>,
         options?: SchedulerOptions,
     ) {
         this.#options = { ...options };
     }
 
+    /**
+     * Job is currently scheduled
+     */
     get scheduled() {
         return this.#currentJob != null;
     }
 
     /**
+     * Schedule a job to run periodically based on a crontab expression.
+     *
      * @param crontabExpression Crontab expression
      * @param params Params for runner
-     * @param options cron-parser options
+     * @param options cron options
+     *
      * @see https://crontab.guru/
      * @see https://wikipedia.org/wiki/Cron wiki
-     * @see https://github.com/harrisiirak/cron-parser#supported-format format
+     * @see https://github.com/harrisiirak/cron-parser#supported-format cron format
+     *
+     * @returns true if rescheduling was successful
      */
-    schedule(
+    schedule: IsNever<
+        TParams,
+        (crontabExpression: string, params?: undefined, options?: CronExpressionOptions) => boolean,
+        (crontabExpression: string, params: TParams, options?: CronExpressionOptions) => boolean
+    > = (
         crontabExpression: string,
-        params?: TParams,
-        options?: CronExpressionOptions,
-    ): boolean {
+        params: TParams | undefined,
+        options: CronExpressionOptions | undefined,
+    ): boolean => {
         crontabExpression = crontabExpression.trim();
         if (crontabExpression !== this.#currentIntervalExpression) {
             this.stop();
@@ -87,15 +111,22 @@ class SchedulerImpl<TParams> {
             return true;
         }
         return false;
-    }
+    };
 
+    /**
+     * Unschedule job execution.
+     */
     stop() {
         this.#currentJob?.abort();
         this.#currentJob = undefined;
+        this.#currentParams = undefined;
         this.#currentIntervalExpression = undefined;
     }
 
-    setParams(params: TParams | undefined) {
+    /**
+     * Assign new parameters for the next job execution.
+     */
+    setParams(params: TParams) {
         this.#currentParams = params;
     }
 
@@ -107,15 +138,29 @@ class SchedulerImpl<TParams> {
             // eslint-disable-next-line no-unmodified-loop-condition
             while (!aborted && interval.hasNext()) {
                 try {
-                    const till = interval.next() as unknown as Date;
-                    await (sleeper = deepSleeper(till, this.#options.accuracyMS)).waitFor();
-
-                    if (aborted) break;
-                    const promise = this.runner(this.#currentParams);
                     if (aborted) break;
 
-                    if (this.#options.serial) await promise;
-                    else promise.catch((error) => this.#onError(error as Error));
+                    const till = interval.next().toDate();
+
+                    if (till < new Date()) {
+                        // If the next scheduled time is in the past, skip it
+                        continue;
+                    }
+
+                    await (sleeper = createDeepSleeper(till, this.#options.accuracyMS)).waitFor();
+                    if (aborted) break;
+
+                    const promise = this.runner(
+                        // @ts-expect-error Params already defined
+                        this.#currentParams,
+                    );
+                    if (aborted) break;
+
+                    if (this.#options.serial) {
+                        await promise;
+                    } else {
+                        promise.catch((error) => this.#onError(error as Error));
+                    }
                 } catch (e: any) {
                     this.#onError(e as Error);
                 }
@@ -131,27 +176,56 @@ class SchedulerImpl<TParams> {
     }
 
     #onError(error: Error) {
-        if (!this.#options.onError)
+        if (!this.#options.onError) {
             console.error(`[Scheduler STEP RUN ERROR for ${this.name}]`, error);
-        else this.#options.onError(error);
+        } else {
+            this.#options.onError(error);
+        }
     }
 }
 
-export type Scheduler<TParams = void> = SchedulerImpl<TParams>;
-
 /**
- * Runs task by schedule
- * @param runner Task executed by schedule
- * @param options Options for task execution (or task name)
- * @param name Arbitrary task name
+ * Create a job scheduler.
+ * @example
+ *      // Basic usage
+ *      const s1 = createScheduler(
+ *          async function onRum(params) {
+ *              console.log(`${this.name} executed with params: ${params}`);
+ *              await delay(1);
+ *          },
+ *          {
+ *              name: 'JOB 1',
+ *              serial: true,
+ *          },
+ *      );
+ *
+ *      s1.schedule('20 * * * *', undefined);
+ *      s1.schedule('20 * * * *';
+ *
+ *      // Example with parameters
+ *      const task2 = createScheduler<{ a: number; b: number }>(
+ *          async (params) => {
+ *              console.log('Task 1 executed with params:', params);
+ *              await delay(1);
+ *          },
+ *          {
+ *              name: 'Task 1',
+ *              serial: true,
+ *          },
+ *      );
+ *
+ *      task2.schedule('20 * * * *', { a: 1, b: 2 });
+ *      task2.schedule('20 * * * *'); // <- TSC error: you should provide params here.
  */
-export function scheduler<TParams = void>(
-    runner: SchedulerRunner<TParams>,
+export function createScheduler<TParams = never>(
+    jobRunner: SchedulerJobRunner<TParams>,
     options?: SchedulerOptions | NonEmptyString,
     name?: NonEmptyString,
 ): Scheduler<TParams> {
     const optsIsName = typeof options === 'string';
-    name = optsIsName ? options : options?.name || name || 'UNNAMED';
+    name = optsIsName ? options : options?.name || name || `SCHEDULED JOB #${++jobCount}`;
 
-    return new SchedulerImpl<TParams>(name, runner, optsIsName ? undefined : options);
+    return new SchedulerImpl<TParams>(name, jobRunner, optsIsName ? undefined : options);
 }
+
+let jobCount = 0;

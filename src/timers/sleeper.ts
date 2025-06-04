@@ -1,3 +1,6 @@
+/**
+ * Sleeper is a utility that allows you to wait for a specified period of time
+ */
 export type Sleeper = {
     /** Wait for the end of the waiting period */
     waitFor: () => Promise<void>;
@@ -9,13 +12,9 @@ export type Sleeper = {
 
 class SleeperImpl implements Sleeper {
     readonly #promise: Promise<void>;
-
     #timer: NodeJS.Timeout | undefined = undefined;
-
     #resolver: VoidFunction | undefined = undefined;
-
     #aborted = false;
-
     #fulfilled = false;
 
     constructor(timeout: number) {
@@ -26,14 +25,23 @@ class SleeperImpl implements Sleeper {
         if (this.#timer.unref) this.#timer.unref();
     }
 
+    /**
+     * Indicates whether the waiting was interrupted
+     */
     get aborted() {
         return this.#aborted;
     }
 
+    /**
+     * Gets a promise that resolves when the waiting period ends
+     */
     waitFor(): Promise<void> {
         return this.#promise;
     }
 
+    /**
+     * Interrupts the waiting period prematurely
+     */
     abort(): boolean {
         if (!this.#fulfilled) {
             this.#aborted = true;
@@ -61,7 +69,7 @@ class SleeperImpl implements Sleeper {
  * **Important**: the accuracy of triggering depends entirely on the engine and the environment,
  *   since everything is tied to setTimeout
  */
-export function sleeper(timeout: number): Sleeper {
+export function createSleeper(timeout: number): Sleeper {
     return new SleeperImpl(timeout);
 }
 
@@ -74,8 +82,9 @@ export function sleeper(timeout: number): Sleeper {
  *   However, the smaller this number, the more often the check for the deadline is performed and the more load on the event-loop
  *   The accuracy values set by default are sufficient in most cases
  */
-export function deepSleeper(date: Date, accuracyMS: number = 10 * 1000): Sleeper {
+export function createDeepSleeper(date: Date, accuracyMS: number = 10 * 1000): Sleeper {
     let timer: Sleeper;
+
     const promise = new Promise<void>((resolve) => {
         void (async () => {
             const till = date.getTime();
@@ -85,10 +94,11 @@ export function deepSleeper(date: Date, accuracyMS: number = 10 * 1000): Sleeper
                     resolve();
                     break;
                 }
-                await (timer = sleeper(accuracyMS)).waitFor();
+                await (timer = createSleeper(accuracyMS)).waitFor();
             }
         })();
     });
+
     return {
         async waitFor() {
             return promise;
