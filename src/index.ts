@@ -186,6 +186,11 @@ export type PromiseValue<T> = T extends Promise<infer U> ? U : T;
 export type StringKeyOf<T> = T extends object ? Extract<keyof T, string> : never;
 
 /**
+ * Get keys of union type T
+ */
+export type KeyOfUnion<T> = T extends T ? keyof T : never;
+
+/**
  * Make K-keys of T required
  */
 export type RequiredSome<T, K extends keyof T> = T & {
