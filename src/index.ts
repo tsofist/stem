@@ -64,7 +64,11 @@ export type FromVocabulary<
     ExtraFields extends object = never,
     R = IsNever<Pick<FieldLibrary, RequiredFields>, object> &
         IsNever<Partial<Pick<FieldLibrary, OptionalFields>>, object> &
-        IsNever<ExtraFields, object>,
+        IsNever<
+            ExtraFields,
+            // eslint-disable-next-line @typescript-eslint/ban-types
+            {}
+        >,
 > = IsEmptyObject<R> extends true ? EmptyRec : R;
 
 /**
