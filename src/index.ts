@@ -9,14 +9,14 @@ export type NonPrimitive = Exclude<object, Primitive>;
 export type Nully = null | undefined;
 export type Nullable<T> = T | null | undefined;
 
-/** Returns IfNever if T is never, otherwise returns T or AltT */
-export type IsNever<T, IfNever, AltT = T> = [T] extends [never] ? IfNever : AltT;
+/** Returns Then if T is never, otherwise returns T or Otherwise */
+export type IsNever<T, Then, Otherwise = T> = [T] extends [never] ? Then : Otherwise;
 
-/** Returns IfUndefined if T is undefined, otherwise returns T or AltT */
-export type IsUndefined<T, IfUndefined, AltT = T> = [T] extends [undefined] ? IfUndefined : AltT;
+/** Returns Then if T is undefined, otherwise returns T or Otherwise */
+export type IsUndefined<T, Then, Otherwise = T> = [T] extends [undefined] ? Then : Otherwise;
 
-/** Returns Then if Value is true, otherwise returns Otherwise */
-export type IsTrue<Value, Then = true, Otherwise = false> = Value extends true ? Then : Otherwise;
+/** Returns Then if T is true, otherwise returns Otherwise */
+export type IsTrue<T, Then = true, Otherwise = false> = T extends true ? Then : Otherwise;
 
 /** Returns never if T is never, otherwise returns T */
 export type ExcludeNever<T> = T extends never ? never : T;
