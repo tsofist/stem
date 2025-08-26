@@ -1,4 +1,4 @@
-import { Nullable } from '../index';
+import type { Nullable } from '../index';
 
 /**
  * Get array of Map/Set keys
