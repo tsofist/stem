@@ -1,4 +1,5 @@
 import { CronExpression, CronExpressionOptions, CronExpressionParser } from 'cron-parser';
+import type { ZuluISODateTimeString } from '../cldr/date-time/types';
 import type { IsNever, NonEmptyString } from '../index';
 import { createDeepSleeper, Sleeper } from './sleeper';
 
@@ -48,7 +49,8 @@ export type SchedulerOptions = {
 };
 
 type SchedulerJob = {
-    abort: () => void;
+    readonly interval: CronExpression;
+    readonly abort: () => void;
 };
 
 class SchedulerImpl<TParams> {
@@ -71,6 +73,22 @@ class SchedulerImpl<TParams> {
      */
     get scheduled() {
         return this.#currentJob != null;
+    }
+
+    /**
+     * Next invocation time
+     * @see ZuluISODateTimeString
+     */
+    get nextInvocation() {
+        const v = this.#currentJob?.interval.next().toISOString();
+        return (v || undefined) as ZuluISODateTimeString | undefined;
+    }
+
+    /**
+     * Job has next invocation
+     */
+    get hasNextInvocation() {
+        return this.#currentJob?.interval.hasNext() ?? false;
     }
 
     /**
@@ -168,6 +186,7 @@ class SchedulerImpl<TParams> {
         })();
 
         return {
+            interval,
             abort() {
                 aborted = true;
                 sleeper?.abort();
