@@ -1,6 +1,6 @@
 import { ErrorCode, errorFrom, readErrorContextEx } from '../error';
-import { ARec, PickByValueType, ShallowExact, URec } from '../index';
-import {
+import type { ARec, PickByValueType, ShallowExact, URec } from '../index';
+import type {
     ErrorCodeFamily,
     ErrorCodeFamilySep,
     ErrorFamilyMember,
@@ -8,14 +8,6 @@ import {
 } from './types';
 
 const ErrorFactoryFieldID = Symbol('ErrorFactoryFieldID');
-
-const defaultErrorFactory: ErrorInstanceFactory = (code, context, message) => {
-    return errorFrom.call(null, {
-        code,
-        context,
-        message,
-    });
-};
 
 export class ErrorFamily<
     ErrorCodePrefix extends ErrorCode,
@@ -54,9 +46,9 @@ export class ErrorFamily<
         };
     }
 
-    protected alternativeErrorFactories = new WeakMap<ErrorInstanceFactory, this>();
+    protected readonly alternativeErrorFactories = new WeakMap<ErrorInstanceFactory, this>();
+    protected readonly [ErrorFactoryFieldID]: ErrorInstanceFactory = defaultErrorFactory;
     protected forkedTimes: number = 0;
-    protected [ErrorFactoryFieldID]: ErrorInstanceFactory = defaultErrorFactory;
 
     protected constructor(
         readonly prefix: Family,
@@ -87,6 +79,16 @@ export class ErrorFamily<
     raise<T extends keyof Members>(code: T, context: Exclude<Members[T][1], undefined>): never;
     raise(code: keyof Members, context?: object) {
         throw this[ErrorFactoryFieldID](
+            code as ErrorCode,
+            this.getMergedContext(code, context),
+            this.msg(code),
+        );
+    }
+
+    create<T extends keyof PickByValueType<Members, [any]>>(code: T): Error;
+    create<T extends keyof Members>(code: T, context: Exclude<Members[T][1], undefined>): Error;
+    create(code: keyof Members, context?: object) {
+        return this[ErrorFactoryFieldID](
             code as ErrorCode,
             this.getMergedContext(code, context),
             this.msg(code),
@@ -134,3 +136,11 @@ export class ErrorFamily<
         return context || defaults ? { ...defaults, ...context } : undefined;
     }
 }
+
+const defaultErrorFactory: ErrorInstanceFactory = (code, context, message) => {
+    return errorFrom.call(null, {
+        code,
+        context,
+        message,
+    });
+};
