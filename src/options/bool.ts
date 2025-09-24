@@ -38,7 +38,7 @@
 export function ovBoolOrType<T>(
     source: Source<T>,
     value?: T | ValueFn<SourceExact<T>, T>,
-): SourceExact<T> | undefined {
+): T | undefined {
     const v = unwrap(source);
     if (v === false) return undefined;
 
