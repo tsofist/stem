@@ -1,6 +1,6 @@
 /**
- * Converting value to boolean type
- * In case of Nully result defaultValue will be used
+ * Converting value to boolean type.
+ * In case of Nully result defaultValue will be used.
  */
 export function asBool(it: any, defaultValue = false): boolean {
     if (it == null) return defaultValue;
