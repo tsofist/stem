@@ -1,6 +1,6 @@
 import type { ArrayMay } from '../index';
 
-export type TextBuilderItem = string | undefined | null | false;
+export type TextBuilderItem = number | string | undefined | null | false;
 export type TextBuilderPushData = TextBuilder | ArrayMay<TextBuilderItem | TextBuilder>;
 
 export function txt(...data: ConstructorParameters<typeof TextBuilder>): TextBuilder {
@@ -18,12 +18,17 @@ export class TextBuilder {
         if (data != null) this.a(data, level);
     }
 
-    static ne(value: TextBuilderItem, condition?: unknown): string | undefined {
-        return ((arguments.length > 1 ? !!condition && value : value) && value) || undefined;
-    }
-
     get size() {
         return this.#data.length;
+    }
+
+    /**
+     * Append line break(s)
+     */
+    br(lines = 2) {
+        for (let i = 0; i < lines; i++) {
+            this.#data.push('');
+        }
     }
 
     /**
@@ -36,10 +41,15 @@ export class TextBuilder {
             if (data instanceof TextBuilder) data = [...data.#data];
             else data = [data];
         }
-        const push = (item: TextBuilderItem) =>
-            item != null &&
-            item !== false &&
-            this.#data.push((this.levelChar.repeat(level * this.levelSize) + item).trimEnd());
+        const push = (item: TextBuilderItem) => {
+            return (
+                item != null &&
+                item !== false &&
+                this.#data.push(
+                    (this.levelChar.repeat(level * this.levelSize) + String(item)).trimEnd(),
+                )
+            );
+        };
 
         for (const item of data) {
             if (item instanceof TextBuilder) for (const dataItem of item.#data) push(dataItem);
@@ -66,7 +76,7 @@ export class TextBuilder {
             headerSep?: string;
             intersectionSep?: string;
             titleSep?: string;
-        },
+        } = {},
     ) {
         const level = this.baseLevel + (options.level ?? 0);
         const {
