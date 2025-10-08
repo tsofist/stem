@@ -1,3 +1,3 @@
 export function noop() {
-    // stub
+    return undefined;
 }
