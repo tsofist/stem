@@ -1,0 +1,212 @@
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+
+exports[`TextBuilder basic 1`] = `
+"val-1.1
+  val-2.1
+    val-3.1
+  val-2.2
+val-1.2"
+`;
+
+exports[`TextBuilder table from items (ati) basic 1`] = `
+"1   │ val-1.1 │ true │
+2   │ val-2.2 │      │ [object Object]
+3   │ val-3.3 │ true │
+4   │ val-4.4 │ true │ 0
+5   │ val-5.5 │ true │
+6   │ val-6.6 │ true │ () => { }
+7   │ val-7.7 │ true │ 1000
+8   │ val-8.8 │ true │ alpha          
+                     │ beta           
+                     │ gamma
+100 │ v100    │ true │   0            
+                     │   =0           
+                     │   >3           
+                     │   >2           
+                     │   >1
+┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+`;
+
+exports[`TextBuilder table from items (ati) w/ head: projection + inner text builders [1] 1`] = `
+"n   │ b    │ a               │ s
+────┼──────┼─────────────────┼────────
+1   │ true │                 │ val-1.1
+2   │      │ [object Object] │ val-2.2
+3   │ true │                 │ val-3.3
+4   │ true │ 0               │ val-4.4
+5   │ true │                 │ val-5.5
+6   │ true │ () => { }       │ val-6.6
+7   │ true │ 1000            │ val-7.7
+8   │ true │ alpha           │ 
+           │ beta            │ 
+           │ gamma           │ val-8.8
+100 │ true │   0             │ 
+           │   =0            │ 
+           │   >3            │ 
+           │   >2            │ 
+           │   >1            │ v100
+┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+`;
+
+exports[`TextBuilder table from items (ati) w/ head: projection + inner text builders [2] 1`] = `
+"a               │ n
+────────────────┼────
+                │ 1
+[object Object] │ 2
+                │ 3
+0               │ 4
+                │ 5
+() => { }       │ 6
+1000            │ 7
+alpha           │ 
+beta            │ 
+gamma           │ 8
+  0             │ 
+  =0            │ 
+  >3            │ 
+  >2            │ 
+  >1            │ 100
+┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+`;
+
+exports[`TextBuilder table from items (ati) w/ head: projection 1`] = `
+"n   │ s
+────┼────────
+1   │ val-1.1
+2   │ val-2.2
+3   │ val-3.3
+4   │ val-4.4
+5   │ val-5.5
+6   │ val-6.6
+7   │ val-7.7
+8   │ val-8.8
+100 │ v100
+┈┈┈┈┈┈┈┈┈┈┈┈┈"
+`;
+
+exports[`TextBuilder table from items (ati) w/ head: titles 1`] = `
+"No. │ String  │ Bool.
+────┼─────────┼──────
+1   │ val-1.1 │ true
+2   │ val-2.2 │
+3   │ val-3.3 │ true
+4   │ val-4.4 │ true
+5   │ val-5.5 │ true
+6   │ val-6.6 │ true
+7   │ val-7.7 │ true
+8   │ val-8.8 │ true
+100 │ v100    │ true
+┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+`;
+
+exports[`TextBuilder table from items (ati) w/ header 1`] = `
+"n   │ s       │ b    │ a
+────┼─────────┼──────┼────────────────
+1   │ val-1.1 │ true │
+2   │ val-2.2 │      │ [object Object]
+3   │ val-3.3 │ true │
+4   │ val-4.4 │ true │ 0
+5   │ val-5.5 │ true │
+6   │ val-6.6 │ true │ () => { }
+7   │ val-7.7 │ true │ 1000
+8   │ val-8.8 │ true │ alpha          
+                     │ beta           
+                     │ gamma
+100 │ v100    │ true │   0            
+                     │   =0           
+                     │   >3           
+                     │   >2           
+                     │   >1
+┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+`;
+
+exports[`TextBuilder table from rows (at) basic 1`] = `
+"Basic Table:
+
+    ~ Col 1 ~                                        ~ Col 2 ~          ~ Col 3 ~
+    val-1.1                                          val-2.2            val-3.3
+    wide-val-2.1                                     wide-val-2.2       wide-val-2.3
+    super-super-super-super-super-super-wide-val-3.1 extra-wide-val-3.2 val-3.3
+    ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+`;
+
+exports[`TextBuilder table from rows (at) basic w/ title & header & inner text builder 1`] = `
+"Basic Table with Title & Header & Inner TextBuilder:
+
+    ┈┈ Supertable: ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
+    ~ Col 1 ~                                        ~ Col 2 ~          ~ Col 3 ~
+    ─────────────────────────────────────────────────┼──────────────────┼───────────────────────────────────────────────
+    val-1.1                                          val-2.2            val-3.3
+    wide-val-2.1                                     wide-val-2.2       wide-val-2.3
+    super-super-super-super-super-super-wide-val-3.1 extra-wide-val-3.2 a                                               
+                                                                        b                                           
+                                                                        c                                           
+                                                                        super-super-super-super-super-super-wide-val-3.1
+    ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+`;
+
+exports[`TextBuilder table from rows (at) basic w/ title & header 1`] = `
+"Basic Table with Title & Header:
+
+    ┈┈ Supertable: ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
+    ~ Col 1 ~                                        ~ Col 2 ~          ~ Col 3 ~
+    ─────────────────────────────────────────────────┼──────────────────┼───────────
+    val-1.1                                          val-2.2            val-3.3
+    wide-val-2.1                                     wide-val-2.2       wide-val-2.3
+    super-super-super-super-super-super-wide-val-3.1 extra-wide-val-3.2 val-3.3
+    ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+`;
+
+exports[`TextBuilder table from rows (at) basic w/ title 1`] = `
+"Basic Table with Title:
+
+    ┈┈ Supertable: ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈
+    ~ Col 1 ~                                        ~ Col 2 ~          ~ Col 3 ~
+    val-1.1                                          val-2.2            val-3.3
+    wide-val-2.1                                     wide-val-2.2       wide-val-2.3
+    super-super-super-super-super-super-wide-val-3.1 extra-wide-val-3.2 val-3.3
+    ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+`;
+
+exports[`TextBuilder table from rows (at) grid table with header 1`] = `
+"Grid table with header:
+
+    ~ Col 1 ~                                        │ ~ Col 2 ~          │ ~ Col 3 ~
+    ─────────────────────────────────────────────────┼────────────────────┼─────────────
+    val-1.1                                          │ val-2.2            │ val-3.3
+    wide-val-2.1                                     │ wide-val-2.2       │ wide-val-2.3
+    super-super-super-super-super-super-wide-val-3.1 │ extra-wide-val-3.2 │ val-3.3
+    ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+`;
+
+exports[`TextBuilder table from rows (at) key-value table w/ header 1`] = `
+"Key-Value table w/ header:
+
+    Characteristic   │ Value
+    ─────────────────┼─────────────────────────────────────────────────
+    Col 1            │ val-1.1
+    Col 2            │ val-2.2
+    Col 3            │ val-3.3
+    Wide Col 1       │ wide-val-2.1
+    Wide Col 2       │ wide-val-2.2
+    Wide Col 3       │ wide-val-2.3
+    Super Wide Col 1 │ super-super-super-super-super-super-wide-val-3.1
+    Extra Wide Col 2 │ extra-wide-val-3.2
+    Col 3 Again      │ val-3.3
+    ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+`;
+
+exports[`TextBuilder table from rows (at) key-value table w/o header 1`] = `
+"Key-Value table w/o header:
+
+    Col 1            │ val-1.1
+    Col 2            │ val-2.2
+    Col 3            │ val-3.3
+    Wide Col 1       │ wide-val-2.1
+    Wide Col 2       │ wide-val-2.2
+    Wide Col 3       │ wide-val-2.3
+    Super Wide Col 1 │ super-super-super-super-super-super-wide-val-3.1
+    Extra Wide Col 2 │ extra-wide-val-3.2
+    Col 3 Again      │ val-3.3
+    ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+`;
