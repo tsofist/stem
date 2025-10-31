@@ -8,6 +8,11 @@ exports[`TextBuilder basic 1`] = `
 val-1.2"
 `;
 
+exports[`TextBuilder error entries table 1`] = `
+"error │ Error: Table generation failed!
+┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+`;
+
 exports[`TextBuilder table from items (ati) basic 1`] = `
 "1   │ val-1.1 │ true │
 2   │ val-2.2 │      │ [object Object]

@@ -1,3 +1,4 @@
+import { substr } from './substr';
 import { txt } from './text-builder';
 
 describe('TextBuilder', () => {
@@ -10,6 +11,32 @@ describe('TextBuilder', () => {
         t.a('val-1.2', 0);
 
         expect(t.stringify()).toMatchSnapshot();
+    });
+
+    describe('error entries', () => {
+        it('basic', () => {
+            const msg = 'Something bad happened!';
+            const t = txt();
+
+            t.a(new URIError(msg));
+
+            const v = String(t);
+            const vLines = v.split('\n');
+
+            expect(v.length).toBeGreaterThan(10);
+            expect(v.charAt(0)).toBe(t.errorPrefixChar);
+            expect(substr(v, ' ', '\n')).toStrictEqual(`URIError: ${msg}`);
+            expect(vLines.filter((value) => value.startsWith('at ')).length).toStrictEqual(0);
+        });
+
+        it('table', () => {
+            const t = txt();
+            const e = new Error('Table generation failed!');
+
+            t.at(Object.entries({ error: e }));
+
+            expect(String(t)).toMatchSnapshot();
+        });
     });
 
     describe('table from rows (at)', () => {

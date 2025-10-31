@@ -1,6 +1,7 @@
+import { asArray } from '../as-array';
 import type { ARec, ArrayMay, PRec, StringKeyOf } from '../index';
 
-export type TextBuilderItem = number | string | undefined | null | false;
+export type TextBuilderItem = number | string | undefined | null | false | Error;
 export type TextBuilderPushData = TextBuilder | ArrayMay<TextBuilderItem | TextBuilder>;
 export type TextBuilderTableCellAlign = 'left' | 'right';
 export type TextBuilderTableOptions = {
@@ -35,6 +36,8 @@ export class TextBuilder {
     levelSize = 2;
     baseLevel = 0;
 
+    errorPrefixChar = '⭕';
+
     tColumnSeparator = ' │ ';
     tHeaderSeparator = '─';
     tIntersectionSeparator = '┼';
@@ -54,37 +57,53 @@ export class TextBuilder {
     /**
      * Append line break(s)
      */
-    br(lines = 2) {
+    br(lines = 1) {
         for (let i = 0; i < lines; i++) {
-            this.#data.push('');
+            this.a('');
         }
+    }
+
+    protected doAppend(
+        sources: TextBuilderPushData,
+        level: number = 0,
+        container: Pick<string[], 'push'> = this.#data,
+    ) {
+        level = this.baseLevel + level;
+
+        const append = (item: TextBuilder | TextBuilderItem, builder: TextBuilder) => {
+            if (item != null && item !== false) {
+                const { errorPrefixChar, levelChar, levelSize } = builder;
+                let prefix = levelChar.repeat(level * levelSize);
+
+                if (item instanceof TextBuilder) {
+                    for (const innerItem of item.#data) {
+                        container.push(`${prefix}${innerItem}`);
+                    }
+                } else if (item instanceof Error) {
+                    if (errorPrefixChar) prefix += errorPrefixChar + ' ';
+                    container.push(`${prefix}${String(item)}`);
+                    if (item.stack) {
+                        // eslint-disable-next-line prefer-spread
+                        container.push.apply(container, item.stack.split('\n').slice(1));
+                    }
+                } else {
+                    container.push(`${prefix}${String(item)}`);
+                }
+            }
+        };
+
+        for (const item of asArray(sources)) {
+            append(item, this);
+        }
+
+        return this;
     }
 
     /**
      * Append element(s)
      */
     a(data: TextBuilderPushData, level = 0) {
-        level = this.baseLevel + level;
-
-        if (!Array.isArray(data)) {
-            if (data instanceof TextBuilder) data = [...data.#data];
-            else data = [data];
-        }
-        const push = (item: TextBuilderItem) => {
-            return (
-                item != null &&
-                item !== false &&
-                this.#data.push(
-                    (this.levelChar.repeat(level * this.levelSize) + String(item)).trimEnd(),
-                )
-            );
-        };
-
-        for (const item of data) {
-            if (item instanceof TextBuilder) for (const dataItem of item.#data) push(dataItem);
-            else push(item);
-        }
-        return this;
+        return this.doAppend(data, level);
     }
 
     /**
@@ -313,21 +332,21 @@ export class TextBuilder {
         const cLen = rows.at(0)?.length ?? 0;
         const cSizes: number[] = new Array(cLen).fill(0);
 
-        for (const row of rows) {
-            for (let i = 0; i < cLen; i++) {
-                const item = row[i];
-                if (item instanceof TextBuilder) {
-                    for (const dataItem of item.#data) {
-                        if (
-                            dataItem != null &&
-                            // @ts-expect-error TS2367 - OK
-                            dataItem !== false
-                        ) {
-                            cSizes[i] = Math.max(cSizes[i], String(dataItem).length);
-                        }
-                    }
-                } else if (item != null && item !== false) {
-                    cSizes[i] = Math.max(cSizes[i], String(item).length);
+        {
+            for (const row of rows) {
+                for (let i = 0; i < cLen; i++) {
+                    const item = row[i];
+                    this.doAppend(
+                        //
+                        item,
+                        0,
+                        {
+                            push(item) {
+                                cSizes[i] = Math.max(cSizes[i], item.length);
+                                return 0;
+                            },
+                        },
+                    );
                 }
             }
         }
@@ -340,7 +359,7 @@ export class TextBuilder {
                 title.length >= totalSize
                     ? title
                     : title + sTitle.repeat(Math.max(0, totalSize - title.length - 2)) + ' ';
-            this.#data.push((this.levelChar.repeat(level * this.levelSize) + titleLine).trimEnd());
+            this.doAppend(titleLine.trimEnd(), level);
         }
 
         const headerProcessed = separateHeader && rows.length > 1;
@@ -356,7 +375,7 @@ export class TextBuilder {
                             .map((dataItem, index) => {
                                 let line = '';
                                 if (index === 0) {
-                                    line = String(dataItem);
+                                    line = dataItem;
                                 } else {
                                     const prefixSize = Math.max(
                                         0,
@@ -368,7 +387,7 @@ export class TextBuilder {
                                         this.levelChar.repeat(level * this.levelSize) +
                                         item.levelChar.repeat(prefixSize) +
                                         (i === 0 ? '' : sCol) +
-                                        String(dataItem);
+                                        dataItem;
                                 }
 
                                 const p =
@@ -391,9 +410,10 @@ export class TextBuilder {
 
                     return text[am](cSizes[i], ' ');
                 })
-                .join(sCol);
+                .join(sCol)
+                .trimEnd();
 
-            this.#data.push((this.levelChar.repeat(level * this.levelSize) + line).trimEnd());
+            this.doAppend(line, level);
 
             if (headerProcessed && r === 0) {
                 const sepLine = cSizes.reduce((acc, size, index) => {
@@ -412,9 +432,7 @@ export class TextBuilder {
 
                     return acc;
                 }, '');
-                this.#data.push(
-                    (this.levelChar.repeat(level * this.levelSize) + sepLine).trimEnd(),
-                );
+                this.doAppend(sepLine, level);
             }
         }
 
@@ -427,11 +445,7 @@ export class TextBuilder {
                 ) +
                 sCol.length * (cSizes.length - 1);
 
-            this.#data.push(
-                (
-                    this.levelChar.repeat(level * this.levelSize) + sTitle.repeat(totalSize)
-                ).trimEnd(),
-            );
+            this.doAppend(sTitle.repeat(totalSize).trimEnd(), level);
         }
 
         return this;
