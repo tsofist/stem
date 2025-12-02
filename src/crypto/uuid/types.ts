@@ -1,9 +1,56 @@
 /**
+ * UUID with string representation.
+ *
+ * Version: unspecified.
+ *
  * @format uuid
+ *
  * @see createUUID
- * @see https://ru.wikipedia.org/wiki/UUID Wikipedia
+ * @see UUIDv4
+ * @see UUIDv7
+ *
+ * @see https://ru.wikipedia.org/wiki/UUID Wikipedia: UUID
+ * @see https://www.ietf.org/archive/id/draft-ietf-uuidrev-rfc4122bis-00.html#section-5.4 UUIDv4 Byte Order RFC draft
+ * @see https://www.ietf.org/archive/id/draft-ietf-uuidrev-rfc4122bis-00.html#section-5.7 UUIDv7 Byte Order RFC draft
  */
 export type UUID = `${string}-${string}-${string}-${string}-${string}`;
+
+/**
+ * UUID with binary representation.
+ *
+ * Version: unspecified.
+ *
+ * @see https://ru.wikipedia.org/wiki/UUID Wikipedia: UUID
+ * @see https://www.ietf.org/archive/id/draft-ietf-uuidrev-rfc4122bis-00.html#section-5.4 UUIDv4 Byte Order RFC draft
+ * @see https://www.ietf.org/archive/id/draft-ietf-uuidrev-rfc4122bis-00.html#section-5.7 UUIDv7 Byte Order RFC draft
+ */
+export type UUIDB = Uint8Array<ArrayBuffer> & { __brand: never };
+
+/**
+ * UUID with string representation.
+ *
+ * Version: 4.
+ *
+ * @format uuid
+ *
+ * @see createUUID
+ * @see UUID
+ * @see UUIDv7
+ */
+export type UUIDv4 = UUID;
+
+/**
+ * UUID with string representation.
+ *
+ * Version: 7.
+ *
+ * @format uuid
+ *
+ * @see createUUID
+ * @see UUID
+ * @see UUIDv4
+ */
+export type UUIDv7 = UUID;
 
 /**
  * Nil UUID
