@@ -1,6 +1,6 @@
 import type { PRec, Rec, UniqueItemsArray } from '../index';
 import type { Int } from '../number/integer/types';
-import type { IANATimeZoneList } from './time-zone';
+import type { IANABackwardTimeZoneList, IANAEtcTimeZoneList, IANATimeZoneList } from './time-zone';
 
 export type DateConstructorSource = string | Int | Date;
 
@@ -37,13 +37,23 @@ export type ISODayOfMonth =
 export type ISODayOfMonthSet = UniqueItemsArray<ISODayOfMonth>;
 
 /**
- * IANA Time Zone Database identifier
+ * IANA Time Zone Database Identifier (name)
  *
- * @see https://en.wikipedia.org/wiki/Time_zone wiki: Time Zone
- * @see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones wiki: IANA Time Zone Database
- * @see https://en.wikipedia.org/wiki/List_of_time_zone_abbreviations wiki: Time Zone Abbreviations
+ * @see https://www.iana.org/time-zones IANA Time Zone Database
+ * @see https://en.wikipedia.org/wiki/Time_zone Wikipedia: Time Zone
+ * @see https://en.wikipedia.org/wiki/List_of_tz_database_time_zones Wikipedia: IANA Time Zone Database
+ * @see https://en.wikipedia.org/wiki/List_of_time_zone_abbreviations Wikipedia: Time Zone Abbreviations
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Temporal/ZonedDateTime#time_zones_and_offsets MDN
  */
-export type IANATimeZoneId = (typeof IANATimeZoneList)[number];
+export type IANATimeZoneId =
+    | (typeof IANATimeZoneList)[number]
+    | (typeof IANAEtcTimeZoneList)[number]
+    | (typeof IANABackwardTimeZoneList)[number];
 
-export type IANATimeZoneIdSet = UniqueItemsArray<IANATimeZoneId>;
+/**
+ * Set of IANA Time Zone Database Identifiers
+ *
+ * @uniqueItems true
+ * @see IANATimeZoneId
+ */
+export type IANATimeZoneIdSet = IANATimeZoneId;
