@@ -9,12 +9,13 @@
   "types": "lib/index",
   "type": "commonjs",
   "scripts": {
-    "build": "rimraf lib/** && tsc -p tsconfig.build.json",
+    "build": "rm -rf lib && tsc -p tsconfig.build.json",
     "format": "npm run lint -- --fix",
     "lint": "eslint . --cache --cache-location .lint-cache/",
     "pkg:publish": "semantic-release --no-ci",
     "pkg:publish-test": "semantic-release --dry-run",
-    "pkg:purge": "rimraf lib .coverage .lint-cache .jest-cache node_modules",
+    "pkg:clean": "rm -rf lib .coverage .*-cache",
+    "pkg:purge": "npm run pkg:clean && rm -rf node_modules",
     "prepare": "husky",
     "test": "jest",
     "test:cov": "jest --coverage",
@@ -28,13 +29,12 @@
   "devDependencies": {
     "@tsofist/web-buddy": "^1.21.0",
     "@types/jest": "~30.0.0",
-    "@types/node": "^20.19.9",
+    "@types/node": "^20.19.0",
     "@types/supertest": "^6.0.3",
     "husky": "^9.1.7",
     "jest": "~30.2.0",
-    "rimraf": "^6.0.1",
     "supertest": "^7.1.4",
-    "ts-jest": "^29.4.4",
+    "ts-jest": "^29.4.6",
     "typescript": "~5.9.3"
   },
   "publishConfig": {
