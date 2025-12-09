@@ -19,9 +19,11 @@ export function keysOf(target: Nullable<object>): unknown[] {
     return Object.keys(target);
 }
 
-export function roKeysOf<K>(target: Nullable<Map<K, any> | Set<K>>): readonly K[];
+export function roKeysOf<K, R = K>(target: Nullable<Map<K, any> | Set<K>>): readonly R[];
 export function roKeysOf(target: Nullable<URec>): readonly string[];
-export function roKeysOf<K extends PropertyKey>(target: Nullable<Rec<unknown, K>>): readonly K[];
+export function roKeysOf<K extends PropertyKey, R = K>(
+    target: Nullable<Rec<unknown, K>>,
+): readonly R[];
 export function roKeysOf(target: Nullable<object>): readonly unknown[] {
     return keysOf(target);
 }
