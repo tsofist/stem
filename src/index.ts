@@ -76,7 +76,7 @@ export type FromVocabulary<
 
 /**
  * Valid types of object keys
- * @deprecated use PropertyKey from standard library
+ * @deprecated use `PropertyKey` from standard library
  */
 export type ObjectKey = string | number | symbol;
 
@@ -205,6 +205,19 @@ export type RequiredSome<T, K extends keyof T> = T & {
 };
 
 /**
+ * Pick all required fields from T
+ */
+export type PickRequired<T, Only extends keyof T = keyof T> = Pick<T, PickRequiredKeys<T, Only>>;
+
+/**
+ * Get all required keys from T
+ */
+export type PickRequiredKeys<T, Only extends keyof T = keyof T> = {
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    [K in Only]-?: {} extends Pick<T, K> ? never : K;
+}[Only];
+
+/**
  * Make K-keys of T optional
  */
 export type PartialSome<T, K extends keyof T> = Omit<T, K> & {
@@ -286,7 +299,7 @@ export type ValuesOf<T, K extends keyof T = keyof T> = T[K];
  * Get all types from values of T assignable to object keys
  */
 export type SimpleValuesOf<T, K extends keyof T = keyof T> = Exclude<
-    Extract<T[K], ObjectKey>,
+    Extract<T[K], PropertyKey>,
     null | undefined
 >;
 
@@ -295,7 +308,7 @@ export type SimpleValuesOf<T, K extends keyof T = keyof T> = Exclude<
  * @see SimpleValuesOf
  */
 export type WSimpleValuesOf<T, K extends keyof T = keyof T> = Exclude<
-    Extract<T[K], ObjectKey | undefined | unknown>,
+    Extract<T[K], PropertyKey | undefined | unknown>,
     null
 >;
 
@@ -320,14 +333,14 @@ export type OmitMethods<T extends object> = Pick<
 /**
  * Get all existing keys from T specified in K
  */
-export type PickExistsKeys<T, K extends ObjectKey> = {
+export type PickExistsKeys<T, K extends PropertyKey> = {
     [P in keyof T]: P extends K ? P : never;
 }[keyof T];
 
 /**
  * Get all existing fields from T specified in K
  */
-export type PickExists<T, K extends ObjectKey> = Pick<T, PickExistsKeys<T, K>>;
+export type PickExists<T, K extends PropertyKey> = Pick<T, PickExistsKeys<T, K>>;
 
 /**
  * Extract all methods from T
@@ -395,7 +408,7 @@ export type DeepReadonly<T> = T extends Primitive
  *     [Names.Dylan]: 'Some Last Name',
  *   };
  */
-export type Rec<V, K extends ObjectKey = string> = {
+export type Rec<V, K extends PropertyKey = string> = {
     [Key in K]: V;
 };
 
@@ -417,14 +430,14 @@ export type URec = Rec<unknown>;
  * Partial keys version of Rec
  * @see Rec
  */
-export type PRec<V, K extends ObjectKey = string> = {
+export type PRec<V, K extends PropertyKey = string> = {
     [Key in K]?: V;
 };
 
 /**
  * Object without any fields
  */
-export type EmptyRec = Rec<never, ObjectKey>;
+export type EmptyRec = Rec<never, PropertyKey>;
 
 /**
  * Universal comparator result type
