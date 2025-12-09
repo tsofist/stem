@@ -1,5 +1,22 @@
 /**
- * NumericDate.
+ * A string representing a set of claims as a JSON object that is
+ *   encoded in a JWS or JWE, enabling the claims to be digitally
+ *   signed or MACed and/or encrypted.
+ *
+ * #### Format
+ * ```
+ * BASE64URL(header) + "." + BASE64URL(payload) + "." + BASE64URL(signature)
+ * ```
+ *
+ * @see https://datatracker.ietf.org/doc/html/rfc7519
+ * @see https://auth0.com/blog/demystifying-jose-jwt-family/ Auth0: Demystifying JOSE, the JWT Family: JWS, JWE, JWA, and JWK Explained
+ * @see https://www.jwt.io/introduction#what-is-json-web-token Introduction to JSON Web Tokens
+ *
+ */
+export type JSONWebToken = string;
+
+/**
+ * `NumericDate` / _Claim Value Type_
  *
  * ---
  *
@@ -18,7 +35,7 @@
 export type JWTNumericDate = number;
 
 /**
- * StringOrURI.
+ * `StringOrURI` / _Claim Value Type_
  *
  * ---
  *
