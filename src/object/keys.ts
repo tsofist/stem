@@ -1,4 +1,4 @@
-import type { Nullable } from '../index';
+import type { Nullable, Rec, URec } from '../index';
 
 /**
  * Get array of Map/Set keys
@@ -17,4 +17,11 @@ export function keysOf(target: Nullable<object>): unknown[] {
         return Array.from(target.keys()) as unknown[];
     }
     return Object.keys(target);
+}
+
+export function roKeysOf<K>(target: Nullable<Map<K, any> | Set<K>>): readonly K[];
+export function roKeysOf(target: Nullable<URec>): readonly string[];
+export function roKeysOf<K extends PropertyKey>(target: Nullable<Rec<unknown, K>>): readonly K[];
+export function roKeysOf(target: Nullable<object>): readonly unknown[] {
+    return keysOf(target);
 }
