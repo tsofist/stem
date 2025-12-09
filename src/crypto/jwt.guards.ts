@@ -1,5 +1,5 @@
 import { Buffer } from 'buffer';
-import type { ARec } from '../index';
+import type { ARec, ArrayReadonlyMay } from '../index';
 import type { JSONWebToken } from './jwt';
 
 /**
@@ -11,8 +11,8 @@ import type { JSONWebToken } from './jwt';
  */
 export function isJSONWebToken(
     value: unknown,
-    claims?: string[],
-    headerParams?: string[],
+    claims?: ArrayReadonlyMay<string>,
+    headerParams?: ArrayReadonlyMay<string>,
 ): value is JSONWebToken {
     if (!value || typeof value !== 'string' || value.length === 0) return false;
 
@@ -48,7 +48,7 @@ function parseJWTPart(value: string): ARec | undefined {
     return v && typeof v === 'object' ? v : undefined;
 }
 
-function includeAll(names: string[], target: ARec) {
+function includeAll(names: ArrayReadonlyMay<string>, target: ARec) {
     for (const name of names) {
         if (!(name in target)) return false;
     }
