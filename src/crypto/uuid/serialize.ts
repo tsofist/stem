@@ -1,4 +1,4 @@
-import type { UUID, UUIDB } from './types';
+import type { UUID, UUIDB, UUIDv7Hex } from './types';
 
 /**
  * Serialize UUID from byte array to string representation
@@ -27,6 +27,14 @@ export function serializeUUID<R extends UUID>(source: UUIDB, offset = 0): R {
         byteToHex[source[offset + 14]] +
         byteToHex[source[offset + 15]]
     ).toLowerCase() as R;
+}
+
+export function serializeUUIDToHex(source: UUIDB, offset = 0): UUIDv7Hex {
+    let result = '' as UUIDv7Hex;
+    for (let i = 0; i < 16; i++) {
+        result += byteToHex[source[offset + i]];
+    }
+    return result;
 }
 
 const byteToHex: string[] = [];

@@ -53,6 +53,16 @@ export type UUIDv4 = UUID;
 export type UUIDv7 = UUID;
 
 /**
+ * UUID v7 with hex string representation (without dashes).
+ *
+ * @pattern ^([a-fA-F0-9]{2})$
+ * @maxLength 32
+ * @minLength 32
+ * @faker { 'number.hex': [{ min: 32, max: 32 }] }
+ */
+export type UUIDv7Hex = string;
+
+/**
  * Nil UUID
  * @see https://en.wikipedia.org/wiki/Universally_unique_identifier#Nil_UUID Wikipedia
  */
