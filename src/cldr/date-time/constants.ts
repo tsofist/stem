@@ -104,7 +104,8 @@ export const CLDRRegExpGroups = (() => {
     const Sign = '([+-])';
     const UTCOffset = `(${Sign}${Hour}:${Minute})`;
     // Date
-    const Year = `(197\\d|19[89]\\d|20[0-2]\\d|203[0-8])`;
+    const Year = `(\\d\\d\\d\\d)`;
+    const YearCentury = `(19\\d\\d|2\\d\\d\\d)`;
     const Month = `(0[1-9]|1[0-2])`;
     const Day = `(0[1-9]|[12]\\d|3[01])`;
     // Combined
@@ -123,7 +124,7 @@ export const CLDRRegExpGroups = (() => {
         /* eslint-disable prettier/prettier */
         Hour, Minute, Second, Millisecond,
         Sign, UTCOffset,
-        Year, Month, Day,
+        Year, YearCentury, Month, Day,
         Time, LocalTime, ZuluTime, AnyTime,
         Date, ZuluDate,
         DateWithAnyTime, DateWithLocalTime, DateWithZuluTime,

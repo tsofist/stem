@@ -68,6 +68,8 @@ export type UTCOffsetString = `${'+' | '-'}${NumericString}:${NumericString}`;
  *   2021-01-01
  *   2021-12-31
  *   2021-02-28
+ *   1966-08-12
+ *   2145-01-29
  *
  * @see https://en.wikipedia.org/wiki/UTC_offset
  * @see https://en.wikipedia.org/wiki/List_of_UTC_offsets
@@ -75,7 +77,7 @@ export type UTCOffsetString = `${'+' | '-'}${NumericString}:${NumericString}`;
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString Date.prototype.toISOString()
  * @see https://en.wikipedia.org/wiki/ISO_8601 ISO-8601
  *
- * @pattern ^(197\d|19[89]\d|20[0-2]\d|203[0-8])-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$
+ * @pattern ^(\d\d\d\d)-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$
  *
  * @public
  */
@@ -135,7 +137,7 @@ export type LocalISOTimeString =
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString Date.prototype.toISOString()
  * @see https://en.wikipedia.org/wiki/ISO_8601 ISO-8601
  *
- * @pattern ^(197\d|19[89]\d|20[0-2]\d|203[0-8])-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])T(0\d|1\d|2[0-3]):(0\d|[1-5]\d):(0\d|[1-5]\d)(\.(00\d|0[1-9]\d|[1-9]\d{2}))?(([+-])(0\d|1\d|2[0-3]):(0\d|[1-5]\d))?$
+ * @pattern ^(\d\d\d\d)-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])T(0\d|1\d|2[0-3]):(0\d|[1-5]\d):(0\d|[1-5]\d)(\.(00\d|0[1-9]\d|[1-9]\d{2}))?(([+-])(0\d|1\d|2[0-3]):(0\d|[1-5]\d))?$
  *
  * @public
  */
@@ -182,7 +184,7 @@ export type ZuluISOTimeString = `${NumericString}:${NumericString}:${NumericStri
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString Date.prototype.toISOString()
  * @see https://en.wikipedia.org/wiki/ISO_8601 ISO-8601
  *
- * @pattern ^((197\d|19[89]\d|20[0-2]\d|203[0-8])-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))T(00):(00):(00)(\.(000))?Z$
+ * @pattern ^((\d\d\d\d)-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))T(00):(00):(00)(\.(000))?Z$
  *
  * @faker {
  *     'helpers.arrayElement': [[
@@ -215,7 +217,7 @@ export type ZuluISODateString = `${LocalISODateString}T00:00:00Z`;
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toISOString Date.prototype.toISOString()
  * @see https://en.wikipedia.org/wiki/ISO_8601 ISO-8601
  *
- * @pattern ^(197\d|19[89]\d|20[0-2]\d|203[0-8])-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])T(0\d|1\d|2[0-3]):(0\d|[1-5]\d):(0\d|[1-5]\d)(\.(00\d|0[1-9]\d|[1-9]\d{2}))?Z$
+ * @pattern ^(\d\d\d\d)-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])T(0\d|1\d|2[0-3]):(0\d|[1-5]\d):(0\d|[1-5]\d)(\.(00\d|0[1-9]\d|[1-9]\d{2}))?Z$
  *
  * @faker date.anytime
  *
