@@ -1,61 +1,69 @@
-import type { PRec, Rec, StringKeyOf, URec } from '../index';
+import type { DeepReadonly, PRec, Rec } from '../index';
+import { entries } from './entries';
 
 /**
- * Remap object values based on a mapping definition.
+ * Remap object values
  */
-export function remap<V extends PRec<unknown>, M extends RemapMap<V>>(
-    map: M | ((formatter: RemapFormatWrapper<V>) => M),
+export function remap<V extends RemapValues, M extends RemapMap<V>>(map: M, values: V): Remap<M, V>;
+/**
+ * Remap object values
+ */
+export function remap<V extends RemapValues, R>(
+    map: (values: DeepReadonly<V>, format: RemapRootFormatter<V>) => R,
     values: V,
-): Remap<M, V> {
-    type MK = StringKeyOf<M>;
-    const result: URec = {};
-
+): R;
+export function remap<V extends RemapValues, M extends RemapMap<V>, R>(
+    map: RemapMap<M> | ((values: V, format: RemapRootFormatter<V>) => R),
+    values: V,
+) {
     if (typeof map === 'function') {
-        map = map(createFormatter(values));
-    }
-
-    for (const [mK, vK] of Object.entries(map) as [MK, RemapMapItem<V>][]) {
-        switch (typeof vK) {
-            case 'string':
-                result[mK] = values[vK];
-                break;
-            case 'function':
-                result[mK] = vK();
-                break;
-            default:
-                result[mK] = vK;
-        }
-    }
-
-    return result as Remap<M, V>;
-}
-
-export type Remap<M extends RemapMap<V>, V extends PRec<unknown>> = {
-    readonly [K in keyof M]: M[K] extends string
-        ? V[M[K]]
-        : M[K] extends RemapFormatWrapperLike<keyof M, infer R>
-          ? R
-          : M[K];
-};
-
-function createFormatter<V extends PRec<unknown>>(values: V): RemapFormatWrapper<V> {
-    return function format(key: string, fmt: (v: unknown) => unknown) {
-        return () => {
+        const formatter: RemapRootFormatter<V> = (key, fmt) => {
             const raw = values[key];
             return fmt(raw);
         };
-    } as RemapFormatWrapper<V>;
+
+        return map(values, formatter);
+    } else {
+        const result: Rec<unknown, RemapMapKey> = {};
+        for (const [key, item] of entries(map)) {
+            if (!item) continue;
+            const itemType = typeof item;
+
+            if (itemType === 'string' || itemType === 'symbol') {
+                result[key] = values[item as string];
+            } else if (itemType === 'function') {
+                result[key] = (item as RemapFormater<any, any>)(values);
+            } else if (itemType === 'object') {
+                result[key] = remap(item as Remap<any, any>, values);
+            }
+        }
+        return result;
+    }
 }
 
-type RemapFormatWrapper<V extends PRec<unknown>> = <
-    K extends keyof V,
-    F extends (v: V[K]) => unknown,
->(
-    key: keyof V,
-    fmt: F,
-) => typeof fmt extends (v: V[typeof key]) => infer R ? RemapFormater<R> : never;
+export type Remap<M extends RemapMap<V>, V extends RemapValues> = {
+    readonly [K in keyof M]: M[K] extends string
+        ? V[M[K]]
+        : M[K] extends (...args: unknown[]) => unknown
+          ? M[K] extends RemapFormater<V, infer R>
+              ? R
+              : never
+          : M[K] extends RemapMap<V>
+            ? Remap<M[K], V>
+            : never;
+};
 
-type RemapFormatWrapperLike<K extends PropertyKey, R> = (key: K, formatter: RemapFormater<R>) => R;
-type RemapFormater<R> = () => R;
-type RemapMapItem<V extends PRec<unknown>> = RemapFormater<V> | object | keyof V;
-type RemapMap<V extends PRec<unknown>> = Rec<RemapMapItem<V>>;
+export type RemapValues = PRec<unknown, string | symbol>;
+export type RemapMap<V extends RemapValues> = Rec<RemapMapItem<V>, RemapMapKey>;
+
+type RemapMapKey = string | symbol;
+type RemapMapItem<V extends RemapValues> =
+    | RemapFormater<V, unknown>
+    | keyof V
+    | { [K in RemapMapKey]: RemapMapItem<V> };
+
+type RemapFormater<V, R> = (v: DeepReadonly<V>) => R;
+type RemapRootFormatter<V extends RemapValues> = <K extends keyof V, R>(
+    key: K,
+    formatter: (raw: V[K]) => R,
+) => R;

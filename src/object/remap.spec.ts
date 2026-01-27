@@ -1,44 +1,92 @@
 import { remap } from './remap';
 
 describe('remap', () => {
-    it('maps string keys to values', () => {
-        const values = { a: 1, b: 'two', c: true };
-        expect(remap({ x: 'a', y: 'b', z: 'c' }, values)).toStrictEqual({
+    it('remaps flat object with key map', () => {
+        const source = { a: 1, b: 'two', c: true };
+        const result = remap({ x: 'a', y: 'b', z: 'c' }, source);
+
+        expect(result).toEqual({
             x: 1,
             y: 'two',
             z: true,
         });
     });
 
-    it('applies formatter functions from a factory', () => {
-        const values = { a: 1, b: 'two' };
+    it('remaps flat object with formatter map', () => {
+        const source = { a: 2, b: 3 };
+
         const result = remap(
-            (fmt) => ({
-                x: fmt('a', (v) => (v as number) + 1),
-                y: fmt('b', (v) => (v as string).toUpperCase()),
-            }),
-            values,
+            {
+                sum: (vals: typeof source) => vals.a + vals.b,
+                product: (vals: typeof source) => vals.a * vals.b,
+            },
+            source,
         );
-        expect(result).toStrictEqual({ x: 2, y: 'TWO' });
+
+        expect(result).toEqual({
+            sum: 5,
+            product: 6,
+        });
     });
 
-    it('accepts function formater items (constants via function)', () => {
-        const values = { a: 1 };
-        const result = remap({ x: () => 5, y: () => 'hello' }, values);
-        expect(result).toStrictEqual({ x: 5, y: 'hello' });
+    it('remaps nested object with mixed map', () => {
+        const source = {
+            a: 10,
+            b: 20,
+            c: { d: 30, e: 40 },
+        };
+
+        const result = remap(
+            {
+                first: 'a',
+                second: (vals) => vals.b * 2,
+                nested: {
+                    third: 'b',
+                    fourth: (vals) => vals.c.e + 10,
+                },
+            },
+            source,
+        );
+
+        expect(result).toStrictEqual({
+            first: 10,
+            second: 40,
+            nested: { third: 20, fourth: 50 },
+        });
     });
 
-    it('returns undefined for missing keys referenced by string', () => {
-        const values = { a: 1 };
-        expect(remap({ x: 'missing' as any }, values)).toEqual({ x: undefined });
-    });
+    it('remaps using root formatter function', () => {
+        const source = { x: 5, y: 15, additional: 100 };
 
-    it('works with class instances as values', () => {
-        class MyClass {
-            a = 10;
-            b = 'ok';
-        }
-        const instance = new MyClass() as any;
-        expect(remap({ x: 'a', y: 'b' }, instance)).toEqual({ x: 10, y: 'ok' });
+        const result = remap((values, fmt) => {
+            const additional = fmt('additional', (v) => v / 10);
+            return {
+                total: fmt('x', (v) => v + fmt('y', (w) => w)),
+                difference: fmt('y', (v) => v - fmt('x', (w) => w)),
+                add: {
+                    initialX: values.x,
+                    initialY: values.y,
+                    additional,
+                },
+                pNull: null,
+                pNum: 42,
+                pBoolF: false,
+                pBoolT: true,
+            };
+        }, source);
+
+        expect(result).toStrictEqual({
+            total: 20,
+            difference: 10,
+            add: {
+                additional: 10,
+                initialX: 5,
+                initialY: 15,
+            },
+            pNull: null,
+            pNum: 42,
+            pBoolF: false,
+            pBoolT: true,
+        });
     });
 });
