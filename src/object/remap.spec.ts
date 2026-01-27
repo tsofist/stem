@@ -2,10 +2,26 @@ import { remap } from './remap';
 
 describe('remap', () => {
     it('remaps flat object with key map', () => {
-        const source = { a: 1, b: 'two', c: true };
-        const result = remap({ x: 'a', y: 'b', z: 'c' }, source);
+        const S1 = Symbol('s1');
+        const S2 = Symbol('s2');
+        const source = { a: 1, b: 'two', c: true, [S1]: 2, [S2]: 's2' };
+        const result = remap(
+            {
+                x: 'a',
+                y: 'b',
+                z: 'c',
+            },
+            source,
+        );
 
-        expect(result).toEqual({
+        result.x.toFixed();
+        result.y.toUpperCase();
+        result.z.valueOf();
+
+        // @ts-expect-error TS2551: test
+        result.Y;
+
+        expect(result).toStrictEqual({
             x: 1,
             y: 'two',
             z: true,
@@ -23,7 +39,7 @@ describe('remap', () => {
             source,
         );
 
-        expect(result).toEqual({
+        expect(result).toStrictEqual({
             sum: 5,
             product: 6,
         });

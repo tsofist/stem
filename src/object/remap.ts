@@ -24,7 +24,7 @@ export function remap<V extends RemapValues, M extends RemapMap<V>, R>(
 
         return map(values, formatter);
     } else {
-        const result: Rec<unknown, RemapMapKey> = {};
+        const result: Rec<unknown> = {};
         for (const [key, item] of entries(map)) {
             if (!item) continue;
             const itemType = typeof item;
@@ -42,7 +42,7 @@ export function remap<V extends RemapValues, M extends RemapMap<V>, R>(
 }
 
 export type Remap<M extends RemapMap<V>, V extends RemapValues> = {
-    readonly [K in keyof M]: M[K] extends string
+    readonly [K in keyof M]: M[K] extends RemapKey
         ? V[M[K]]
         : M[K] extends (...args: unknown[]) => unknown
           ? M[K] extends RemapFormater<V, infer R>
@@ -53,15 +53,17 @@ export type Remap<M extends RemapMap<V>, V extends RemapValues> = {
             : never;
 };
 
-export type RemapValues = PRec<unknown, string | symbol>;
-export type RemapMap<V extends RemapValues> = Rec<RemapMapItem<V>, RemapMapKey>;
+export type RemapValues = PRec<unknown, RemapKey>;
+export type RemapMap<V extends RemapValues> = {
+    [K in RemapKey]: RemapMapItem<V>;
+};
 
-type RemapMapKey = string | symbol;
 type RemapMapItem<V extends RemapValues> =
     | RemapFormater<V, unknown>
-    | keyof V
-    | { [K in RemapMapKey]: RemapMapItem<V> };
+    | Exclude<keyof V, symbol>
+    | { [K in RemapKey]: RemapMapItem<V> };
 
+type RemapKey = string | number;
 type RemapFormater<V, R> = (v: DeepReadonly<V>) => R;
 type RemapRootFormatter<V extends RemapValues> = <K extends keyof V, R>(
     key: K,
