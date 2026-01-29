@@ -55,6 +55,7 @@ type SchedulerJob = {
 
 class SchedulerImpl<TParams> {
     #currentIntervalExpression: string | undefined = undefined;
+    #currentIntervalOptions: CronExpressionOptions | undefined = undefined;
     #currentJob: SchedulerJob | undefined = undefined;
     #currentParams: TParams | undefined = undefined;
 
@@ -80,8 +81,13 @@ class SchedulerImpl<TParams> {
      * @see ZuluISODateTimeString
      */
     get nextInvocation() {
-        const v = this.#currentJob?.interval.next().toISOString();
-        return (v || undefined) as ZuluISODateTimeString | undefined;
+        if (!this.#currentJob) return undefined;
+        const interval = this.#createInterval(
+            this.#currentIntervalExpression!,
+            this.#currentIntervalOptions!,
+        );
+        const v = interval.next().toISOString();
+        return v ? (v as ZuluISODateTimeString) : undefined;
     }
 
     /**
@@ -117,14 +123,13 @@ class SchedulerImpl<TParams> {
         if (crontabExpression !== this.#currentIntervalExpression) {
             this.stop();
 
-            const interval = CronExpressionParser.parse(
-                crontabExpression,
-                options || this.#options.defaultCronParserOptions,
-            );
+            const ceo = { ...(options || this.#options.defaultCronParserOptions || {}) };
+            const interval = this.#createInterval(crontabExpression, ceo);
 
             this.#currentParams = params;
             this.#currentJob = this.#createJob(interval);
             this.#currentIntervalExpression = crontabExpression;
+            this.#currentIntervalOptions = ceo;
 
             return true;
         }
@@ -148,6 +153,10 @@ class SchedulerImpl<TParams> {
         this.#currentParams = params;
     }
 
+    #createInterval(expression: string, options: CronExpressionOptions) {
+        return CronExpressionParser.parse(expression, options);
+    }
+
     #createJob(interval: CronExpression): SchedulerJob {
         let aborted = false;
         let sleeper: Sleeper | undefined;
@@ -168,10 +177,7 @@ class SchedulerImpl<TParams> {
                     await (sleeper = createDeepSleeper(till, this.#options.accuracyMS)).waitFor();
                     if (aborted) break;
 
-                    const promise = this.runner(
-                        // @ts-expect-error Params already defined
-                        this.#currentParams,
-                    );
+                    const promise = this.runner(this.#currentParams!);
                     if (aborted) break;
 
                     if (this.#options.serial) {
