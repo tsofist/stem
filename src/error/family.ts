@@ -39,8 +39,9 @@ export class ErrorFamily<
     >(
         prefix: Family,
         members: ShallowExact<{ [Code in Family]: ErrorFamilyMember<any> }, Members>,
+        ErrorCtor = Error,
     ) {
-        const result = new this(prefix, members);
+        const result = new this(prefix, members, ErrorCtor);
         return result as typeof result & {
             readonly [key in keyof Members]: key;
         };
@@ -53,9 +54,16 @@ export class ErrorFamily<
     protected constructor(
         readonly prefix: Family,
         protected readonly members: Members,
+        ErrorConstructor = Error,
     ) {
         for (const code of Object.keys(members)) {
             (this as ARec)[code] = code;
+        }
+
+        if (ErrorConstructor && ErrorConstructor !== Error) {
+            this[ErrorFactoryFieldID] = function CustomErrorFactory(code, context, message) {
+                return errorFrom.call(null, { code, context, message }, ErrorConstructor);
+            } satisfies ErrorInstanceFactory;
         }
     }
 
@@ -137,7 +145,11 @@ export class ErrorFamily<
     }
 }
 
-const defaultErrorFactory: ErrorInstanceFactory = (code, context, message) => {
+const defaultErrorFactory: ErrorInstanceFactory = function DefaultErrorFactory(
+    code,
+    context,
+    message,
+) {
     return errorFrom.call(null, {
         code,
         context,

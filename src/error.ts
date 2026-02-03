@@ -111,11 +111,11 @@ export function testErrorMessage(error: any, math: ArrayMay<RegExp | string>): b
     return false;
 }
 
-export interface MatchErrorCondition {
-    code?: ErrorCode;
-    context?: [field: string, value: Primitive];
-    message?: ArrayMay<string | RegExp>;
-}
+export type MatchErrorCondition = {
+    readonly code?: ErrorCode;
+    readonly context?: [field: string, value: Primitive];
+    readonly message?: ArrayMay<string | RegExp>;
+};
 
 export function matchError(error: any, condition: MatchErrorCondition): boolean {
     const { code, context, message } = condition;
@@ -128,8 +128,8 @@ export function matchError(error: any, condition: MatchErrorCondition): boolean 
     return false;
 }
 
-function createError(code?: string, context?: ARec, message?: string): Error {
-    const result = new Error(message ?? code);
+function createError(code?: string, context?: ARec, message?: string, Ctor = Error): Error {
+    const result = new Ctor(message ?? code);
 
     if (code) {
         Object.defineProperty(result, ErrorCodeField, {
@@ -152,13 +152,13 @@ function createError(code?: string, context?: ARec, message?: string): Error {
     return result;
 }
 
-export function errorFrom(source: unknown): Error {
-    if (source instanceof Error) return source;
+export function errorFrom(source: unknown, Ctor = Error): Error {
+    if (source instanceof Ctor) return source;
 
     // @ts-expect-error It's OK
     const { code, context, message } = source || {};
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    return createError(code, context, message);
+    return createError(code, context, message, Ctor);
 }
 
 export function isErrorCode(source: any): source is ErrorCode {
