@@ -89,6 +89,8 @@ export type ErrorInstanceFactory<R extends Error = Error, TCtx = void> = (
     message: string | undefined,
 ) => R;
 
+export type ErrorClass<T extends Error = Error> = new (...args: any[]) => T;
+
 /**
  * @see ErrorFamily
  */

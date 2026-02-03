@@ -148,18 +148,38 @@ describe('ErrorFamily: types', () => {
     const F1Prefix: F1 = 'EC_F1_';
     type F1ErrorCode = ErrorFamilyCode<typeof F1Errors>;
 
-    const F1Errors = ErrorFamily.declare(F1Prefix, {
-        EC_F1_S1: ErrorFamily.member('Message for S1'),
-        EC_F1_WITH_CTX1: ErrorFamily.member<{ n: number }>('Message for W_CTX1'),
-        EC_F1_WITH_CTX2: ErrorFamily.member('Message for W_CTX2', { f1: 1 }),
-        EC_F1_WITH_CTX3_1: ErrorFamily.member<{ f3_1: boolean }>('Message for W_CTX3_1'),
-        EC_F1_WITH_CTX3_2: ErrorFamily.member<{ f3_1: boolean }>('Message for W_CTX3_2', {}),
-        EC_F1_WITH_CTX3_3: ErrorFamily.member<{ f3_1: boolean }>('Message for W_CTX3_3', {
-            f3_1: false,
-        }),
-        EC_F1_WITH_CTX4: ErrorFamily.member<{ f4: boolean; add: string }>('Message for W_CTX4', {
-            add: 'add',
-        }),
+    class E1 extends Error {}
+
+    const F1Errors = ErrorFamily.declare(
+        F1Prefix,
+        {
+            EC_F1_S1: ErrorFamily.member('Message for S1'),
+            EC_F1_WITH_CTX1: ErrorFamily.member<{ n: number }>('Message for W_CTX1'),
+            EC_F1_WITH_CTX2: ErrorFamily.member('Message for W_CTX2', { f1: 1 }),
+            EC_F1_WITH_CTX3_1: ErrorFamily.member<{ f3_1: boolean }>('Message for W_CTX3_1'),
+            EC_F1_WITH_CTX3_2: ErrorFamily.member<{ f3_1: boolean }>('Message for W_CTX3_2', {}),
+            EC_F1_WITH_CTX3_3: ErrorFamily.member<{ f3_1: boolean }>('Message for W_CTX3_3', {
+                f3_1: false,
+            }),
+            EC_F1_WITH_CTX4: ErrorFamily.member<{ f4: boolean; add: string }>(
+                'Message for W_CTX4',
+                {
+                    add: 'add',
+                },
+            ),
+        },
+        E1,
+    );
+
+    it('should be extensible with custom Error class', () => {
+        try {
+            F1Errors.raise('EC_F1_S1');
+        } catch (e) {
+            expect(e).toBeDefined();
+            expect(e).toBeInstanceOf(Error);
+            expect(e).toBeInstanceOf(E1);
+            expect(e).not.toBeInstanceOf(TypeError);
+        }
     });
 
     it('should correctly infer error codes', () => {

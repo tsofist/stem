@@ -1,6 +1,7 @@
 import { ErrorCode, errorFrom, readErrorContextEx } from '../error';
 import type { ARec, PickByValueType, ShallowExact, URec } from '../index';
 import type {
+    ErrorClass,
     ErrorCodeFamily,
     ErrorCodeFamilySep,
     ErrorFamilyMember,
@@ -39,7 +40,7 @@ export class ErrorFamily<
     >(
         prefix: Family,
         members: ShallowExact<{ [Code in Family]: ErrorFamilyMember<any> }, Members>,
-        ErrorCtor = Error,
+        ErrorCtor?: ErrorClass,
     ) {
         const result = new this(prefix, members, ErrorCtor);
         return result as typeof result & {
@@ -54,7 +55,7 @@ export class ErrorFamily<
     protected constructor(
         readonly prefix: Family,
         protected readonly members: Members,
-        ErrorConstructor = Error,
+        ErrorConstructor?: ErrorClass,
     ) {
         for (const code of Object.keys(members)) {
             (this as ARec)[code] = code;

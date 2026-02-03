@@ -1,5 +1,6 @@
 import { asArray } from './as-array';
-import { ARec, ArrayMay, Primitive, URec } from './index';
+import type { ErrorClass } from './error/types';
+import type { ARec, ArrayMay, Primitive, URec } from './index';
 
 export const ErrorCodePrefix = 'EC_';
 export const ErrorCodeField = 'code';
@@ -128,8 +129,13 @@ export function matchError(error: any, condition: MatchErrorCondition): boolean 
     return false;
 }
 
-function createError(code?: string, context?: ARec, message?: string, Ctor = Error): Error {
-    const result = new Ctor(message ?? code);
+function createError<T extends Error>(
+    code?: string,
+    context?: ARec,
+    message?: string,
+    Ctor: ErrorClass = Error,
+): T {
+    const result = new Ctor(message ?? code) as T;
 
     if (code) {
         Object.defineProperty(result, ErrorCodeField, {
@@ -152,8 +158,8 @@ function createError(code?: string, context?: ARec, message?: string, Ctor = Err
     return result;
 }
 
-export function errorFrom(source: unknown, Ctor = Error): Error {
-    if (source instanceof Ctor) return source;
+export function errorFrom<T extends Error>(source: unknown, Ctor: ErrorClass = Error): T {
+    if (source instanceof Ctor) return source as T;
 
     // @ts-expect-error It's OK
     const { code, context, message } = source || {};
