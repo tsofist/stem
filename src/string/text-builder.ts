@@ -9,8 +9,16 @@ export type TextBuilderTableOptions = {
     level?: number;
     /** Table title */
     title?: string;
-    /** Whether the first row is a header */
+    /**
+     * Whether the first row is a header
+     * @default false
+     */
     header?: boolean;
+    /**
+     * Print footer line
+     * @default false
+     */
+    footer?: boolean;
     /** Column separator */
     colSep?: string;
     /** Header separator */
@@ -30,6 +38,9 @@ export function txt(...data: ConstructorParameters<typeof TextBuilder>): TextBui
 }
 
 export class TextBuilder {
+    /** @private */
+    static testing: string | false = false;
+
     readonly #data: string[] = [];
 
     levelChar = ' ';
@@ -37,6 +48,8 @@ export class TextBuilder {
     baseLevel = 0;
 
     errorPrefixChar = '⭕';
+    errorStackPrefixChar = '┌';
+    errorStackItemChar = '├';
 
     tColumnSeparator = ' │ ';
     tHeaderSeparator = '─';
@@ -72,19 +85,41 @@ export class TextBuilder {
 
         const append = (item: TextBuilder | TextBuilderItem, builder: TextBuilder) => {
             if (item != null && item !== false) {
-                const { errorPrefixChar, levelChar, levelSize } = builder;
-                let prefix = levelChar.repeat(level * levelSize);
+                const {
+                    errorPrefixChar,
+                    errorStackPrefixChar,
+                    errorStackItemChar,
+                    levelChar,
+                    levelSize,
+                } = builder;
+                const prefix = levelChar.repeat(level * levelSize);
+                const push = (list: string[], aPrefix = '') => {
+                    for (const v of list) {
+                        container.push(`${prefix}${aPrefix}${v}`);
+                    }
+                };
+                const prepareStackLine = (line: string, _index: number) => {
+                    let result = line.trimStart();
+                    if (TextBuilder.testing) {
+                        result = result
+                            .replace(TextBuilder.testing, '@')
+                            .replace(/:\d+:\d+/, ':0000:0000');
+                    }
+                    return result;
+                };
 
                 if (item instanceof TextBuilder) {
-                    for (const innerItem of item.#data) {
-                        container.push(`${prefix}${innerItem}`);
-                    }
+                    push(item.#data);
                 } else if (item instanceof Error) {
-                    if (errorPrefixChar) prefix += errorPrefixChar + ' ';
-                    container.push(`${prefix}${String(item)}`);
+                    push([String(item)], errorPrefixChar ? `${errorPrefixChar} ` : '');
+
                     if (item.stack) {
-                        // eslint-disable-next-line prefer-spread
-                        container.push.apply(container, item.stack.split('\n').slice(1));
+                        const aPrefix = errorStackPrefixChar ? `${errorStackPrefixChar} ` : '';
+                        push([`Stack trace:`], aPrefix);
+                        push(
+                            item.stack.split('\n').slice(1).map(prepareStackLine),
+                            `${errorStackItemChar} `,
+                        );
                     }
                 } else {
                     container.push(`${prefix}${String(item)}`);
@@ -226,15 +261,7 @@ export class TextBuilder {
      */
     ati<T extends ARec, K extends StringKeyOf<T>>(
         items: T[],
-        options?: {
-            level?: number;
-            title?: string;
-            header?: boolean;
-            colSep?: string;
-            headerSep?: string;
-            intersectionSep?: string;
-            titleSep?: string;
-        },
+        options?: TextBuilderTableOptions,
         head?: K[] | PRec<string, K>,
     ) {
         let keys: string[];
@@ -323,6 +350,7 @@ export class TextBuilder {
             intersectionSep: sIntersection = this.tIntersectionSeparator,
             titleSep: sTitle = this.tTitleSeparator,
             header: separateHeader = false,
+            footer: separateFooter = false,
             align = 'l',
             alignHeader = align,
         } = options;
@@ -370,6 +398,11 @@ export class TextBuilder {
             const line = row
                 .map((item, i) => {
                     let text = '';
+
+                    if (item instanceof Error) {
+                        item = new TextBuilder(item);
+                    }
+
                     if (item instanceof TextBuilder) {
                         text = item.#data
                             .map((dataItem, index) => {
@@ -445,7 +478,9 @@ export class TextBuilder {
                 ) +
                 sCol.length * (cSizes.length - 1);
 
-            this.doAppend(sTitle.repeat(totalSize).trimEnd(), level);
+            if (separateFooter) {
+                this.doAppend(sTitle.repeat(totalSize).trimEnd(), level);
+            }
         }
 
         return this;

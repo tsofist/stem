@@ -1,5 +1,7 @@
 import { substr } from './substr';
-import { txt } from './text-builder';
+import { txt, TextBuilder } from './text-builder';
+
+TextBuilder.testing = process.cwd();
 
 describe('TextBuilder', () => {
     it('basic', () => {
@@ -14,7 +16,7 @@ describe('TextBuilder', () => {
     });
 
     describe('error entries', () => {
-        it('basic', () => {
+        it('basic 1', () => {
             const msg = 'Something bad happened!';
             const t = txt();
 
@@ -29,11 +31,29 @@ describe('TextBuilder', () => {
             expect(vLines.filter((value) => value.startsWith('at ')).length).toStrictEqual(0);
         });
 
-        it('table', () => {
+        it('basic 2', () => {
+            const t = txt();
+            const e = new Error('Table generation failed!');
+
+            t.a(e);
+
+            expect(String(t)).toMatchSnapshot();
+        });
+
+        it('table from rows (at)', () => {
             const t = txt();
             const e = new Error('Table generation failed!');
 
             t.at(Object.entries({ error: e }));
+
+            expect(String(t)).toMatchSnapshot();
+        });
+
+        it('table from items (ati)', () => {
+            const t = txt();
+            const e = new Error('Table generation failed!');
+
+            t.ati([['ErrorInstance', e]], { footer: true });
 
             expect(String(t)).toMatchSnapshot();
         });

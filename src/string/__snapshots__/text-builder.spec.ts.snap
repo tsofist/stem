@@ -8,9 +8,71 @@ exports[`TextBuilder basic 1`] = `
 val-1.2"
 `;
 
-exports[`TextBuilder error entries table 1`] = `
-"error │ Error: Table generation failed!
-┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+exports[`TextBuilder error entries basic 2 1`] = `
+"⭕ Error: Table generation failed!
+┌ Stack trace:
+├ at Object.<anonymous> (@/src/string/text-builder.spec.ts:0000:0000)
+├ at Promise.finally.completed (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)
+├ at new Promise (<anonymous>)
+├ at callAsyncCircusFn (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)
+├ at _callCircusTest (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)
+├ at processTicksAndRejections (node:internal/process/task_queues:0000:0000)
+├ at _runTest (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)
+├ at @/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000
+├ at _runTestsForDescribeBlock (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)
+├ at _runTestsForDescribeBlock (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)
+├ at _runTestsForDescribeBlock (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)
+├ at run (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)
+├ at runAndTransformResultsToJestFormat (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)
+├ at jestAdapter (@/node_modules/jest-circus/build/runner.js:0000:0000)
+├ at runTestInternal (@/node_modules/jest-runner/build/testWorker.js:0000:0000)
+├ at runTest (@/node_modules/jest-runner/build/testWorker.js:0000:0000)
+├ at Object.worker (@/node_modules/jest-runner/build/testWorker.js:0000:0000)"
+`;
+
+exports[`TextBuilder error entries table from items (ati) 1`] = `
+"ErrorInstance │ ⭕ Error: Table generation failed!                                                                      
+              │ ┌ Stack trace:                                                                                         
+              │ ├ at Object.<anonymous> (@/src/string/text-builder.spec.ts:0000:0000)                                  
+              │ ├ at Promise.finally.completed (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)         
+              │ ├ at new Promise (<anonymous>)                                                                         
+              │ ├ at callAsyncCircusFn (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)                 
+              │ ├ at _callCircusTest (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)                   
+              │ ├ at processTicksAndRejections (node:internal/process/task_queues:0000:0000)                           
+              │ ├ at _runTest (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)                          
+              │ ├ at @/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000                                     
+              │ ├ at _runTestsForDescribeBlock (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)         
+              │ ├ at _runTestsForDescribeBlock (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)         
+              │ ├ at _runTestsForDescribeBlock (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)         
+              │ ├ at run (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)                               
+              │ ├ at runAndTransformResultsToJestFormat (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)
+              │ ├ at jestAdapter (@/node_modules/jest-circus/build/runner.js:0000:0000)                                
+              │ ├ at runTestInternal (@/node_modules/jest-runner/build/testWorker.js:0000:0000)                        
+              │ ├ at runTest (@/node_modules/jest-runner/build/testWorker.js:0000:0000)                                
+              │ ├ at Object.worker (@/node_modules/jest-runner/build/testWorker.js:0000:0000)
+┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+`;
+
+exports[`TextBuilder error entries table from rows (at) 1`] = `
+"error │ ⭕ Error: Table generation failed!                                                                      
+      │ ┌ Stack trace:                                                                                         
+      │ ├ at Object.<anonymous> (@/src/string/text-builder.spec.ts:0000:0000)                                  
+      │ ├ at Promise.finally.completed (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)         
+      │ ├ at new Promise (<anonymous>)                                                                         
+      │ ├ at callAsyncCircusFn (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)                 
+      │ ├ at _callCircusTest (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)                   
+      │ ├ at processTicksAndRejections (node:internal/process/task_queues:0000:0000)                           
+      │ ├ at _runTest (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)                          
+      │ ├ at @/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000                                     
+      │ ├ at _runTestsForDescribeBlock (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)         
+      │ ├ at _runTestsForDescribeBlock (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)         
+      │ ├ at _runTestsForDescribeBlock (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)         
+      │ ├ at run (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)                               
+      │ ├ at runAndTransformResultsToJestFormat (@/node_modules/jest-circus/build/jestAdapterInit.js:0000:0000)
+      │ ├ at jestAdapter (@/node_modules/jest-circus/build/runner.js:0000:0000)                                
+      │ ├ at runTestInternal (@/node_modules/jest-runner/build/testWorker.js:0000:0000)                        
+      │ ├ at runTest (@/node_modules/jest-runner/build/testWorker.js:0000:0000)                                
+      │ ├ at Object.worker (@/node_modules/jest-runner/build/testWorker.js:0000:0000)"
 `;
 
 exports[`TextBuilder table from items (ati) basic 1`] = `
@@ -28,8 +90,7 @@ exports[`TextBuilder table from items (ati) basic 1`] = `
                      │   =0           
                      │   >3           
                      │   >2           
-                     │   >1
-┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+                     │   >1"
 `;
 
 exports[`TextBuilder table from items (ati) w/ head: projection + inner text builders [1] 1`] = `
@@ -49,8 +110,7 @@ exports[`TextBuilder table from items (ati) w/ head: projection + inner text bui
            │   =0            │ 
            │   >3            │ 
            │   >2            │ 
-           │   >1            │ v100
-┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+           │   >1            │ v100"
 `;
 
 exports[`TextBuilder table from items (ati) w/ head: projection + inner text builders [2] 1`] = `
@@ -70,8 +130,7 @@ gamma           │ 8
   =0            │ 
   >3            │ 
   >2            │ 
-  >1            │ 100
-┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+  >1            │ 100"
 `;
 
 exports[`TextBuilder table from items (ati) w/ head: projection 1`] = `
@@ -85,8 +144,7 @@ exports[`TextBuilder table from items (ati) w/ head: projection 1`] = `
 6   │ val-6.6
 7   │ val-7.7
 8   │ val-8.8
-100 │ v100
-┈┈┈┈┈┈┈┈┈┈┈┈┈"
+100 │ v100"
 `;
 
 exports[`TextBuilder table from items (ati) w/ head: titles 1`] = `
@@ -100,8 +158,7 @@ exports[`TextBuilder table from items (ati) w/ head: titles 1`] = `
 6   │ val-6.6 │ true
 7   │ val-7.7 │ true
 8   │ val-8.8 │ true
-100 │ v100    │ true
-┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+100 │ v100    │ true"
 `;
 
 exports[`TextBuilder table from items (ati) w/ header 1`] = `
@@ -121,8 +178,7 @@ exports[`TextBuilder table from items (ati) w/ header 1`] = `
                      │   =0           
                      │   >3           
                      │   >2           
-                     │   >1
-┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+                     │   >1"
 `;
 
 exports[`TextBuilder table from rows (at) basic 1`] = `
@@ -131,8 +187,7 @@ exports[`TextBuilder table from rows (at) basic 1`] = `
     ~ Col 1 ~                                        ~ Col 2 ~          ~ Col 3 ~
     val-1.1                                          val-2.2            val-3.3
     wide-val-2.1                                     wide-val-2.2       wide-val-2.3
-    super-super-super-super-super-super-wide-val-3.1 extra-wide-val-3.2 val-3.3
-    ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+    super-super-super-super-super-super-wide-val-3.1 extra-wide-val-3.2 val-3.3"
 `;
 
 exports[`TextBuilder table from rows (at) basic w/ title & header & inner text builder 1`] = `
@@ -146,8 +201,7 @@ exports[`TextBuilder table from rows (at) basic w/ title & header & inner text b
     super-super-super-super-super-super-wide-val-3.1 extra-wide-val-3.2 a                                               
                                                                         b                                           
                                                                         c                                           
-                                                                        super-super-super-super-super-super-wide-val-3.1
-    ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+                                                                        super-super-super-super-super-super-wide-val-3.1"
 `;
 
 exports[`TextBuilder table from rows (at) basic w/ title & header 1`] = `
@@ -158,8 +212,7 @@ exports[`TextBuilder table from rows (at) basic w/ title & header 1`] = `
     ─────────────────────────────────────────────────┼──────────────────┼───────────
     val-1.1                                          val-2.2            val-3.3
     wide-val-2.1                                     wide-val-2.2       wide-val-2.3
-    super-super-super-super-super-super-wide-val-3.1 extra-wide-val-3.2 val-3.3
-    ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+    super-super-super-super-super-super-wide-val-3.1 extra-wide-val-3.2 val-3.3"
 `;
 
 exports[`TextBuilder table from rows (at) basic w/ title 1`] = `
@@ -169,8 +222,7 @@ exports[`TextBuilder table from rows (at) basic w/ title 1`] = `
     ~ Col 1 ~                                        ~ Col 2 ~          ~ Col 3 ~
     val-1.1                                          val-2.2            val-3.3
     wide-val-2.1                                     wide-val-2.2       wide-val-2.3
-    super-super-super-super-super-super-wide-val-3.1 extra-wide-val-3.2 val-3.3
-    ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+    super-super-super-super-super-super-wide-val-3.1 extra-wide-val-3.2 val-3.3"
 `;
 
 exports[`TextBuilder table from rows (at) grid table with header 1`] = `
@@ -180,8 +232,7 @@ exports[`TextBuilder table from rows (at) grid table with header 1`] = `
     ─────────────────────────────────────────────────┼────────────────────┼─────────────
     val-1.1                                          │ val-2.2            │ val-3.3
     wide-val-2.1                                     │ wide-val-2.2       │ wide-val-2.3
-    super-super-super-super-super-super-wide-val-3.1 │ extra-wide-val-3.2 │ val-3.3
-    ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+    super-super-super-super-super-super-wide-val-3.1 │ extra-wide-val-3.2 │ val-3.3"
 `;
 
 exports[`TextBuilder table from rows (at) key-value table w/ header 1`] = `
@@ -197,8 +248,7 @@ exports[`TextBuilder table from rows (at) key-value table w/ header 1`] = `
     Wide Col 3       │ wide-val-2.3
     Super Wide Col 1 │ super-super-super-super-super-super-wide-val-3.1
     Extra Wide Col 2 │ extra-wide-val-3.2
-    Col 3 Again      │ val-3.3
-    ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+    Col 3 Again      │ val-3.3"
 `;
 
 exports[`TextBuilder table from rows (at) key-value table w/o header 1`] = `
@@ -212,6 +262,5 @@ exports[`TextBuilder table from rows (at) key-value table w/o header 1`] = `
     Wide Col 3       │ wide-val-2.3
     Super Wide Col 1 │ super-super-super-super-super-super-wide-val-3.1
     Extra Wide Col 2 │ extra-wide-val-3.2
-    Col 3 Again      │ val-3.3
-    ┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈┈"
+    Col 3 Again      │ val-3.3"
 `;
