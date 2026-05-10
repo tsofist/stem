@@ -1,4 +1,4 @@
-import { Nullable } from '../index';
+import type { Nullable } from '../index';
 
 export function startsWithDigit(value: Nullable<string>): boolean {
     if (value != null && value.length > 0) {

@@ -1,18 +1,17 @@
-import { Nullable, ObjectKey, PRec } from '../index';
+import type { Nullable, PRec } from '../index';
 
-export type GroupByKeyExtractor<TItem, R> = (item: TItem) => Nullable<R>;
-export type GroupByTarget<T = unknown> = Set<T> | Map<any, T> | T[];
-
-export function groupBy<T, K extends keyof T, KV extends ObjectKey>(
+export function groupBy<T, K extends keyof T, KV extends PropertyKey>(
     target: Nullable<GroupByTarget<T>>,
     by: GroupByKeyExtractor<T, KV>,
     skipNullableKeys?: boolean,
 ): PRec<T[], KV>;
+
 export function groupBy<T, K extends keyof T>(
     target: Nullable<GroupByTarget<T>>,
     by: K,
     skipNullableKeys?: boolean,
-): PRec<T[], ObjectKey>;
+): PRec<T[], PropertyKey>;
+
 export function groupBy<T, K extends keyof T, KV>(
     target: Nullable<GroupByTarget<T>>,
     by: K | GroupByKeyExtractor<T, KV>,
@@ -36,3 +35,6 @@ export function groupBy<T, K extends keyof T, KV>(
 
     return result;
 }
+
+export type GroupByKeyExtractor<TItem, R> = (item: TItem) => Nullable<R>;
+export type GroupByTarget<T = unknown> = Set<T> | Map<any, T> | T[];

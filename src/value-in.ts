@@ -1,4 +1,4 @@
-import { ARec, ArrayMay, Nullable, PRec, Primitive } from './index';
+import type { ARec, ArrayMay, Nullable, PRec, Primitive } from './index';
 
 /**
  * Value in Enumeration checker
@@ -13,6 +13,7 @@ import { ARec, ArrayMay, Nullable, PRec, Primitive } from './index';
  *      valueIn(1, [{ value: 1, other: 1 }, { value: 2, other: 1 }], 'value'); // true
  */
 export function valueIn(value: any, enumeration: Nullable<any[]>, field?: PropertyKey): boolean;
+
 /**
  * Value in Enumeration checker
  * @param value
@@ -28,6 +29,7 @@ export function valueIn(value: any, enumeration: Nullable<any[]>, field?: Proper
  *      valueIn('a', Test, true); // true
  */
 export function valueIn(value: any, enumeration: Nullable<ARec>, byValue?: true): boolean;
+
 export function valueIn(
     value: Primitive | PropertyKey,
     enumeration: Nullable<ArrayMay<PRec<any, PropertyKey>> | (typeof value)[]>,

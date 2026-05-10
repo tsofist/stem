@@ -1,10 +1,11 @@
 import type { DeepReadonly, PRec, Rec } from '../index';
-import { entries } from './entries';
+import { entriesOf } from './entries-of';
 
 /**
  * Remap object values
  */
 export function remap<V extends RemapValues, M extends RemapMap<V>>(map: M, values: V): Remap<M, V>;
+
 /**
  * Remap object values
  */
@@ -12,6 +13,7 @@ export function remap<V extends RemapValues, R>(
     map: (values: DeepReadonly<V>, format: RemapRootFormatter<V>) => R,
     values: V,
 ): R;
+
 export function remap<V extends RemapValues, M extends RemapMap<V>, R>(
     map: RemapMap<M> | ((values: V, format: RemapRootFormatter<V>) => R),
     values: V,
@@ -25,7 +27,7 @@ export function remap<V extends RemapValues, M extends RemapMap<V>, R>(
         return map(values, formatter);
     } else {
         const result: Rec<unknown> = {};
-        for (const [key, item] of entries(map)) {
+        for (const [key, item] of entriesOf(map)) {
             if (!item) continue;
             const itemType = typeof item;
 

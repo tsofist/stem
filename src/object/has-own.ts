@@ -1,4 +1,4 @@
-import { Nullable } from '../index';
+import type { Nullable } from '../index';
 
 /**
  * Check if the target object has the specified property.

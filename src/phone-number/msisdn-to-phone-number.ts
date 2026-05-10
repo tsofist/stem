@@ -1,4 +1,4 @@
-import { MSISDN, StringPhoneNumber } from './types';
+import type { MSISDN, StringPhoneNumber } from './types';
 
 export function msisdnToStringPhoneNumber(value: MSISDN): StringPhoneNumber {
     return `+${value}`;

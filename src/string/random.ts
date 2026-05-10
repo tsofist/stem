@@ -1,6 +1,6 @@
 /**
  * Create a string of random content
- * @see https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number/toString radix
+ * @see https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Number/toString Number.toString(radix) | MDN
  */
 export function randomString(length = 12, radix = 16): string {
     let result = '';

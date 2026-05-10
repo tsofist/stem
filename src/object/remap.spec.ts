@@ -5,14 +5,7 @@ describe('remap', () => {
         const S1 = Symbol('s1');
         const S2 = Symbol('s2');
         const source = { a: 1, b: 'two', c: true, [S1]: 2, [S2]: 's2' };
-        const result = remap(
-            {
-                x: 'a',
-                y: 'b',
-                z: 'c',
-            },
-            source,
-        );
+        const result = remap({ x: 'a', y: 'b', z: 'c' }, source);
 
         result.x.toFixed();
         result.y.toUpperCase();

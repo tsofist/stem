@@ -9,6 +9,8 @@ export type NonPrimitive = Exclude<object, Primitive>;
 export type Nully = null | undefined;
 export type Nullable<T> = T | null | undefined;
 
+export type Falsy = false | 0 | 0n | '' | null | undefined;
+
 /** Returns Then if T is never, otherwise returns T or Otherwise */
 export type IsNever<T, Then, Otherwise = T> = [T] extends [never] ? Then : Otherwise;
 
@@ -19,7 +21,7 @@ export type IsUndefined<T, Then, Otherwise = T> = [T] extends [undefined] ? Then
 export type IsTrue<T, Then = true, Otherwise = false> = T extends true ? Then : Otherwise;
 
 /** Returns never if T is never, otherwise returns T */
-export type ExcludeNever<T> = T extends never ? never : T;
+export type ExcludeNever<T> = [T] extends [never] ? never : T;
 
 /** Merge all values from T without never-value members */
 export type MergeNonNeverValues<T, R = ValuesOf<OmitByValueType<T, never>>> = {
@@ -165,6 +167,7 @@ export type Constructor<
     prototype: TInstance;
 };
 
+export type AbstractFunction<R = unknown> = (...args: any[]) => R;
 export type VoidFunction = () => void;
 export type AsyncFunction<R = void, Params extends Array<any> = Array<unknown>> = (
     ...args: Params
@@ -199,6 +202,12 @@ export type PromiseValue<T> = T extends Promise<infer U> ? U : T;
 export type StringKeyOf<T> = T extends object ? Extract<keyof T, string> : never;
 
 /**
+ * Get String keys of T as string literal type
+ * @see StringKeyOf
+ */
+export type LiteralStringKeyOf<T> = StringKeyOf<T> & string;
+
+/**
  * Get keys of union type T
  */
 export type KeyOfUnion<T> = T extends T ? keyof T : never;
@@ -231,6 +240,16 @@ export type PartialSome<T, K extends keyof T> = Omit<T, K> & {
 };
 
 /**
+ * Make K-keys of T optional if they's values are nullable
+ */
+export type PartialNullable<
+    T,
+    K extends keyof T & PickNullableKeys<T> = keyof T & PickNullableKeys<T>,
+> = Omit<T, K> & {
+    [P in K]?: T[P];
+};
+
+/**
  * Pick some items from T
  *
  * (for omitting items you can use just Exclude<A, B>)
@@ -255,6 +274,14 @@ export type TemplateStringOf<T extends string> = `${T}`;
  */
 export type NumericString<T extends number = number> = `${T}`;
 
+export type PickNonNullableKeys<T> = keyof {
+    [K in keyof T as T[K] extends NonNullable<T[K]> ? K : never]: T[K];
+};
+
+export type PickNullableKeys<T> = keyof {
+    [K in keyof T as T[K] extends NonNullable<T[K]> ? never : K]: T[K];
+};
+
 /**
  * Pick all properties with values has a U-types
  */
@@ -272,6 +299,7 @@ export type OmitByValueType<T, U> = {
 /**
  * Reintroduces properties from type R into type T,
  *    replacing any properties in T that share the same name with those in R.
+ *
  * R can include additional properties that are not present in T.
  *
  * @example
@@ -284,6 +312,7 @@ export type Reintroduce<T extends object, R extends object> = Omit<T, keyof R> &
 /**
  * Reintroduces properties from type R into type T exactly,
  *    replacing any properties in T that share the same name with those in R.
+ *
  * R may only contain properties that exist in T, ensuring that no extra properties are included.
  *
  * @example
@@ -297,7 +326,7 @@ export type ReintroduceExact<
 > = Omit<T, keyof R> & R;
 
 /**
- * Get all types from values of T
+ * Get values types of T
  */
 export type ValuesOf<T, K extends keyof T = keyof T> = T[K];
 
@@ -391,7 +420,7 @@ export type DeepReadonlyObject<T> = {
  * Deep-version of Readonly type
  * @see Readonly
  */
-export type DeepReadonly<T> = T extends Primitive
+export type DeepReadonly<T> = T extends Primitive | AbstractFunction
     ? T
     : T extends Map<infer K, infer V>
       ? ReadonlyMap<K, V>
@@ -451,6 +480,13 @@ export type EmptyRec = Rec<never, PropertyKey>;
 export type CompareResult = -1 | 0 | 1;
 
 /**
+ * Object with get method for getting values by keys
+ */
+export interface Gettable<V, K = PropertyKey | WeakKey> {
+    get: (this: this, key: K) => V | undefined;
+}
+
+/**
  * Type containing only elements present in both set T and set U.
  * This makes type U a subset of T or, in other words, narrows down set U to match set T.
  *
@@ -474,3 +510,40 @@ export type DeepExact<T, U extends T = T> = {
             : U[Key]
         : never;
 };
+
+/**
+ * Extract all possible paths to properties of T
+ *
+ * @see https://www.typescriptlang.org/play/?ssl=32&ssc=11&pln=20&pc=1#code/MYewdgzgLgBAtgTwPICMBWBTYsC8MDeAUDDAOYBOIArgA4CCAXAcSTAJYAmAjE0a6wEMmAImjk2YUsIA0LEgF9Z-TgCZeMITCjkqGGIrnsOAZnWau+pa04AWdSiZgqAG2eWWBkhWo0HzZdy8ntYcagTBJJym4VaRHHYxHrLyGhAwoJBQANyEhFAINHoCMHgA4hhQAHIY0BgcADz5hSAAZvDI6FhQ0jDC3rR0AHSqKoMCwgB8OYQYAB40IOSwTXrlVTVQdfUAKqiY2D3bAAoCUAAWMHObYBxpYhKkEyUwu53Yl7PXtzAASliLDRY90kVioYAA1mAQAB3MCECYsAD8LxO5w+XzSAAMACT4CQtDDkFHkDAtNizeSDXH4wkvADKVBaZIpmMMyOOJOZ6IwNzS4IwCFaLz2XUMJGRa2qtQar32UAA2hzSeSALqHBlM8kI-gkRwYABuhMMTAA9CaYAB1PSQmFaM6nO16GinC4cEA1MAAclgGSgAgkGjACBgbqghmOLu5vJg-MFbVlov47JF2EVqLOKuNMBaAmcEAwLD1hvIOSAA
+ * @see https://gist.github.com/callebstrom/221c951383ee3e50b7c869698e750a74
+ * @see https://llu.is/how-to-write-type-safe-nested-key-paths-in-typescript/
+ * @see https://gist.github.com/mikimaine/623eaab3107225c01925f7d40a7b6745
+ * @see https://alexop.dev/posts/typescript-extract-all-keys-nested-objects/
+ *
+ * @see ExtractPropertyTypeByPath
+ */
+export type ExtractPropertyPaths<T> = T extends ExtractPropertyNAT
+    ? never
+    : {
+          [K in LiteralStringKeyOf<T>]: T[K] extends ExtractPropertyNAT
+              ? K
+              : `${K}.${ExtractPropertyPaths<T[K]>}`;
+      }[LiteralStringKeyOf<T>];
+
+/**
+ * Extract type of property by path from T
+ *
+ * @see ExtractPropertyPaths
+ */
+export type ExtractPropertyTypeByPath<T, PropertyPath extends string> = T extends ExtractPropertyNAT
+    ? never
+    : PropertyPath extends `${infer K}.${infer Rest}`
+      ? K extends LiteralStringKeyOf<T>
+          ? ExtractPropertyTypeByPath<T[K], Rest>
+          : never
+      : PropertyPath extends LiteralStringKeyOf<T>
+        ? T[PropertyPath]
+        : never;
+
+enum ExtractPropertyNATEnum {}
+type ExtractPropertyNAT = Primitive | any[] | ExtractPropertyNATEnum | AbstractFunction<any>;

@@ -1,16 +1,16 @@
-import { Nullable, ObjectKey, PRec, SimpleValuesOf, WSimpleValueKeysOf } from '../index';
-
-export type KeyValueExtractor<T, R extends ObjectKey> = (target: T) => R;
+import type { Nullable, PRec, SimpleValuesOf, WSimpleValueKeysOf } from '../index';
 
 export function indexBy<T, K extends WSimpleValueKeysOf<T>>(
     target: Nullable<T[] | Set<T> | Map<any, T>>,
     keyField: K,
 ): PRec<T, SimpleValuesOf<T, K>>;
-export function indexBy<T, KV extends ObjectKey, E extends KeyValueExtractor<T, KV>>(
+
+export function indexBy<T, KV extends PropertyKey, E extends KeyValueExtractor<T, KV>>(
     target: Nullable<T[] | Set<T> | Map<any, T>>,
     keyValueExtractor: E,
 ): PRec<T, ReturnType<E>>;
-export function indexBy<T, R extends ObjectKey>(
+
+export function indexBy<T, R extends PropertyKey>(
     target: Nullable<T[] | Set<T> | Map<unknown, T>>,
     keyField: KeyValueExtractor<T, R> | keyof T,
 ): PRec<T> {
@@ -31,3 +31,5 @@ export function indexBy<T, R extends ObjectKey>(
 
     return result;
 }
+
+export type KeyValueExtractor<T, R extends PropertyKey> = (target: T) => R;

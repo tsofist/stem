@@ -1,14 +1,14 @@
-import { entries } from './entries';
+import { entriesOf } from './entries-of';
 
 describe('entries', () => {
     it('should return an empty array for null or undefined target', () => {
-        expect(entries(null)).toEqual([]);
-        expect(entries(undefined)).toEqual([]);
+        expect(entriesOf(null)).toEqual([]);
+        expect(entriesOf(undefined)).toEqual([]);
     });
 
     it('should return an array of key-value pairs for an object', () => {
         const obj = { a: 1, b: 'two', c: true };
-        expect(entries(obj)).toEqual([
+        expect(entriesOf(obj)).toEqual([
             ['a', 1],
             ['b', 'two'],
             ['c', true],
@@ -23,7 +23,7 @@ describe('entries', () => {
         }
 
         const instance = new MyClass();
-        expect(entries(instance)).toEqual([
+        expect(entriesOf(instance)).toEqual([
             ['a', 1],
             ['b', 'two'],
             ['c', true],
@@ -36,7 +36,7 @@ describe('entries', () => {
             ['b', 2],
             ['c', 3],
         ]);
-        expect(entries(map)).toEqual([
+        expect(entriesOf(map)).toEqual([
             ['a', 1],
             ['b', 2],
             ['c', 3],
@@ -45,7 +45,7 @@ describe('entries', () => {
 
     it('should return an array of key-value pairs for a Set object', () => {
         const set = new Set<string>(['a', 'b', 'c']);
-        expect(entries(set)).toEqual([
+        expect(entriesOf(set)).toEqual([
             ['a', 'a'],
             ['b', 'b'],
             ['c', 'c'],
@@ -54,12 +54,12 @@ describe('entries', () => {
 
     it('should be sorted by key if a sort function is provided', () => {
         const obj = { b: 'two', a: 1, c: true };
-        expect(entries(obj, (a, b) => (a[0] < b[0] ? -1 : 1))).toEqual([
+        expect(entriesOf(obj, (a, b) => (a[0] < b[0] ? -1 : 1))).toEqual([
             ['a', 1],
             ['b', 'two'],
             ['c', true],
         ]);
-        expect(entries(obj, (a, b) => (a[0] > b[0] ? -1 : 1))).toEqual([
+        expect(entriesOf(obj, (a, b) => (a[0] > b[0] ? -1 : 1))).toEqual([
             ['c', true],
             ['b', 'two'],
             ['a', 1],

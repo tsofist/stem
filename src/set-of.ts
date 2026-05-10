@@ -1,4 +1,4 @@
-import { Nullable } from './index';
+import type { Nullable } from './index';
 
 export interface SetOf<T> extends Iterable<T> {
     readonly rebuild: <U extends T>(values: Nullable<readonly U[]>) => this;
