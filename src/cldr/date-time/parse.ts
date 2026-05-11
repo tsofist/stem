@@ -35,7 +35,7 @@ export function parseTypedDateTimeStringRaw(
         }
     }
 
-    return [kind, match || undefined];
+    return [kind, match ?? undefined];
 }
 
 export function parseTypedDateTimeString(value: unknown): TypedDateTimeDescription | undefined {

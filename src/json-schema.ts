@@ -1,7 +1,7 @@
-import { ARec } from './index';
+import type { ARec } from './index';
 
-export interface JSONSchemaLike {
+export type JSONSchemaLike = {
     $ref: string;
     $schema: string;
     definitions?: ARec;
-}
+};

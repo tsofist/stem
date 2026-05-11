@@ -406,7 +406,7 @@ export class TextBuilder {
                     if (item instanceof TextBuilder) {
                         text = item.#data
                             .map((dataItem, index) => {
-                                let line = '';
+                                let line;
                                 if (index === 0) {
                                     line = dataItem;
                                 } else {

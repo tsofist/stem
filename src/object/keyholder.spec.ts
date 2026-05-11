@@ -1,6 +1,5 @@
 import { keyholderOf, writableKeyholderOf } from './keyholder';
 
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 
 describe('keyholderOf', () => {

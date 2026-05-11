@@ -123,7 +123,7 @@ class SchedulerImpl<TParams> {
         if (crontabExpression !== this.#currentIntervalExpression) {
             this.stop();
 
-            const ceo = { ...(options || this.#options.defaultCronParserOptions || {}) };
+            const ceo = { ...(options ?? this.#options.defaultCronParserOptions ?? {}) };
             const interval = this.#createInterval(crontabExpression, ceo);
 
             this.#currentParams = params;
@@ -162,7 +162,6 @@ class SchedulerImpl<TParams> {
         let sleeper: Sleeper | undefined;
 
         void (async () => {
-            // eslint-disable-next-line no-unmodified-loop-condition
             while (!aborted && interval.hasNext()) {
                 try {
                     if (aborted) break;
@@ -248,7 +247,7 @@ export function createScheduler<TParams = never>(
     name?: NonEmptyString,
 ): Scheduler<TParams> {
     const optsIsName = typeof options === 'string';
-    name = optsIsName ? options : options?.name || name || `SCHEDULED JOB #${++jobCount}`;
+    name = optsIsName ? options : (options?.name ?? name ?? `SCHEDULED JOB #${++jobCount}`);
 
     return new SchedulerImpl<TParams>(name, jobRunner, optsIsName ? undefined : options);
 }

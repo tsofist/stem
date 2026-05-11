@@ -93,7 +93,7 @@ export function hasErrorCode(error: any, code: ErrorCode): boolean {
 export function matchErrorMessage(error: any, re: RegExp): RegExpMatchArray | string[] {
     if (error && error instanceof Error) {
         const message = error.message ?? String(error);
-        return message.match(re) || [];
+        return message.match(re) ?? [];
     }
     return [];
 }
@@ -162,7 +162,7 @@ export function errorFrom<T extends Error>(source: unknown, Ctor: ErrorClass = E
     if (source instanceof Ctor) return source as T;
 
     // @ts-expect-error It's OK
-    const { code, context, message } = source || {};
+    const { code, context, message } = source ?? {};
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     return createError(code, context, message, Ctor);
 }

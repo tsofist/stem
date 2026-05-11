@@ -32,7 +32,7 @@ export function setSerialInterval(
     let timer: NodeJS.Timeout | undefined;
     let allowed = true;
 
-    const onError = options?.onError || console.error.bind(console);
+    const onError = options?.onError ?? console.error.bind(console);
 
     const action = async () => {
         try {

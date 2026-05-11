@@ -11,10 +11,10 @@
   "scripts": {
     "build": "rm -rf lib && tsc -p tsconfig.build.json",
     "format": "npm run lint -- --fix",
-    "lint": "eslint . --cache --cache-location .lint-cache/",
+    "lint": "eslint . --cache --cache-location .cache/",
     "pkg:publish": "semantic-release --no-ci",
     "pkg:publish-test": "semantic-release --dry-run",
-    "pkg:clean": "rm -rf lib .coverage .*-cache",
+    "pkg:clean": "rm -rf lib .coverage .cache",
     "pkg:purge": "npm run pkg:clean && rm -rf node_modules",
     "prepare": "husky",
     "test": "jest",
@@ -27,15 +27,15 @@
     "tslib": "^2.8.1"
   },
   "devDependencies": {
-    "@tsofist/web-buddy": "^1.22.0",
+    "@tsofist/web-buddy": "^2.0.0-next.3",
     "@types/jest": "~30.0.0",
-    "@types/node": "^20.19.0",
+    "@types/node": "^20.19.40",
     "@types/supertest": "^7.2.0",
     "husky": "^9.1.7",
-    "jest": "~30.3.0",
+    "jest": "~30.4.2",
     "supertest": "^7.2.2",
-    "ts-jest": "^29.4.6",
-    "typescript": "~5.9.3"
+    "ts-jest": "^29.4.9",
+    "typescript": "~6.0.3"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
@@ -43,7 +43,7 @@
   },
   "release": {
     "extends": [
-      "@tsofist/web-buddy/.releaserc-github.json"
+      "@tsofist/web-buddy/lib/semantic-release/config.github.js"
     ]
   },
   "jest": {
@@ -62,7 +62,7 @@
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
-    "cacheDirectory": ".jest-cache",
+    "cacheDirectory": ".cache",
     "coverageDirectory": ".coverage",
     "testEnvironment": "node",
     "moduleNameMapper": {}
@@ -71,7 +71,7 @@
     "lib",
     "LICENSE"
   ],
-  "prettier": "./node_modules/@tsofist/web-buddy/.prettierrc.js",
+  "prettier": "./node_modules/@tsofist/web-buddy/lib/prettier/config.js",
   "eslintConfig": {
     "root": true,
     "extends": [

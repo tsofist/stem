@@ -87,8 +87,7 @@ export function isValidDateSource(
     else if (source instanceof Date) return !Number.isNaN(source.getTime());
     else if (Number.isInteger(source)) return true;
     else {
-        source = source as string;
-        if (!isValidDateParts(source)) return false;
+        if (!isValidDateParts(source as string)) return false;
         if (Number.isNaN(new Date(source).getTime())) return false;
     }
 

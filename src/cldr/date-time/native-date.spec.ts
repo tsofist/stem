@@ -64,7 +64,6 @@ describe('dateToTypedString', () => {
 
     it('throws error for invalid input', () => {
         expect(() =>
-            // eslint-disable-next-line @typescript-eslint/no-confusing-void-expression
             dateToTypedString(
                 // @ts-expect-error Testing invalid input
                 'AAA',

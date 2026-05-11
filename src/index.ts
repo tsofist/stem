@@ -69,11 +69,7 @@ export type FromVocabulary<
     ExtraFields extends object = never,
     R = IsNever<Pick<FieldLibrary, RequiredFields>, object> &
         IsNever<Partial<Pick<FieldLibrary, OptionalFields>>, object> &
-        IsNever<
-            ExtraFields,
-            // eslint-disable-next-line @typescript-eslint/ban-types
-            {}
-        >,
+        IsNever<ExtraFields, {}>,
 > = IsEmptyObject<R> extends true ? EmptyRec : R;
 
 /**
@@ -169,13 +165,13 @@ export type Constructor<
 
 export type AbstractFunction<R = unknown> = (...args: any[]) => R;
 export type VoidFunction = () => void;
-export type AsyncFunction<R = void, Params extends Array<any> = Array<unknown>> = (
+export type AsyncFunction<R = void, Params extends any[] = unknown[]> = (
     ...args: Params
 ) => Promise<R>;
 
 export type ArrayMay<TType = unknown> = TType | TType[];
 
-export type ArrayValue<T> = T extends Array<infer U> ? U : T;
+export type ArrayValue<T> = T extends (infer U)[] ? U : T;
 
 /** @minItems 1 */
 export type NonEmptyArray<T> = T[];
@@ -189,7 +185,7 @@ export type UniqueItemsArray<T> = T[];
  */
 export type NonEmptyUniqueItemsArray<T> = T[];
 
-export type ArrayReadonlyMay<T> = T | readonly T[] | ReadonlyArray<T>;
+export type ArrayReadonlyMay<T> = T | readonly T[];
 
 export type PromiseMay<T = unknown> = T | Promise<T>;
 export type PromiseValue<T> = T extends Promise<infer U> ? U : T;
@@ -228,7 +224,6 @@ export type PickRequired<T, Only extends keyof T = keyof T> = Pick<T, PickRequir
  * Get all required keys from T
  */
 export type PickRequiredKeys<T, Only extends keyof T = keyof T> = {
-    // eslint-disable-next-line @typescript-eslint/ban-types
     [K in Only]-?: {} extends Pick<T, K> ? never : K;
 }[Only];
 
@@ -482,6 +477,7 @@ export type CompareResult = -1 | 0 | 1;
 /**
  * Object with get method for getting values by keys
  */
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 export interface Gettable<V, K = PropertyKey | WeakKey> {
     get: (this: this, key: K) => V | undefined;
 }

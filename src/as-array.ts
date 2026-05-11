@@ -1,4 +1,4 @@
-import { ArrayMay } from './index';
+import type { ArrayMay } from './index';
 
 export function asArray<T>(value: T | [T]): [T];
 export function asArray<T>(value: ArrayMay<T>): T[];

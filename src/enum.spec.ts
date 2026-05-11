@@ -71,11 +71,11 @@ describe('enum', () => {
 
         it('should extract values from computed enum', () => {
             enum Access {
-                /*1*/ None, // 0
-                /*2*/ Read = 1 << 1, // 2
-                /*4*/ Write = 1 << 2, // 4
-                /*3*/ ReadWrite = Read | Write, // 6
-                /*0*/ G = '123'.length, // 3
+                /* 1 */ None, // 0
+                /* 2 */ Read = 1 << 1, // 2
+                /* 4 */ Write = 1 << 2, // 4
+                /* 3 */ ReadWrite = Read | Write, // 6
+                /* 0 */ G = '123'.length, // 3
             }
             const values = extractEnumValues(Access);
             expect(values).toStrictEqual([3, 0, 2, 6, 4]);

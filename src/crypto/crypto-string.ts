@@ -44,7 +44,7 @@ export class CryptoString {
         if (!valueIn(algorithm, CipherAlgorithm, true)) {
             raise(`Unknown cipher algorithm: ${algorithm}`);
         }
-        if (!cryptoKey || cryptoKey.length !== 44) {
+        if (cryptoKey?.length !== 44) {
             raise(
                 'Crypto key must be non-empty base64-encoded string of 32 bytes (44 ch.).' +
                     'Use CryptoString.createCryptoKey() to generate a new key.' +

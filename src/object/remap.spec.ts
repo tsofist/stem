@@ -12,6 +12,7 @@ describe('remap', () => {
         result.z.valueOf();
 
         // @ts-expect-error TS2551: test
+        // eslint-disable-next-line @typescript-eslint/no-unused-expressions
         result.Y;
 
         expect(result).toStrictEqual({

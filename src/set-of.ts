@@ -1,5 +1,6 @@
 import type { Nullable } from './index';
 
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 export interface SetOf<T> extends Iterable<T> {
     readonly rebuild: <U extends T>(values: Nullable<readonly U[]>) => this;
     readonly has: <U extends T>(value: U) => boolean;

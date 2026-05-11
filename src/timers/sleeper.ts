@@ -88,7 +88,6 @@ export function createDeepSleeper(date: Date, accuracyMS: number = 10 * 1000): S
     const promise = new Promise<void>((resolve) => {
         void (async () => {
             const till = date.getTime();
-            // eslint-disable-next-line no-constant-condition
             while (true) {
                 if (till <= Date.now()) {
                     resolve();

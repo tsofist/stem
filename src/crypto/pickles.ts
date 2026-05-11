@@ -9,11 +9,11 @@ export enum PicklesHashingAlgorithm {
     HMACSha512 = 'A1.1',
 }
 
-export interface SaltedStringHash {
+export type SaltedStringHash = {
     alg: PicklesHashingAlgorithm;
     salt: Base64String;
     hash: Base64String;
-}
+};
 
 export function createSaltedStringHash(
     value: BinaryLike,

@@ -134,7 +134,7 @@ type InternalKeyHolder<
      * @uniqueItems
      * @readonly
      */
-    readonly array: IsTrue<RO, ReadonlyArray<Key>, Key[]>;
+    readonly array: IsTrue<RO, readonly Key[], Key[]>;
     /**
      * Original struct.
      */

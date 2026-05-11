@@ -16,7 +16,7 @@ export function minutesToUTCOffset(minutes: Int): UTCOffsetString {
 }
 
 export function utcOffsetToMinutes(offset: UTCOffsetString): Int {
-    const sign = offset[0] === '+' ? 1 : -1;
+    const sign = offset.startsWith('+') ? 1 : -1;
     const [h, m] = offset.slice(1).split(':').map(Number);
     return sign * (h * 60 + m);
 }

@@ -203,6 +203,7 @@ describe('TextBuilder', () => {
     describe('table from items (ati)', () => {
         type Item = { n: number; s: string; b: boolean; a: any };
 
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
         const n = () => {};
         const items: Item[] = [
             { n: 1, s: 'val-1.1', b: true, a: null },

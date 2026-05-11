@@ -9,8 +9,6 @@ import {
     ErrorInstanceFactory,
 } from './types';
 
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
 describe('ErrorFamily: examples', () => {
     it('example-1', () => {
         type AuthErrorCodeFamily = ErrorCodeFamily<'EC_AEF'>;

@@ -27,9 +27,7 @@ export type N24HourClock =
  *
  * @public
  */
-export type N12HourClock =
-    // eslint-disable-next-line prettier/prettier
-    1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+export type N12HourClock = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 
 /**
  * UTC offset string.
@@ -304,7 +302,7 @@ export type ISODateTimeTypeName = EnumValues<typeof ISODateTimeType>;
 /**
  * List of all ISO date/-time type names.
  */
-export const ISODateTimeTypesNames: ReadonlyArray<ISODateTimeTypeName> =
+export const ISODateTimeTypesNames: readonly ISODateTimeTypeName[] =
     extractEnumValues(ISODateTimeType);
 
 /**
