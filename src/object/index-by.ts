@@ -20,10 +20,7 @@ export function indexBy<T, R extends PropertyKey>(
 
     if (target) {
         for (let item of target) {
-            item = isMap
-                ? (item as [unknown, T])[1]
-                : // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-                  (item as T);
+            item = isMap ? (item as [unknown, T])[1] : (item as T);
             const keyValue = fn ? keyField(item) : item[keyField];
             if (keyValue != null) {
                 // @ts-expect-error It's OK
