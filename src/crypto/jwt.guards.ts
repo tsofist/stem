@@ -1,5 +1,5 @@
-import { Buffer } from 'buffer';
 import type { ARec, ArrayReadonlyMay } from '../index';
+import { bufferFromBase64UrlString } from './base64/base64url';
 import type { JSONWebToken } from './jwt';
 
 /**
@@ -43,17 +43,10 @@ export function isJSONWebTokenLike(value: unknown): value is JSONWebToken {
 
 export const RE_JWT = /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/;
 
-let b64urlSupport: boolean | undefined;
-
 function parseJWTPart(value: string): ARec | undefined {
-    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-    if (b64urlSupport === undefined) b64urlSupport = Buffer.isEncoding('base64url');
-
-    const buf = b64urlSupport
-        ? Buffer.from(value, 'base64url')
-        : Buffer.from(value.replace(/-/g, '+').replace(/_/g, '/'), 'base64');
-    const v = JSON.parse(buf.toString('utf8'));
-    return v && typeof v === 'object' ? v : undefined;
+    const buf = bufferFromBase64UrlString(value);
+    const result = JSON.parse(buf.toString('utf8'));
+    return result && typeof result === 'object' ? result : undefined;
 }
 
 function includeAll(names: ArrayReadonlyMay<string>, target: ARec) {
