@@ -1,3 +1,5 @@
+import type { VoidFunction } from '../index';
+
 /**
  * Sleeper is a utility that allows you to wait for a specified period of time
  */

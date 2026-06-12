@@ -111,9 +111,8 @@ function nextRandoms(state: RandomsState): Uint8Array {
     } else {
         return getRandomValues
             ? getRandomValues(state.buf)
-            : crypto.getRandomValues
-              ? // @ts-expect-error It's OK
-                crypto.getRandomValues(state.buf)
+            : typeof crypto === 'object' && crypto.getRandomValues
+              ? crypto.getRandomValues(state.buf)
               : raise(`Unable to access secure random number generator (crypto.getRandomValues)`);
     }
 }

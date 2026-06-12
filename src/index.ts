@@ -170,7 +170,6 @@ export type AsyncFunction<R = void, Params extends any[] = unknown[]> = (
 ) => Promise<R>;
 
 export type ArrayMay<TType = unknown> = TType | TType[];
-
 export type ArrayValue<T> = T extends (infer U)[] ? U : T;
 
 /** @minItems 1 */
@@ -184,8 +183,6 @@ export type UniqueItemsArray<T> = T[];
  * @uniqueItems true
  */
 export type NonEmptyUniqueItemsArray<T> = T[];
-
-export type ArrayReadonlyMay<T> = T | readonly T[];
 
 export type PromiseMay<T = unknown> = T | Promise<T>;
 export type PromiseValue<T> = T extends Promise<infer U> ? U : T;
@@ -394,11 +391,32 @@ export type PickExplicitFieldsWithPrefix<T extends object, Prefix extends string
     [K in keyof T as K extends `${Prefix}${infer Rest}` ? Rest : never]: T[K];
 };
 
+export type ReadonlyMay<T> = T | Readonly<T>;
+
+export type DeepReadonlyMay<T> = T | DeepReadonly<T>;
+
 /**
  * Drop readonly modifier from a target object
  */
-export type DropReadonly<T extends object, K extends keyof T = keyof T> = {
+export type DropReadonly<T, K extends keyof T = keyof T> = {
     -readonly [P in K]: T[P];
+};
+
+/**
+ * Deep-version of DropReadonly
+ * @see DropReadonly
+ */
+export type DeepDropReadonly<T> = T extends Primitive | AbstractFunction
+    ? T
+    : T extends ReadonlyMap<infer MK, infer MV>
+      ? Map<MK, MV>
+      : T extends ReadonlySet<infer M>
+        ? Set<M>
+        : DropReadonlyObject<T>;
+
+/** @internal */
+type DropReadonlyObject<T> = {
+    -readonly [K in keyof T]: DropReadonly<T[K]>;
 };
 
 /**
@@ -407,7 +425,8 @@ export type DropReadonly<T extends object, K extends keyof T = keyof T> = {
  */
 export type DeepPartial<T> = T extends object ? { [P in keyof T]?: DeepPartial<T[P]> } : T;
 
-export type DeepReadonlyObject<T> = {
+/** @internal */
+type DeepReadonlyObject<T> = {
     readonly [K in keyof T]: DeepReadonly<T[K]>;
 };
 

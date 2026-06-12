@@ -1,4 +1,4 @@
-import type { DeepReadonlyObject, IsNever, IsTrue, PRec, Rec } from '../index';
+import type { DeepReadonly, IsNever, IsTrue, PRec, Rec } from '../index';
 import { keysOf } from './keys';
 
 /**
@@ -61,7 +61,7 @@ export function keyholderOf<
     Source extends PRec<unknown, PropertyKey> = never,
     Struct extends Rec<unknown, keyof Source> = Rec<unknown, keyof Source>,
 >(map: IsNever<Source, never, Struct>) {
-    return writableKeyholderOf(map) as Keyholder<Source>;
+    return writableKeyholderOf(map) as unknown as Keyholder<Source>;
 }
 
 /**
@@ -138,5 +138,5 @@ type InternalKeyHolder<
     /**
      * Original struct.
      */
-    readonly map: IsTrue<RO, DeepReadonlyObject<Struct>, Struct>;
+    readonly map: IsTrue<RO, DeepReadonly<Struct>, Struct>;
 };

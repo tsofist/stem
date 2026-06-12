@@ -48,3 +48,7 @@ export type JWTNumericDate = number;
  * @see https://en.wikipedia.org/wiki/Uniform_Resource_Identifier Wikipedia: Uniform Resource Identifier
  */
 export type JWTStringOrURI = string;
+
+export type JSONWebTokenSegments = readonly [header: string, payload: string, signature: string];
+
+export const RE_JWT = /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/;
