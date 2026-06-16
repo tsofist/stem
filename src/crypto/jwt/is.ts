@@ -1,5 +1,5 @@
 import type { ARec, ReadonlyMay } from '../../index';
-import { parseJSONWebTokenSegment, splitJSONWebTokenToSegments } from './decoder';
+import { decodeJSONWebTokenSegment, segmentizeJSONWebToken } from './decoder';
 import type { JSONWebToken, JSONWebTokenSegments } from './types';
 
 /**
@@ -24,14 +24,14 @@ export function isJSONWebToken(
     } else if (typeof value !== 'string') {
         return false;
     } else {
-        segments = splitJSONWebTokenToSegments(value);
+        segments = segmentizeJSONWebToken(value);
     }
 
     if (!segments) return false;
 
     try {
-        const header = parseJSONWebTokenSegment(segments[0]);
-        const payload = parseJSONWebTokenSegment(segments[1]);
+        const header = decodeJSONWebTokenSegment(segments[0]);
+        const payload = decodeJSONWebTokenSegment(segments[1]);
 
         if (!header || !payload) return false;
         if (claims?.length && !hasAll(claims, payload)) return false;

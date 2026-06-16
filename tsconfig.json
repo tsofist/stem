@@ -6,7 +6,7 @@
     "module": "CommonJS",
     "skipLibCheck": true,
     "types": ["node", "jest"],
-    "lib": ["es2022.intl"],
+    "lib": ["ES6", "ES2022.Intl", "DOM"],
     "rootDir": "src"
   },
   "include": ["src"],

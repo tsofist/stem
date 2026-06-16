@@ -119,7 +119,7 @@ function nextRandoms(state: RandomsState): Uint8Array {
 
 type RandomsState = {
     /** Reusable buffer for values */
-    readonly buf: Uint8Array;
+    readonly buf: Uint8Array & ArrayBufferView<ArrayBuffer>;
     /** Pool of random values */
     readonly pool: Uint8Array;
     /** Current position in the pool */

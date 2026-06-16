@@ -1,15 +1,15 @@
 import { Buffer } from 'buffer';
-import type { Nullable } from '../../index';
+import type { Base64String, Nullable } from '../../index';
 
-export function bufferFromBase64UrlString(source: Nullable<string>): Buffer {
+export function bufferFromBase64URLString(source: Nullable<Base64URLString>): Buffer {
     if (!source) return Buffer.alloc(0);
 
     return B64URLSupported
         ? Buffer.from(source, 'base64url')
-        : Buffer.from(fromBase64Url(source), 'base64');
+        : Buffer.from(fromBase64URLString(source), 'base64');
 }
 
-export function fromBase64Url(source: Nullable<string>): string {
+export function fromBase64URLString(source: Nullable<Base64URLString>): Base64String {
     if (!source) return '';
 
     let result = source.replace(RE_MINUS, '+').replace(RE_UNDERSCORE, '/');

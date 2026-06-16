@@ -1,7 +1,7 @@
 import type { ReadonlyMay, URec } from '../../index';
-import { parseJSONWebTokenSegment, splitJSONWebTokenToSegments } from './decoder';
+import { decodeJSONWebTokenSegment, segmentizeJSONWebToken } from './decoder';
 import { isJSONWebToken } from './is';
-import type { JSONWebToken } from './types';
+import type { JSONWebToken, JSONWebTokenSegments } from './types';
 
 export function wrapJSONWebToken<Payload extends URec, Header extends URec>(
     value: string,
@@ -27,7 +27,7 @@ class JSONWebTokenWrapperImpl<Payload extends URec, Header extends URec> {
     get header(): Header | undefined {
         if (!this.valid) return undefined;
         if (!this.#header) {
-            this.#header = parseJSONWebTokenSegment<Header>(this.segments!.header);
+            this.#header = decodeJSONWebTokenSegment<Header>(this.segments!.header);
         }
         return this.#header;
     }
@@ -35,7 +35,7 @@ class JSONWebTokenWrapperImpl<Payload extends URec, Header extends URec> {
     get payload(): Payload | undefined {
         if (!this.valid) return undefined;
         if (!this.#payload) {
-            this.#payload = parseJSONWebTokenSegment<Payload>(this.segments!.payload);
+            this.#payload = decodeJSONWebTokenSegment<Payload>(this.segments!.payload);
         }
         return this.#payload;
     }
@@ -56,28 +56,12 @@ class JSONWebTokenWrapperImpl<Payload extends URec, Header extends URec> {
 
     get segments() {
         if (!this.valid) return undefined;
-        if (!this.#segments) {
-            const segments = splitJSONWebTokenToSegments(this.value);
-            if (segments) {
-                this.#segments = {
-                    header: segments[0],
-                    payload: segments[1],
-                    signature: segments[2],
-                };
-            }
-        }
+        if (!this.#segments) this.#segments = segmentizeJSONWebToken(this.value);
         return this.#segments;
     }
 
     #valid: undefined | boolean = undefined;
-    #segments:
-        | undefined
-        | {
-              readonly header: string;
-              readonly payload: string;
-              readonly signature: string;
-          } = undefined;
-
+    #segments: undefined | JSONWebTokenSegments = undefined;
     #header: undefined | Header = undefined;
     #payload: undefined | Payload = undefined;
 }

@@ -49,6 +49,14 @@ export type JWTNumericDate = number;
  */
 export type JWTStringOrURI = string;
 
-export type JSONWebTokenSegments = readonly [header: string, payload: string, signature: string];
+export type JSONWebTokenSegments = {
+    readonly header: Base64URLString;
+    readonly payload: Base64URLString;
+    readonly signature: Base64URLString;
+} & {
+    readonly [Index in 0 | 1 | 2]: Base64URLString;
+};
+
+export type JSONWebTokenSegmentName = keyof JSONWebTokenSegments;
 
 export const RE_JWT = /^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/;

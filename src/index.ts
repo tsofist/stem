@@ -121,7 +121,9 @@ export type HRefString = URLString | URLPath;
 
 /**
  * @pattern ^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})$
+ *
  * @see https://en.wikipedia.org/wiki/Base64 Wikipedia
+ * @see Base64URLString
  */
 export type Base64String = string;
 
