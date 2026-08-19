@@ -61,9 +61,7 @@ export type RemapMap<V extends RemapValues> = {
 };
 
 type RemapMapItem<V extends RemapValues> =
-    | RemapFormater<V, unknown>
-    | Exclude<keyof V, symbol>
-    | { [K in RemapKey]: RemapMapItem<V> };
+    RemapFormater<V, unknown> | Exclude<keyof V, symbol> | { [K in RemapKey]: RemapMapItem<V> };
 
 type RemapKey = string | number;
 type RemapFormater<V, R> = (v: DeepReadonly<V>) => R;

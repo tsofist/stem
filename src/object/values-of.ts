@@ -83,9 +83,7 @@ export function valuesOf<T, K>(
 
 export type ValuesOfTarget<T> = Map<unknown, T> | Set<T> | T[];
 export type ValuesOfTargetWithNully<T> =
-    | Map<unknown, Nullable<T>>
-    | Set<Nullable<T>>
-    | Nullable<T>[];
+    Map<unknown, Nullable<T>> | Set<Nullable<T>> | Nullable<T>[];
 
 type ValuesOfArrayPredicate = (item: unknown, index: number) => boolean;
 type ValuesOfCollectionPredicate<K> = (value: unknown, key: K) => boolean;

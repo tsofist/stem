@@ -46,7 +46,10 @@ export function ovBoolOrType<T>(
         value = (value as ValueFn<SourceExact<T>, T>)(v);
     }
 
-    if (value === undefined) {
+    if (
+        // eslint-disable-next-line no-restricted-syntax
+        value === undefined
+    ) {
         if (v === true) return undefined;
         return v;
     }

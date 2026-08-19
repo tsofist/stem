@@ -38,7 +38,11 @@ export function valueIn(
     if (enumeration) {
         if (Array.isArray(enumeration)) {
             // find by whole value
-            if (fieldOrByValue === undefined || fieldOrByValue === true) {
+            if (
+                // eslint-disable-next-line no-restricted-syntax
+                fieldOrByValue === undefined ||
+                fieldOrByValue === true
+            ) {
                 return enumeration.includes(value);
             }
             // find by field value
