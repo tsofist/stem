@@ -85,7 +85,6 @@ export class UUIDV7Sequence {
         buf[offset++] = randoms[12];
         buf[offset++] = randoms[13];
         buf[offset++] = randoms[14];
-        // eslint-disable-next-line no-useless-assignment
         buf[offset++] = randoms[15];
 
         return buf;

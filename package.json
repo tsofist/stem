@@ -27,7 +27,7 @@
     "tslib": "^2.8.1"
   },
   "devDependencies": {
-    "@tsofist/web-buddy": "^2.0.0-next.9",
+    "@tsofist/web-buddy": "^2.0.0-next.12",
     "@types/jest": "~30.0.0",
     "@types/node": "^20.19.0",
     "@types/supertest": "^7.2.1",
@@ -47,29 +47,27 @@
     ]
   },
   "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
+    "cacheDirectory": ".cache",
+    "collectCoverageFrom": [
+      "**/*.ts"
     ],
+    "coverageDirectory": ".coverage",
+    "moduleNameMapper": {},
     "roots": [
       "src"
     ],
+    "testEnvironment": "node",
     "testRegex": ".*\\.spec\\.ts$",
     "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
-    ],
-    "cacheDirectory": ".cache",
-    "coverageDirectory": ".coverage",
-    "testEnvironment": "node",
-    "moduleNameMapper": {}
+      "^.+\\.ts$": "ts-jest"
+    }
   },
   "files": [
     "lib",
-    "LICENSE"
+    "README.md",
+    "LICENSE",
+    "!*.private.*",
+    "!*.tmp.*"
   ],
   "prettier": "./node_modules/@tsofist/web-buddy/lib/prettier/config.js",
   "keywords": [
