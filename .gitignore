@@ -12,5 +12,6 @@
 .vscode/
 .history/
 
+*.tgz
 *.tmp.*
 *.private.*

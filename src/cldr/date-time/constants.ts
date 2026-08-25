@@ -2,25 +2,25 @@
  * One minute in milliseconds
  * @const 60000
  */
-export const ONE_MINUTE = 60 * 1000;
+export const ONE_MINUTE = 60_000;
 
 /**
  * One hour in milliseconds
  * @const 3600000
  */
-export const ONE_HOUR = 60 * ONE_MINUTE;
+export const ONE_HOUR = 3_600_000;
 
 /**
  * One day in milliseconds
  * @const 86400000
  */
-export const ONE_DAY = 24 * ONE_HOUR;
+export const ONE_DAY = 86_400_000;
 
 /**
  * One week in milliseconds
  * @const 604800000
  */
-export const ONE_WEEK = 7 * ONE_DAY;
+export const ONE_WEEK = 604_800_000;
 
 /**
  * Minimum Unix timestamp

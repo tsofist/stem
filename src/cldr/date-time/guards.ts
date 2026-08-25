@@ -1,6 +1,6 @@
-import { Nullable } from '../../index';
+import type { Nullable } from '../../index';
 import { setOf } from '../../set-of';
-import { DateConstructorSource } from '../types';
+import type { DateConstructorSource } from '../types';
 import {
     CLDR_ISO_LOCAL_DATE,
     CLDR_ISO_LOCAL_DATE_TIME,
@@ -13,14 +13,14 @@ import {
 import { isValidDateParts, parseTypedDateTimeStringRaw, TypedDateTimeStringKind } from './parse';
 import {
     ISODateTimeType,
-    LocalISODateString,
-    LocalISODateTimeString,
-    LocalISOTimeString,
-    TypedDateTimeString,
-    UTCOffsetString,
-    ZuluISODateString,
-    ZuluISODateTimeString,
-    ZuluISOTimeString,
+    type LocalISODateString,
+    type LocalISODateTimeString,
+    type LocalISOTimeString,
+    type TypedDateTimeString,
+    type UTCOffsetString,
+    type ZuluISODateString,
+    type ZuluISODateTimeString,
+    type ZuluISOTimeString,
 } from './types';
 
 export function isUTCOffsetString(value: unknown): value is UTCOffsetString {
