@@ -1,6 +1,6 @@
 {
   "name": "@tsofist/stem",
-  "version": "8.3.0",
+  "version": "8.3.1",
   "description": "Core basics for TypeScript applications",
   "author": "Andrew Berdnikov <tsofistgudmen@gmail.com>",
   "license": "LGPL-3.0",
@@ -38,8 +38,7 @@
     "ts-jest": "^29.4.12",
     "typescript": "~6.0.3"
   },
-  "peerDependencies": {
-  },
+  "peerDependencies": {},
   "publishConfig": {
     "registry": "https://registry.npmjs.org/",
     "access": "public"
