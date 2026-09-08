@@ -144,7 +144,7 @@ function parseDateParts(
     }
 
     // check year
-    if (year < 1970 || year > 2038) {
+    if (year < 0 || year > 9999) {
         return processError(`Invalid ISO date year: ${year}`);
     }
 

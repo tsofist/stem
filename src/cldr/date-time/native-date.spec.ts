@@ -1,4 +1,4 @@
-import { dateToTypedString, typedStringToDate } from './native-date';
+import { createTypedDateTimeString, dateToTypedString, typedStringToDate } from './native-date';
 import { TypedDateTimeString, ISODateTimeType } from './types';
 import { minutesToUTCOffset } from './utc-offset';
 
@@ -50,7 +50,7 @@ describe('dateToTypedString', () => {
         expect(dateToTypedString(undefined, ISODateTimeType.LocalDate)).toBeUndefined();
     });
 
-    it('', () => {
+    it('converts Date object to Local* strings', () => {
         const randomType: ISODateTimeType =
             Math.random() > 0.5 ? ISODateTimeType.LocalDate : ISODateTimeType.LocalTime;
 
@@ -94,5 +94,16 @@ describe('dateToTypedString', () => {
                 999,
             ),
         ).toThrow('Unknown date type: 999');
+    });
+});
+
+describe('createTypedDateTimeString', () => {
+    it('creates LocalDate string from Date string', () => {
+        expect(createTypedDateTimeString(ISODateTimeType.LocalDate, '2012-09-11T00:00:00')).toEqual(
+            '2012-09-11',
+        );
+        expect(createTypedDateTimeString(ISODateTimeType.LocalDate, '1900-01-01')).toEqual(
+            '1900-01-01',
+        );
     });
 });

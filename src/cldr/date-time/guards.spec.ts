@@ -197,125 +197,57 @@ describe('cldr/isValidDateSource', () => {
 describe('cldr/parseTypedDateTimeString', () => {
     it('should be parsed normally with date-time', () => {
         expect(parseTypedDateTimeString('2020-01-01T00:23:59.999+14:45')).toStrictEqual({
-            date: {
-                year: 2020,
-                month: 1,
-                day: 1,
-            },
-            time: {
-                hour: 0,
-                minute: 23,
-                second: 59,
-                ms: 999,
-                offset: '+14:45',
-            },
+            date: { year: 2020, month: 1, day: 1 },
+            time: { hour: 0, minute: 23, second: 59, ms: 999, offset: '+14:45' },
             zulu: false,
         });
 
         expect(parseTypedDateTimeString('2020-01-01T00:23:59')).toStrictEqual({
-            date: {
-                year: 2020,
-                month: 1,
-                day: 1,
-            },
-            time: {
-                hour: 0,
-                minute: 23,
-                second: 59,
-                ms: 0,
-                offset: undefined,
-            },
+            date: { year: 2020, month: 1, day: 1 },
+            time: { hour: 0, minute: 23, second: 59, ms: 0, offset: undefined },
             zulu: false,
         });
 
         expect(parseTypedDateTimeString('2020-01-01T00:23:59-11:15')).toStrictEqual({
-            date: {
-                year: 2020,
-                month: 1,
-                day: 1,
-            },
-            time: {
-                hour: 0,
-                minute: 23,
-                second: 59,
-                ms: 0,
-                offset: '-11:15',
-            },
+            date: { year: 2020, month: 1, day: 1 },
+            time: { hour: 0, minute: 23, second: 59, ms: 0, offset: '-11:15' },
             zulu: false,
         });
 
         expect(parseTypedDateTimeString('2020-01-01T00:23:59Z')).toStrictEqual({
-            date: {
-                year: 2020,
-                month: 1,
-                day: 1,
-            },
-            time: {
-                hour: 0,
-                minute: 23,
-                second: 59,
-                ms: 0,
-                offset: undefined,
-            },
+            date: { year: 2020, month: 1, day: 1 },
+            time: { hour: 0, minute: 23, second: 59, ms: 0, offset: undefined },
             zulu: true,
         });
 
         expect(parseTypedDateTimeString('2020-01-01T00:00:00.100Z')).toStrictEqual({
-            date: {
-                year: 2020,
-                month: 1,
-                day: 1,
-            },
-            time: {
-                hour: 0,
-                minute: 0,
-                second: 0,
-                ms: 100,
-                offset: undefined,
-            },
+            date: { year: 2020, month: 1, day: 1 },
+            time: { hour: 0, minute: 0, second: 0, ms: 100, offset: undefined },
             zulu: true,
         });
 
         expect(parseTypedDateTimeString('2020-01-01T00:00:00.001-03:00')).toStrictEqual({
-            date: {
-                year: 2020,
-                month: 1,
-                day: 1,
-            },
-            time: {
-                hour: 0,
-                minute: 0,
-                second: 0,
-                ms: 1,
-                offset: '-03:00',
-            },
+            date: { year: 2020, month: 1, day: 1 },
+            time: { hour: 0, minute: 0, second: 0, ms: 1, offset: '-03:00' },
             zulu: false,
         });
     });
 
     it('should be parsed normally with date', () => {
         expect(parseTypedDateTimeString('2020-01-01')).toStrictEqual({
-            date: {
-                year: 2020,
-                month: 1,
-                day: 1,
-            },
+            date: { year: 2020, month: 1, day: 1 },
+            time: undefined,
+        });
+        expect(parseTypedDateTimeString('1939-01-01')).toStrictEqual({
+            date: { year: 1939, month: 1, day: 1 },
             time: undefined,
         });
         expect(parseTypedDateTimeString('1970-01-01')).toStrictEqual({
-            date: {
-                year: 1970,
-                month: 1,
-                day: 1,
-            },
+            date: { year: 1970, month: 1, day: 1 },
             time: undefined,
         });
         expect(parseTypedDateTimeString('2038-01-01')).toStrictEqual({
-            date: {
-                year: 2038,
-                month: 1,
-                day: 1,
-            },
+            date: { year: 2038, month: 1, day: 1 },
             time: undefined,
         });
     });
@@ -323,59 +255,29 @@ describe('cldr/parseTypedDateTimeString', () => {
     it('should be parsed normally with time', () => {
         expect(parseTypedDateTimeString('00:00:00.123')).toStrictEqual({
             date: undefined,
-            time: {
-                hour: 0,
-                minute: 0,
-                second: 0,
-                ms: 123,
-                offset: undefined,
-            },
+            time: { hour: 0, minute: 0, second: 0, ms: 123, offset: undefined },
             zulu: false,
         });
         expect(parseTypedDateTimeString('00:00:00.123+12:45')).toStrictEqual({
             date: undefined,
-            time: {
-                hour: 0,
-                minute: 0,
-                second: 0,
-                ms: 123,
-                offset: '+12:45',
-            },
+            time: { hour: 0, minute: 0, second: 0, ms: 123, offset: '+12:45' },
             zulu: false,
         });
         expect(parseTypedDateTimeString('00:00:00')).toStrictEqual({
             date: undefined,
-            time: {
-                hour: 0,
-                minute: 0,
-                second: 0,
-                ms: 0,
-                offset: undefined,
-            },
+            time: { hour: 0, minute: 0, second: 0, ms: 0, offset: undefined },
             zulu: false,
         });
         // '00:23:59.999-11:15',
         expect(parseTypedDateTimeString('00:23:59-11:45')).toStrictEqual({
             date: undefined,
-            time: {
-                hour: 0,
-                minute: 23,
-                second: 59,
-                ms: 0,
-                offset: '-11:45',
-            },
+            time: { hour: 0, minute: 23, second: 59, ms: 0, offset: '-11:45' },
             zulu: false,
         });
         // '00:23:59Z',
         expect(parseTypedDateTimeString('00:23:59Z')).toStrictEqual({
             date: undefined,
-            time: {
-                hour: 0,
-                minute: 23,
-                second: 59,
-                ms: 0,
-                offset: undefined,
-            },
+            time: { hour: 0, minute: 23, second: 59, ms: 0, offset: undefined },
             zulu: true,
         });
     });
