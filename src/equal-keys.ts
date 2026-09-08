@@ -39,7 +39,6 @@ function extractKeys<T extends PropertyKey>(
         return new Set(target.keys());
     } else if (typeof target === 'object') {
         return new Set<T>([
-            //
             ...(Object.keys(target) as T[]),
             ...(Object.getOwnPropertySymbols(target) as T[]),
         ]);
