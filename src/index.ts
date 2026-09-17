@@ -172,7 +172,7 @@ export type AsyncFunction<R = void, Params extends any[] = unknown[]> = (
 ) => Promise<R>;
 
 export type ArrayMay<TType = unknown> = TType | TType[];
-export type ArrayValue<T> = T extends (infer U)[] ? U : T;
+export type ArrayValue<T> = T extends ReadonlyMay<(infer U)[]> ? U : T;
 
 /** @minItems 1 */
 export type NonEmptyArray<T> = T[];
@@ -489,6 +489,13 @@ export type PRec<V, K extends PropertyKey = string> = {
  * Object without any fields
  */
 export type EmptyRec = Rec<never, PropertyKey>;
+
+/**
+ * Iterable structure,
+ *   such as string, Map, Set, Array, or Object
+ */
+export type IterableStruct =
+    string | ReadonlyMay<Map<unknown, unknown> | Set<unknown> | unknown[]> | URec;
 
 /**
  * Universal comparator result type

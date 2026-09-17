@@ -1,5 +1,5 @@
 import type { DeepReadonly, IsNever, IsTrue, PRec, Rec } from '../index';
-import { keysOf } from './keys';
+import { keysOf } from './keys-of';
 
 /**
  * Creates a keyholder from the given map object.

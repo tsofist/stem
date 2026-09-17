@@ -12,6 +12,7 @@ import { hasOwn } from './has-own';
  */
 export function isEmptyObject(target: unknown, onlyOwnProperties = true): boolean {
     if (target == null) return false;
+
     for (const key in target) {
         if (onlyOwnProperties) {
             if (hasOwn(target, key)) return false;
@@ -19,5 +20,6 @@ export function isEmptyObject(target: unknown, onlyOwnProperties = true): boolea
             return false;
         }
     }
+
     return true;
 }

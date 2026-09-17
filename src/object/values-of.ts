@@ -1,4 +1,4 @@
-import type { Nullable } from '../index';
+import type { Nullable, ReadonlyMay } from '../index';
 import { isNonNully } from '../nully';
 
 /**
@@ -68,7 +68,7 @@ export function valuesOf<T, K>(
 
             for (const [key, value] of entries) {
                 if (predicate(value, key as K)) {
-                    result.push(value);
+                    result.push(value as T);
                 }
             }
         } else {
@@ -81,9 +81,10 @@ export function valuesOf<T, K>(
     return result;
 }
 
-export type ValuesOfTarget<T> = Map<unknown, T> | Set<T> | T[];
-export type ValuesOfTargetWithNully<T> =
-    Map<unknown, Nullable<T>> | Set<Nullable<T>> | Nullable<T>[];
+export type ValuesOfTarget<T> = ReadonlyMay<Map<unknown, T> | Set<T> | T[]>;
+export type ValuesOfTargetWithNully<T> = ReadonlyMay<
+    Map<unknown, Nullable<T>> | Set<Nullable<T>> | Nullable<T>[]
+>;
 
 type ValuesOfArrayPredicate = (item: unknown, index: number) => boolean;
 type ValuesOfCollectionPredicate<K> = (value: unknown, key: K) => boolean;

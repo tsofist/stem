@@ -17,9 +17,11 @@ export function keysOf(target: Nullable<object>): unknown[] {
     if (target == null) {
         return [];
     }
+
     if (target instanceof Map || target instanceof Set) {
         return Array.from(target.keys()) as unknown[];
     }
+
     return Object.keys(target);
 }
 
