@@ -122,10 +122,25 @@ export type HRefString = URLString | URLPath;
 /**
  * @pattern ^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{4})$
  *
+ * @faker { 'string.fromCharacters': ['ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/', 8] }
+ *
  * @see https://en.wikipedia.org/wiki/Base64 Wikipedia
  * @see Base64URLString
+ *
  */
 export type Base64String = string;
+
+/**
+ * > Preferred alternative to the same-named type from `lib.dom`
+ *
+ * @pattern ^(?:[A-Za-z0-9_-]{4})*(?:[A-Za-z0-9_-]{2,3})?$
+ *
+ * @faker { 'string.fromCharacters': ['ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_', 8] }
+ *
+ * @see https://datatracker.ietf.org/doc/html/rfc4648#section-5 RFC 4648 §5
+ * @see Base64String
+ */
+export type Base64URLString = string;
 
 /**
  * @format email

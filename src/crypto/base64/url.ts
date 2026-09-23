@@ -21,6 +21,22 @@ export function fromBase64URLString(source: Nullable<Base64URLString>): Base64St
     return result;
 }
 
+export function fromBase64String(source: Nullable<Base64String>): Base64URLString {
+    if (!source) return '';
+
+    return source.replace(RE_PLUS, '-').replace(RE_SLASH, '_').replace(RE_PADDING, '');
+}
+
+export function bufferFromBase64String(source: Nullable<Base64String>): Buffer {
+    if (!source) return Buffer.alloc(0);
+
+    return Buffer.from(source, 'base64');
+}
+
 const RE_MINUS = /-/g;
+const RE_PLUS = /\+/g;
+const RE_SLASH = /\//g;
+const RE_PADDING = /=+$/;
 const RE_UNDERSCORE = /_/g;
+
 const B64URLSupported = Buffer.isEncoding('base64url');

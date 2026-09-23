@@ -58,7 +58,7 @@ export type UUIDv7 = UUID;
  * @pattern ^([a-fA-F0-9]{2})$
  * @maxLength 32
  * @minLength 32
- * @faker { 'number.hex': [{ min: 32, max: 32 }] }
+ * @faker { 'string.hexadecimal': [{ prefix: '', casing: 'lower', length: 32 }] }
  */
 export type UUIDv7Hex = string;
 
