@@ -7,7 +7,8 @@ import { pathnameFrom } from './pathname';
  * The query and hash of the base are discarded as well: the result carries the origin of the base
  * and the joined pathname only.
  *
- * Dot-segments of the source are resolved before joining, so `..` never climbs above the base path.
+ * Both pathnames come from the URL parser, so dot-segments are already resolved and `..` never
+ * climbs above the base path. Separators are collapsed at the seam between the two only.
  *
  * @throws TypeError when the base is not a valid URL or cannot be a base (`mailto:`, `urn:`, …)
  *
@@ -25,25 +26,26 @@ import { pathnameFrom } from './pathname';
  */
 export function rebaseURL(source: string | URL, base: string | URL): URL {
     const uBase = base instanceof URL ? base : new URL(base);
-    const pathname = pathnameFrom([uBase.pathname, readSourcePathname(source)]);
 
-    return new URL(pathname ? `/${pathname}` : uBase.pathname, uBase);
+    const pathname = pathnameFrom([uBase.pathname, readSourcePathname(source)]);
+    if (pathname) return new URL(`/${pathname}`, uBase);
+
+    // Nothing but separators was joined, so the base pathname is the root one, if it has any
+    return new URL(uBase.pathname ? '/' : '', uBase);
 }
 
 /** Sentinel base for relative sources: only the resulting pathname is used */
 const SOURCE_BASE = 's://s';
 
 /**
- * Sources which cannot be treated as a plain pathname and require full URL parsing:
- * ones carrying a scheme, protocol-relative ones and ones with dot-segments
+ * Sources the URL parser would change in any way: ones opening with an authority, carrying a
+ * character it would encode, strip or read as a delimiter, or holding a dot-segment to resolve.
+ * Everything else already is its own pathname, up to the leading separator the seam absorbs.
  */
-const RE_OPAQUE_SOURCE = /^[A-Za-z][A-Za-z0-9+.-]*:|^\/\/|(^|\/)\.\.?(\/|$)/;
+const RE_NEEDS_PARSING = /^\/\/|[^\w\-./~]|(^|\/)\.\.?(\/|$)/;
 
 function readSourcePathname(source: string | URL): string {
     if (source instanceof URL) return source.pathname;
 
-    const cut = source.search(/[?#]/);
-    const pathname = cut === -1 ? source : source.slice(0, cut);
-
-    return RE_OPAQUE_SOURCE.test(pathname) ? new URL(source, SOURCE_BASE).pathname : pathname;
+    return RE_NEEDS_PARSING.test(source) ? new URL(source, SOURCE_BASE).pathname : source;
 }

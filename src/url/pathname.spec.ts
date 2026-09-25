@@ -29,7 +29,7 @@ describe('pathnameFrom', () => {
     });
 
     it('handles parts with multiple leading separators', () => {
-        expect(pathnameFrom(['///multiple', 'slashes///here'])).toBe('multiple/slashes/here');
+        expect(pathnameFrom(['///multiple', 'slashes///here'])).toBe('multiple/slashes///here');
     });
 
     it('handles parts with no separators', () => {
@@ -38,12 +38,12 @@ describe('pathnameFrom', () => {
 
     it('handles complex nested parts', () => {
         expect(pathnameFrom(['/complex/', 'nested/path/', 'with//multiple/', '/slashes/'])).toBe(
-            'complex/nested/path/with/multiple/slashes/',
+            'complex/nested/path/with//multiple/slashes/',
         );
     });
 
     it('keeps the trailing separator of the last non-empty part', () => {
-        expect(pathnameFrom(['/api/', '/v1//users/', 'profiles/'])).toBe('api/v1/users/profiles/');
+        expect(pathnameFrom(['/api/', '/v1//users/', 'profiles/'])).toBe('api/v1//users/profiles/');
         expect(pathnameFrom(['/root/', 'nested', 'leaf/'])).toBe('root/nested/leaf/');
         expect(pathnameFrom(['a', '/'])).toBe('a/');
         expect(pathnameFrom(['a/', 'b', '/'])).toBe('a/b/');
@@ -67,7 +67,7 @@ describe('pathnameFrom', () => {
 
     it('treats spaces as a part of a segment', () => {
         expect(pathnameFrom(['a/ b c /d'])).toBe('a/ b c /d');
-        expect(pathnameFrom([' /c//', 'd/', '/e//f '])).toBe(' /c/d/e/f ');
+        expect(pathnameFrom([' /c//', 'd/', '/e//f '])).toBe(' /c/d/e//f ');
         expect(pathnameFrom(['   ', '    '])).toBe('   /    ');
         expect(pathnameFrom(['a/', ' '])).toBe('a/ ');
     });
@@ -81,5 +81,29 @@ describe('pathnameFrom', () => {
         const parts: readonly string[] = ['/api/', 'v1'];
         expect(pathnameFrom(parts)).toBe('api/v1');
         expect(pathnameFrom(['/api/', 'v1'] as const)).toBe('api/v1');
+    });
+
+    it('keeps the duplicate separators inside the parts', () => {
+        expect(pathnameFrom(['a//b', 'c//d'])).toBe('a//b/c//d');
+        expect(pathnameFrom(['//a//b//'])).toBe('a//b//');
+    });
+
+    it('collapses the duplicate separators inside the parts when normalizing', () => {
+        expect(pathnameFrom(['///multiple', 'slashes///here'], true)).toBe('multiple/slashes/here');
+        expect(
+            pathnameFrom(['/complex/', 'nested/path/', 'with//multiple/', '/slashes/'], true),
+        ).toBe('complex/nested/path/with/multiple/slashes/');
+        expect(pathnameFrom(['/api/', '/v1//users/', 'profiles/'], true)).toBe(
+            'api/v1/users/profiles/',
+        );
+        expect(pathnameFrom([' /c//', 'd/', '/e//f '], true)).toBe(' /c/d/e/f ');
+        expect(pathnameFrom(['a//b', 'c//d'], true)).toBe('a/b/c/d');
+    });
+
+    it('never keeps a leading separator, whether normalizing or not', () => {
+        for (const parts of [['//a'], ['///a//b'], ['//', 'a'], ['//', '//a']]) {
+            expect(pathnameFrom(parts).startsWith('/')).toBe(false);
+            expect(pathnameFrom(parts, true).startsWith('/')).toBe(false);
+        }
     });
 });

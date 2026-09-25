@@ -29,9 +29,9 @@ describe('rebaseURL', () => {
         ).toBe('https://api.example.com/v1/individual/userinfo');
     });
 
-    it('normalizes duplicate slashes in the combined pathname while preserving a trailing slash', () => {
+    it('keeps duplicate slashes inside the source path while preserving a trailing slash', () => {
         expect(rebaseURL('/nested//path/', 'https://api.example.com/base/').href).toBe(
-            'https://api.example.com/base/nested/path/',
+            'https://api.example.com/base/nested//path/',
         );
     });
 
@@ -70,28 +70,54 @@ describe('rebaseURL', () => {
         );
     });
 
-    it('normalizes the base pathname', () => {
+    it('keeps the duplicate separators inside the base pathname', () => {
+        // The leading run is still collapsed: a pathname of `//a` would change the origin
         expect(rebaseURL('', 'https://api.example.com//a//b').href).toBe(
-            'https://api.example.com/a/b',
+            'https://api.example.com/a//b',
         );
 
         expect(rebaseURL('c', 'https://api.example.com//a//b//').href).toBe(
-            'https://api.example.com/a/b/c',
+            'https://api.example.com/a//b/c',
         );
     });
 
-    it('treats whitespace as ordinary segment content', () => {
-        expect(rebaseURL(' a/b', 'https://api.example.com/base').href).toBe(
-            'https://api.example.com/base/%20a/b',
+    it('never builds a protocol-relative pathname from a base with a leading separator', () => {
+        expect(rebaseURL('c', 'https://api.example.com//a').href).toBe(
+            'https://api.example.com/a/c',
         );
+        expect(rebaseURL('c', 'https://api.example.com//a').host).toBe('api.example.com');
+        expect(rebaseURL('/x', 'https://api.example.com//').host).toBe('api.example.com');
+    });
 
-        // Trailing whitespace of the resulting URL is stripped by the URL parser itself
-        expect(rebaseURL('a/b ', 'https://api.example.com/base').href).toBe(
+    it('drops the query and the hash of a plain source path', () => {
+        expect(rebaseURL('a/b?x=1', 'https://api.example.com/base').href).toBe(
             'https://api.example.com/base/a/b',
         );
+        expect(rebaseURL('a/b#top', 'https://api.example.com/base').href).toBe(
+            'https://api.example.com/base/a/b',
+        );
+    });
 
+    it('leaves every whitespace decision to the URL parser', () => {
+        // Nothing here trims: the parser drops the whitespace surrounding the whole source …
+        expect(rebaseURL(' a/b ', 'https://api.example.com/base').href).toBe(
+            'https://api.example.com/base/a/b',
+        );
         expect(rebaseURL('   ', 'https://api.example.com/base').href).toBe(
-            'https://api.example.com/base/',
+            'https://api.example.com/base',
+        );
+
+        // … removes tabs and line breaks wherever they are …
+        expect(rebaseURL('a\tb/c\n', 'https://api.example.com/base').href).toBe(
+            'https://api.example.com/base/ab/c',
+        );
+
+        // … and percent-encodes whatever is left inside a segment
+        expect(rebaseURL('a b/c', 'https://api.example.com/base').href).toBe(
+            'https://api.example.com/base/a%20b/c',
+        );
+        expect(rebaseURL('a/ b /c', 'https://api.example.com/base').href).toBe(
+            'https://api.example.com/base/a/%20b%20/c',
         );
     });
     it('resolves dot-segments of the source, so they never climb above the base path', () => {
@@ -156,6 +182,13 @@ describe('rebaseURL', () => {
 
         expect(result).not.toBe(base);
         expect(base.href).toBe('https://api.example.com/base?v=2#top');
+    });
+
+    it('handles a base pathname made of separators only', () => {
+        expect(rebaseURL('', 'https://api.example.com//').href).toBe('https://api.example.com/');
+        expect(rebaseURL('//', 'https://api.example.com//').href).toBe('https://api.example.com/');
+        expect(rebaseURL('x', 'https://api.example.com///').href).toBe('https://api.example.com/x');
+        expect(rebaseURL('', new URL('s://host')).href).toBe('s://host');
     });
 
     it('throws for a base which cannot be a base', () => {
