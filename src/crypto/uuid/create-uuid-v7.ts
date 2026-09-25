@@ -17,7 +17,7 @@ export function createUUIDv7(): UUIDv7 {
  * Generate a real, cryptographically strong UUID v7 in hex string format
  * @see https://ru.wikipedia.org/wiki/UUID
  */
-export function crateUUIDv7Hex(): UUIDv7Hex {
+export function createUUIDv7Hex(): UUIDv7Hex {
     if (!defaultV7Sequence) defaultV7Sequence = new UUIDV7Sequence();
     const buf = defaultV7Sequence.next();
     return serializeUUIDToHex(buf);

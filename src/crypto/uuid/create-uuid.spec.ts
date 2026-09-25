@@ -1,5 +1,5 @@
 import { createUUID } from './create-uuid';
-import { createUUIDv7 } from './create-uuid-v7';
+import { createUUIDv7, createUUIDv7Hex } from './create-uuid-v7';
 import { isUUIDString, isUUIDv4, isUUIDv7, RE_UUID, RE_UUID_V4, RE_UUID_V7 } from './guards';
 
 describe('createUUID', () => {
@@ -42,4 +42,25 @@ describe('createUUID', () => {
 
         expect(uuid1).not.toEqual(uuid2);
     });
+
+    it('should be valid UUID v7 in hex format', () => {
+        const hex = createUUIDv7Hex();
+
+        expect(hex).toMatch(/^[a-f0-9]{32}$/);
+        expect(isUUIDv7(hexToUUID(hex))).toBe(true);
+    });
+
+    it('should return different UUIDs for each call (v7 hex)', () => {
+        expect(createUUIDv7Hex()).not.toEqual(createUUIDv7Hex());
+    });
 });
+
+function hexToUUID(hex: string) {
+    return [
+        hex.slice(0, 8),
+        hex.slice(8, 12),
+        hex.slice(12, 16),
+        hex.slice(16, 20),
+        hex.slice(20),
+    ].join('-');
+}
