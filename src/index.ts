@@ -335,6 +335,11 @@ export type ReintroduceExact<
 > = Omit<T, keyof R> & R;
 
 /**
+ * Define a T value or a function that returns T value
+ */
+export type ValueProvider<T> = T | ((this: unknown) => T);
+
+/**
  * Get values types of T
  */
 export type ValuesOf<T, K extends keyof T = keyof T> = T[K];
