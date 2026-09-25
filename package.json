@@ -11,7 +11,7 @@
   "scripts": {
     "dev:watch": "tsc -p tsconfig.build.json --watch",
     "build": "rm -rf lib && tsc -p tsconfig.build.json",
-    "format": "npm run lint -- --fix",
+    "format": "npm run lint:code -- --fix",
     "lint": "npm run lint:code && npm run lint:lock-file",
     "lint:code": "eslint . --cache --cache-location .cache/",
     "lint:lock-file": "lockfile-lint",
