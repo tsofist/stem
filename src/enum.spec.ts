@@ -2,6 +2,7 @@ import { EnumKeys, EnumValues, extractEnumKeys, extractEnumValues } from './enum
 
 /* eslint-disable @typescript-eslint/prefer-literal-enum-member */
 /* eslint-disable @typescript-eslint/no-mixed-enums */
+/* eslint-disable @typescript-eslint/no-unsafe-enum-assignment */
 
 describe('enum', () => {
     describe('extractEnumKeys', () => {

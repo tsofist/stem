@@ -1,6 +1,7 @@
 import { switchBy } from './switch-by';
 
 /* eslint-disable @typescript-eslint/no-mixed-enums */
+/* eslint-disable @typescript-eslint/no-unsafe-enum-assignment */
 
 describe('switchBy', () => {
     enum V {
