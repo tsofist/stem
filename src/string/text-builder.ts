@@ -38,7 +38,7 @@ export function txt(...data: ConstructorParameters<typeof TextBuilder>): TextBui
 }
 
 export class TextBuilder {
-    /** @private */
+    /** @internal */
     static testing: string | false = false;
 
     readonly #data: string[] = [];
@@ -407,6 +407,7 @@ export class TextBuilder {
                         text = item.#data
                             .map((dataItem, index) => {
                                 let line;
+
                                 if (index === 0) {
                                     line = dataItem;
                                 } else {
@@ -428,6 +429,7 @@ export class TextBuilder {
                                         ? cSizes[i]
                                         : cSizes.slice(0, i + 1).reduce((a, b) => a + b, 0) +
                                           sCol.length * i;
+
                                 // todo am instead of padEnd
                                 return (
                                     line.padEnd(p, ' ') +
@@ -497,8 +499,10 @@ export class TextBuilder {
         return this.a(data, level);
     }
 
-    stringify(separator = '\n') {
-        return this.#data.join(separator);
+    stringify(separator = '\n', prefix?: string) {
+        let result = this.#data;
+        if (prefix) result = this.#data.map((line) => `${prefix}${line}`);
+        return result.join(separator);
     }
 
     linearize() {
