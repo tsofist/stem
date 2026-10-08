@@ -18,6 +18,7 @@ describe('string/upperFirst', () => {
         expect(capitalize('@')).toStrictEqual('@');
         expect(capitalize('п')).toStrictEqual('П');
         expect(capitalize('hello world')).toStrictEqual('Hello world');
-        expect(capitalize('HELLO WORLD')).toStrictEqual('Hello world');
+        expect(capitalize('HELLO WORLD')).toStrictEqual('HELLO WORLD');
+        expect(capitalize('HELLO WORLD', true)).toStrictEqual('Hello world');
     });
 });
