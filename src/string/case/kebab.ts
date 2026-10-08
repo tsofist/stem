@@ -1,5 +1,5 @@
 /**
- * Converts a string to kebab_case.
+ * Converts a string to kebab-case.
  *
  * @example
  *   globalSearchModifiers => global-search-modifiers
