@@ -6,6 +6,7 @@ describe('string/upperFirst', () => {
         expect(capitalize(undefined as unknown as string)).toStrictEqual('');
         expect(capitalize(false as unknown as string)).toStrictEqual('False');
     });
+
     it('Basics', () => {
         expect(capitalize('Str')).toStrictEqual('Str');
         expect(capitalize('str')).toStrictEqual('Str');
@@ -17,5 +18,6 @@ describe('string/upperFirst', () => {
         expect(capitalize('@')).toStrictEqual('@');
         expect(capitalize('п')).toStrictEqual('П');
         expect(capitalize('hello world')).toStrictEqual('Hello world');
+        expect(capitalize('HELLO WORLD')).toStrictEqual('Hello world');
     });
 });
